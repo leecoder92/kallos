@@ -12,7 +12,7 @@
 - release: 배포를 위해 master에 보내기 전, QA 검사하는 브랜치
 - hotfix: master에서 배포한 뒤 버그 생겼을 시 급하게 생성하는 브랜치
 
-## CLI 설정!
+## CLI 설정!!
 
 초기화
 
