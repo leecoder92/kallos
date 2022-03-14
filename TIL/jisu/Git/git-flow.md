@@ -33,7 +33,7 @@ SSAFY@DESKTOP-KVCQHCD MINGW64 ~/Desktop/SSAFY/test (master)
 $ git flow init
 No branches exist yet. Base branches must be created now.
 Branch name for production releases: [master]
-Branch name for "next release" development: [develop]
+Branch name for "next release" development: [develop] <여기에 frontend or backend(아래 추가 설명,,)>
 
 How to name your supporting branch prefixes?
 Feature branches? [feature/]
@@ -55,37 +55,22 @@ frontend와 backend를 같은 깃랩 프로젝트 안에서 작업해야 하기 
 
 ```
 master
-├── develop
-│   ├── frontend
-│   │   ├── feature(각자 개별 기능 작업)
-│   ├── backend
-│   │   ├── feature(각자 개별 기능 작업)
+├── frontend(develop)
+│   ├── feature(각자 개별 기능 작업)
+├── backend(develop)
+│   ├── feature(각자 개별 기능 작업)
 ```
 
 정도로 하면 좋을 것 같다!
 
+=> 즉, git flow init(커스텀버전)으로 초기화해서 FE 개발자들은 develop 브랜치의 이름을 `frontend`로! BE 개발자는 develop 브랜치의 이름을 `backend`로! 하면됨
+
 ---
-
-## branch 생성 및 이동
-
-```
-git branch 브랜치이름 
-```
-- 해당 브랜치가 존재하지 않으면 브랜치 새로 생성
-
-```
-git checkout -b 브랜치 이름
-```
-- 해당 브랜치가 존재하지 않으면 브랜치를 새로 만들고 해당 브랜치로 이동
-
-```
-git checkout 브랜치이름
-```
-- 존재하는 브랜치라면 이동
 
 ## feature 브랜치 사용하기
 
 ### 브랜치 생성
+FE는 `frontend` 브랜치에서 BE는 `backend` 브랜치에서
 
 ```bash
 $ git flow feature start <feature-name>
@@ -105,6 +90,8 @@ $ git flow feature finish <feature-name>
 ### 원격 저장소 push
 
 ```bash
+$ git add .
+$ git commit -m "[jira issue number]commit type: commit msg"
 $ git flow feature publish <feature-name>
 ```
 
