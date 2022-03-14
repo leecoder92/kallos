@@ -12,7 +12,7 @@
 - release: 배포를 위해 master에 보내기 전, QA 검사하는 브랜치
 - hotfix: master에서 배포한 뒤 버그 생겼을 시 급하게 생성하는 브랜치
 
-## CLI 설정
+## CLI 설정!!
 
 초기화
 
@@ -49,7 +49,7 @@ Hooks and filters directory? [C:/Users/SSAFY/Desktop/SSAFY/test/.git/hooks]
 
 ---
 
-## ⭐️ 우리 프로젝트(뽈락)는!
+## ⭐️ 우리 프로젝트(뽈락)는!!
 
 frontend와 backend를 같은 깃랩 프로젝트 안에서 작업해야 하기 때문에
 
@@ -65,6 +65,23 @@ master
 정도로 하면 좋을 것 같다!
 
 ---
+
+## branch 생성 및 이동
+
+```
+git branch 브랜치이름 
+```
+- 해당 브랜치가 존재하지 않으면 브랜치 새로 생성
+
+```
+git checkout -b 브랜치 이름
+```
+- 해당 브랜치가 존재하지 않으면 브랜치를 새로 만들고 해당 브랜치로 이동
+
+```
+git checkout 브랜치이름
+```
+- 존재하는 브랜치라면 이동
 
 ## feature 브랜치 사용하기
 
