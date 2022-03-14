@@ -49,7 +49,7 @@ Hooks and filters directory? [C:/Users/SSAFY/Desktop/SSAFY/test/.git/hooks]
 
 ---
 
-## ⭐️ 우리 프로젝트(뽈락)는!
+## ⭐️ 우리 프로젝트(뽈락)는!!
 
 frontend와 backend를 같은 깃랩 프로젝트 안에서 작업해야 하기 때문에
 
