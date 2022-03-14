@@ -78,15 +78,6 @@ $ git flow feature start <feature-name>
 
 - `feature/`를 접두어로 설정했으므로 `feature/feature-name` 브랜치가 자동 생성되고, checkout 된다.
 
-### 개발 끝 (브랜치 머지)
-
-```bash
-$ git flow feature finish <feature-name>
-```
-
-- `develop` 브랜치로 체크아웃 뒤 `feature/feature-name` 브랜치를 머지 후 삭제한다.
-- Pull Request가 필요할 경우는 이 명령어 대신 Pull Request를 연다.
-
 ### 원격 저장소 push
 
 ```bash
@@ -96,6 +87,15 @@ $ git flow feature publish <feature-name>
 ```
 
 - Pull Request를 이용하려면 원격 저장소에 먼저 push해야 한다. 그때 쓰는 명령어
+
+### 개발 끝 (브랜치 머지)
+
+```bash
+$ git flow feature finish <feature-name>
+```
+
+- `develop` 브랜치로 체크아웃 뒤 `feature/feature-name` 브랜치를 머지 후 삭제한다.
+- Pull Request가 필요할 경우는 이 명령어 대신 Pull Request를 연다.
 
 ### 원격 저장소 pull
 
