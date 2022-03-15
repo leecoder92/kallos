@@ -2,7 +2,7 @@
 
 > git으로 개발할 때 거의 표준처럼 사용되는 방법론
 
-## branch
+## branch!
 
 > 총 5가지 브랜치를 사용해 운영함
 
@@ -84,6 +84,7 @@ $ git flow feature start <feature-name>
 $ git add .
 $ git commit -m "[jira issue number]commit type: commit msg"
 $ git flow feature publish <feature-name>
+$ git push origin <frontend or backend>
 ```
 
 - Pull Request를 이용하려면 원격 저장소에 먼저 push해야 한다. 그때 쓰는 명령어
