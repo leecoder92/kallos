@@ -3,8 +3,8 @@ import type { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "styled-components";
 import theme from "../utils/theme";
-
 import wrapper from "../store/configureStore";
+import { useState, useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
