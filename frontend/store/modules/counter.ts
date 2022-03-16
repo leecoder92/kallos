@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { countReset } from "console";
 
 export type CounterState = {
   value: number;

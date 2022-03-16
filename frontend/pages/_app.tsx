@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "styled-components";
 import theme from "../utils/theme";
 
-import wrapper from "../store/index";
+import wrapper from "../store/configureStore";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
