@@ -1,7 +1,19 @@
-import React, {FC} from 'react';
-import {AppProps} from 'next/app';
-import {wrapper} from '../store/modules/index';
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "styled-components";
+import theme from "../utils/theme";
 
-const WrappedApp: FC<AppProps> = ({Component, pageProps}) => <Component {...pageProps} />;
+import wrapper from "../store/configureStore";
 
-export default wrapper.withRedux(WrappedApp);
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
+}
+
+// export default MyApp;
+export default wrapper.withRedux(MyApp);
