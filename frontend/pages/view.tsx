@@ -42,30 +42,35 @@ const View = () => {
       artist: "sue",
       name: "hi",
       price: 100,
+      itemCode: 5,
     },
     {
       image: "/images/4.png",
       artist: "march",
       name: "welcome",
       price: 200,
+      itemCode: 4,
     },
     {
       image: "/images/3.png",
       artist: "april",
       name: "hello",
       price: 200,
+      itemCode: 3,
     },
     {
       image: "/images/2.png",
       artist: "july",
       name: "seeya",
       price: 200,
+      itemCode: 2,
     },
     {
       image: "/images/1.png",
       artist: "june",
       name: "hoho",
       price: 200,
+      itemCode: 1,
     },
   ];
 

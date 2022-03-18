@@ -1,5 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 import Box from "@mui/material/Box";
 
@@ -23,7 +24,13 @@ const ItemCard = ({ item }) => {
         }}
       >
         <p>
-          <strong>{item.name}</strong>
+          <Link href={{
+              pathname: `details/${item.itemCode}`
+          }}>
+            <a>
+              <strong>{item.name}</strong>
+            </a>
+          </Link>
           <br />
           by <span>{item.artist}</span>
         </p>
