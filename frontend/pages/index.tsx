@@ -16,14 +16,14 @@ const Home: FC<MainProps> = () => {
   const [account, setAccount] = useState<string>("");
   const getAccount = async () => {
     try {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-      } else {
-        alert("Install Metamask");
-      }
+    //   if (window.ethereum) {
+    //     const accounts = await window.ethereum.request({
+    //       method: "eth_requestAccounts",
+    //     });
+    //     setAccount(accounts[0]);
+    //   } else {
+    //     alert("Install Metamask");
+    //   }
     } catch (error) {
       console.error(error);
     }
