@@ -532,6 +532,12 @@ const saleAnimalTokenAbi: AbiItem[] = [
 const mintAnimalTokenAddress = "0xAaEA6C743F57C011a04504519f83346dabe3e1Fe";
 const saleAnimalTokenAddress = "0xA745eF93817efA2dBf4D44a1494D82D75Cd5f81b";
 
+declare global {
+  interface Window {
+    ethereum : any;
+  }
+}
+
 export const web3 = new Web3(
   typeof window !== "undefined" ? window.ethereum : null
 );
