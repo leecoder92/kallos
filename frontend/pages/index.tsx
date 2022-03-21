@@ -31,7 +31,7 @@ const Home: NextPage = () => {
                   내 작품 등록하러 가기
                 </Button>
               </Link>
-              <Link href="/items" passHref>
+              <Link href="/view" passHref>
                 <Button
                   fullWidth
                   variant="contained"
