@@ -107,7 +107,7 @@ export default function SearchAppBar() {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             {pages.map((page) => {
               return (
-                <Link key={page} href="/register" passHref>
+                <Link key={page} href="/create" passHref>
                   <Button sx={{ color: "black" }}>{page}</Button>
                 </Link>
               );

@@ -21,7 +21,7 @@ const Home: NextPage = () => {
               당신의 글씨의 가치를 보장해드립니다.
             </Typography>
             <Stack spacing={{ xs: 0.5, sm: 4.5 }}>
-              <Link href="/register" passHref>
+              <Link href="/create" passHref>
                 <Button
                   fullWidth
                   variant="contained"
