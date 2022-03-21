@@ -14,8 +14,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 
-const pages = ["EXPLORE", "CREATE"];
-
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   border: "1px solid",
@@ -27,10 +25,6 @@ const Search = styled("div")(({ theme }) => ({
   },
   marginLeft: 0,
   width: "60%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -49,14 +43,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    // transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
   },
 }));
 
@@ -80,19 +67,13 @@ export default function SearchAppBar() {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
             <Link href="/" passHref>
-              <Typography variant="h6" noWrap>
-                KALLOS
-              </Typography>
+              <Button sx={{ color: "black" }}>
+                {/* 로고로 대체할 예정 */}
+                <Typography variant="h6" noWrap>
+                  KALLOS
+                </Typography>
+              </Button>
             </Link>
           </Box>
           <Search>
@@ -102,16 +83,17 @@ export default function SearchAppBar() {
             <StyledInputBase
               placeholder="Search collections and accounts."
               inputProps={{ "aria-label": "search" }}
+              fullWidth
             />
           </Search>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            {pages.map((page) => {
-              return (
-                <Link key={page} href="/register" passHref>
-                  <Button sx={{ color: "black" }}>{page}</Button>
-                </Link>
-              );
-            })}
+            <Link href="/view" passHref>
+              <Button sx={{ color: "black" }}>EXPLORE</Button>
+            </Link>
+            <Link href="/register" passHref>
+              <Button sx={{ color: "black" }}>CREATE</Button>
+            </Link>
+
             <div>
               <IconButton
                 size="large"
@@ -138,7 +120,7 @@ export default function SearchAppBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Login</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
