@@ -5,12 +5,15 @@ import { ThemeProvider } from "styled-components";
 import theme from "../utils/theme";
 import wrapper from "../store/configureStore";
 import { useState, useEffect } from "react";
+import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ThemeProvider>
   );
 }
