@@ -90,7 +90,7 @@ export default function SearchAppBar() {
             <Link href="/view" passHref>
               <Button sx={{ color: "black" }}>EXPLORE</Button>
             </Link>
-            <Link href="/register" passHref>
+            <Link href="/create" passHref>
               <Button sx={{ color: "black" }}>CREATE</Button>
             </Link>
 
