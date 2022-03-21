@@ -1,87 +1,51 @@
 import type { NextPage } from "next";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
-import React, { FC, useState, useEffect } from "react";
-import Head from "next/head";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { mintAnimalTokenContract } from "contracts";
-import Test from "./api/counter";
-import AnimalCard from "../components/AnimalCard";
+import CaliImage from "../public/images/cali.jpg";
 
-interface MainProps {
-  account: string;
-}
-
-const Home: FC<MainProps> = () => {
-  const [account, setAccount] = useState<string>("");
-  const getAccount = async () => {
-    try {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-      } else {
-        alert("Install Metamask");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    console.log(account);
-    getAccount();
-  }, [account]);
-  const [newAnimalType, setNewAnimalType] = useState<string>();
-  const onClickMint = async () => {
-    try {
-      if (!account) return;
-
-      const response = await mintAnimalTokenContract.methods
-        .mintAnimalToken()
-        .send({
-          from: account,
-        });
-
-      if (response.status) {
-        const balanceLength = await mintAnimalTokenContract.methods
-          .balanceOf(account)
-          .call();
-
-        const animalTokenId = await mintAnimalTokenContract.methods
-          .tokenOfOwnerByIndex(account, parseInt(balanceLength, 10) - 1)
-          .call();
-
-        const animalType = await mintAnimalTokenContract.methods
-          .animalTypes(animalTokenId)
-          .call();
-
-        setNewAnimalType(animalType);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+const Home: NextPage = () => {
   return (
-    <Flex
-      w="full"
-      h="100vh"
-      justifyContent="center"
-      alignItems="center"
-      direction="column"
-    >
-      <Box>
-        {newAnimalType ? (
-          <AnimalCard animalType={newAnimalType} />
-        ) : (
-          <Text>Let us mint Animal Card!!</Text>
-        )}
-      </Box>
-      <Button mt={4} size="sm" colorScheme="blue" onClick={onClickMint}>
-        Mint
-      </Button>
-    </Flex>
+    <div>
+      <Container>
+        <Stack direction="row" justifyContent="center">
+          <Box width="40%" textAlign="center" sx={{ mt: 10, mr: 20 }}>
+            <Image src={CaliImage} alt="any image" />
+          </Box>
+          <Box width="60%" sx={{ mt: 10, mr: 20 }}>
+            <Typography variant="h3" sx={{ pb: 10 }}>
+              당신의 손글씨를 남기고 싶지 않나요?
+              <br />
+              당신의 글씨의 가치를 보장해드립니다.
+            </Typography>
+            <Stack spacing={{ xs: 0.5, sm: 4.5 }}>
+              <Link href="/register" passHref>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  sx={{ fontSize: 18 }}
+                >
+                  내 작품 등록하러 가기
+                </Button>
+              </Link>
+              <Link href="/items" passHref>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  sx={{ fontSize: 18 }}
+                >
+                  다른 작품 구매하러 가기
+                </Button>
+              </Link>
+            </Stack>
+          </Box>
+        </Stack>
+      </Container>
+    </div>
   );
 };
 
