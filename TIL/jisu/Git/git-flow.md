@@ -84,7 +84,6 @@ $ git flow feature start <feature-name>
 $ git add .
 $ git commit -m "[jira issue number]commit type: commit msg"
 $ git flow feature publish <feature-name>
-$ git push origin <frontend or backend>
 ```
 
 - Pull Request를 이용하려면 원격 저장소에 먼저 push해야 한다. 그때 쓰는 명령어
@@ -93,6 +92,7 @@ $ git push origin <frontend or backend>
 
 ```bash
 $ git flow feature finish <feature-name>
+$ git push origin <frontend or backend>
 ```
 
 - `develop` 브랜치로 체크아웃 뒤 `feature/feature-name` 브랜치를 머지 후 삭제한다.
