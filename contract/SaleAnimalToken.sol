@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "MintAnimalToken.sol";
+import "./MintAnimalToken.sol";
 
 contract SaleAnimalToken {
     MintAnimalToken public mintAnimalTokenAddress;
