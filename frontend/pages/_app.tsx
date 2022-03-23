@@ -4,7 +4,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "styled-components";
 import theme from "../utils/theme";
 import wrapper from "../store/configureStore";
-import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

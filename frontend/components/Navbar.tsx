@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -11,9 +11,32 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
-import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
+import { login, logout } from "../store/modules/login";
+import { RootState } from "../store/modules";
+import { connect } from "react-redux";
 
+// 로그인, 로그아웃 관련
+export interface LoginProps {
+  value: boolean;
+  setLogin: any;
+  setLogout: any;
+}
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    value: state.loginReducer.value,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setLogin: () => dispatch(login()),
+    setLogout: () => dispatch(logout()),
+  };
+};
+
+// Navbar 관련
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   border: "1px solid",
@@ -47,15 +70,51 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [account, setAccount] = useState("");
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const getAccount = async () => {
+    const myAccount = await window.ethereum.request({ method: "eth_accounts" });
+    if (myAccount && myAccount.length > 0) {
+      setLogin();
+      setIsLogin(true);
+    }
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const metaLogin = async () => {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAccount(accounts[0]);
+        setLogin();
+        setIsLogin(true);
+      } else {
+        alert("Metamask를 설치하세요~");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const metaLogout = async () => {
+    setLogout();
+    setIsLogin(false);
+  };
+
+  useEffect(() => {
+    getAccount();
+  }, [isLogin]);
+
   return (
     <Box>
       <AppBar position="static" color="transparent" enableColorOnDark>
@@ -105,28 +164,67 @@ export default function SearchAppBar() {
               >
                 <AccountCircle />
               </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Login</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
+              {isLogin ? (
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <Link href="/mypage" passHref>
+                    <MenuItem onClick={handleClose}>Mypage</MenuItem>
+                  </Link>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      metaLogout();
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                </Menu>
+              ) : (
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleClose();
+                      metaLogin();
+                    }}
+                  >
+                    Login
+                  </MenuItem>
+                </Menu>
+              )}
             </div>
           </Box>
         </Toolbar>
       </AppBar>
     </Box>
   );
-}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchAppBar);
