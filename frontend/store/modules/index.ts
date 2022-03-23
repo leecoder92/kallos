@@ -1,9 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import counterReducer from "./counter";
+import loginReducer from "./login";
 
 const rootReducer = combineReducers({
-    counterReducer,
+  counterReducer,
+  loginReducer,
   // 모듈 추가시 여기에 추가
 });
 
