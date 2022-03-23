@@ -79,20 +79,18 @@ $ git flow feature start <feature-name>
 - `feature/`를 접두어로 설정했으므로 `feature/feature-name` 브랜치가 자동 생성되고, checkout 된다.
 
 ### 원격 저장소 push
-
 ```bash
 $ git add .
 $ git commit -m "[jira issue number]commit type: commit msg"
 $ git flow feature publish <feature-name>
-$ git push origin <frontend or backend>
 ```
 
 - Pull Request를 이용하려면 원격 저장소에 먼저 push해야 한다. 그때 쓰는 명령어
 
 ### 개발 끝 (브랜치 머지)
-
 ```bash
 $ git flow feature finish <feature-name>
+$ git push origin <frontend or backend>
 ```
 
 - `develop` 브랜치로 체크아웃 뒤 `feature/feature-name` 브랜치를 머지 후 삭제한다.
