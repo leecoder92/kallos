@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
+// redux
 import { login, logout } from "../store/modules/login";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
@@ -19,6 +20,7 @@ import { connect } from "react-redux";
 // 로그인, 로그아웃 관련
 export interface LoginProps {
   value: boolean;
+  counter: number;
   setLogin: any;
   setLogout: any;
 }
@@ -72,18 +74,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [account, setAccount] = useState("");
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const [isLogin, setIsLogin] = useState<boolean>(false);
-  const getAccount = async () => {
-    const myAccount = await window.ethereum.request({ method: "eth_accounts" });
-    if (myAccount && myAccount.length > 0) {
-      setLogin();
+  const [isLogin, setIsLogin] = useState<boolean>(value);
+  const getIsLogin = async () => {
+    if (value) {
       setIsLogin(true);
+    } else {
+      setIsLogin(false);
     }
   };
+
+  // const checkMetamaskConnect =
+
+  useEffect(() => {
+    getIsLogin();
+  }, [isLogin]);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -92,10 +99,6 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const metaLogin = async () => {
     try {
       if (window.ethereum) {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
         setLogin();
         setIsLogin(true);
       } else {
@@ -110,10 +113,6 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
     setLogout();
     setIsLogin(false);
   };
-
-  useEffect(() => {
-    getAccount();
-  }, [isLogin]);
 
   return (
     <Box>
