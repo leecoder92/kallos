@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useEffect, useState, FC } from "react";
+import Link from "next/link";
 
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,10 +13,25 @@ import ItemCard from "@/components/ItemCard";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
-const View = () => {
-  const [option, setOption] = React.useState<string>("");
-  const [keyword, setKeyword] = React.useState<string>("");
-  const [showOnlySale, setShowOnlySale] = React.useState<boolean>(false);
+//여기부터
+import { IMyKallosCard } from "@/components/MyKallosCard";
+import {
+  mintKallosTokenContract,
+  saleKallosTokenContract,
+} from "../web3Config";
+import SaleKallosCard from "@/components/SaleKallosCard";
+
+interface SaleKallosProps {
+  account: string;
+}
+
+const View: FC<SaleKallosProps> = ({ account }) => {
+  const [saleKallosCardArray, setSaleKallosCardArray] =
+    useState<IMyKallosCard[]>();
+
+  const [option, setOption] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>("");
+  const [showOnlySale, setShowOnlySale] = useState<boolean>(false);
 
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOption(event.target.value as string);
@@ -35,48 +51,102 @@ const View = () => {
     setShowOnlySale(!showOnlySale);
   };
 
-  //임시 데이터
-  const items = [
-    {
-      image: "/images/5.png",
-      artist: "sue",
-      name: "hi",
-      price: 100,
-      itemCode: 5,
-    },
-    {
-      image: "/images/4.png",
-      artist: "march",
-      name: "welcome",
-      price: 200,
-      itemCode: 4,
-    },
-    {
-      image: "/images/3.png",
-      artist: "april",
-      name: "hello",
-      price: 200,
-      itemCode: 3,
-    },
-    {
-      image: "/images/2.png",
-      artist: "july",
-      name: "seeya",
-      price: 200,
-      itemCode: 2,
-    },
-    {
-      image: "/images/1.png",
-      artist: "june",
-      name: "hoho",
-      price: 200,
-      itemCode: 1,
-    },
-  ];
+  //   //임시 데이터
+  //   const items = [
+  //     {
+  //       image: "/images/5.png",
+  //       artist: "sue",
+  //       name: "hi",
+  //       price: 100,
+  //       itemCode: 5,
+  //     },
+  //     {
+  //       image: "/images/4.png",
+  //       artist: "march",
+  //       name: "welcome",
+  //       price: 200,
+  //       itemCode: 4,
+  //     },
+  //     {
+  //       image: "/images/3.png",
+  //       artist: "april",
+  //       name: "hello",
+  //       price: 200,
+  //       itemCode: 3,
+  //     },
+  //     {
+  //       image: "/images/2.png",
+  //       artist: "july",
+  //       name: "seeya",
+  //       price: 200,
+  //       itemCode: 2,
+  //     },
+  //     {
+  //       image: "/images/1.png",
+  //       artist: "june",
+  //       name: "hoho",
+  //       price: 200,
+  //       itemCode: 1,
+  //     },
+  //   ];
+
+  //   useEffect(() => {
+  //     console.log(account);
+  //   }, []);
+
+  const getOnSaleKallosTokens = async () => {
+    try {
+      const onSaleKallosTokenArrayLength = await saleKallosTokenContract.methods
+        .getOnSaleKallosTokenArrayLength()
+        .call();
+
+      const tempOnSaleArray: IMyKallosCard[] = [];
+
+      for (let i = 0; i < parseInt(onSaleKallosTokenArrayLength, 10); i++) {
+        const kallosTokenId = await saleKallosTokenContract.methods
+          .onSaleKallosTokenArray(i)
+          .call();
+
+        const kallosType = await mintKallosTokenContract.methods
+          .kallosTypes(kallosTokenId)
+          .call();
+
+        const kallosPrice = await saleKallosTokenContract.methods
+          .kallosTokenPrices(kallosTokenId)
+          .call();
+
+        tempOnSaleArray.push({ kallosTokenId, kallosType, kallosPrice });
+      }
+
+      setSaleKallosCardArray(tempOnSaleArray);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getOnSaleKallosTokens();
+  }, []);
+
+  useEffect(() => {
+    console.log(saleKallosCardArray);
+  }, []);
 
   return (
     <div className="viewContainer">
       <h1>Explore Calligraphy</h1>
+
+      <Link href="/regist">
+        <a>
+          <button>regist</button>
+        </a>
+      </Link>
+
+      <Link href="/mine">
+        <a>
+          <button>mine</button>
+        </a>
+      </Link>
 
       <Box
         sx={{
@@ -131,9 +201,19 @@ const View = () => {
           columnGap: 1,
         }}
       >
-        {items?.map((item) => (
-          <ItemCard item={item} />
-        ))}
+        {saleKallosCardArray &&
+          saleKallosCardArray.map((v, i) => {
+            return (
+              <SaleKallosCard
+                key={i}
+                kallosType={v.kallosType}
+                kallosPrice={v.kallosPrice}
+                kallosTokenId={v.kallosTokenId}
+                account={account}
+                getOnSaleKallosTokens={getOnSaleKallosTokens}
+              />
+            );
+          })}
       </Box>
       <style jsx>
         {`
