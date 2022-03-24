@@ -1,4 +1,6 @@
+/* eslint-disable */
 import "../styles/globals.css";
+import Head from "next/head";
 import { useState, useEffect } from "react";
 import type { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,7 +14,6 @@ import { RootState } from "../store/modules";
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [account, setAccount] = useState<string>("");
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
-
   const getAccount = async () => {
     if (isLogin) {
       try {
@@ -28,6 +29,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       } catch (error) {
         console.error(error);
       }
+    } else {
+      setAccount("");
     }
   };
 
@@ -42,6 +45,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Head>
+        <title>KALLOS</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <Layout>
         <Component {...pageProps} account={account} />
       </Layout>

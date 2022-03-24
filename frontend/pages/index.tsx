@@ -1,3 +1,4 @@
+/* eslint-disable */
 import type { NextPage } from "next";
 import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";

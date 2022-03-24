@@ -86,7 +86,17 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
     }
   };
 
-  // const checkMetamaskConnect =
+  const getAccount = async () => {
+    const myAccount = await window.ethereum.request({ method: "eth_accounts" });
+    if (myAccount && myAccount.length > 0) {
+      setLogin();
+      setIsLogin(true);
+    }
+  };
+
+  useEffect(() => {
+    getAccount();
+  }, []);
 
   useEffect(() => {
     getIsLogin();

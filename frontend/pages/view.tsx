@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useEffect, useState, FC } from "react";
 import Link from "next/link";
 
