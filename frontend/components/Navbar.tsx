@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { FC, useEffect, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -20,7 +21,6 @@ import { connect } from "react-redux";
 // 로그인, 로그아웃 관련
 export interface LoginProps {
   value: boolean;
-  counter: number;
   setLogin: any;
   setLogout: any;
 }
