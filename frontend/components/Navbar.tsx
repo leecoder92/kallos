@@ -7,16 +7,16 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 // redux
 import { login, logout } from "../store/modules/login";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
+// searchbar
+import Searchbar from "./Searchbar";
 
 // 로그인, 로그아웃 관련
 export interface LoginProps {
@@ -38,40 +38,7 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-// Navbar 관련
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  border: "1px solid",
-  borderColor: "black",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: "60%",
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    width: "100%",
-  },
-}));
-
+// Navbar
 const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -144,16 +111,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
               </Button>
             </Link>
           </Box>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search collections and accounts."
-              inputProps={{ "aria-label": "search" }}
-              fullWidth
-            />
-          </Search>
+          <Searchbar />
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/view" passHref>
               <Button sx={{ color: "black" }}>EXPLORE</Button>
