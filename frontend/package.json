@@ -18,6 +18,7 @@
     "@mui/styled-engine-sc": "^5.4.2",
     "@mui/styles": "^5.5.1",
     "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^0.26.1",
     "framer-motion": "^6.2.8",
     "next": "12.1.0",
     "next-redux-wrapper": "^7.0.5",
