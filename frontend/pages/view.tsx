@@ -17,21 +17,19 @@ import {
   saleKallosTokenContract,
 } from "../web3Config";
 import SaleKallosCard from "@/components/SaleKallosCard";
-import { getAllItems, getItemDetail } from "@/store/modules/item";
+import { getAllItems } from "@/store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
-    itemDetail: state.itemReducer.itemDetail,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     //   setAllItems: (paramsObj) => getAllItems(paramsObj),
-    //   setItemDetail: (tokenId) => getItemDetail(tokenId),
   };
 };
 
