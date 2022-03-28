@@ -66,7 +66,7 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
 
   return (
     <Box textAlign="center" w={150}>
-      <KallosCard kallosType={kallosType} />
+      <KallosCard kallosType={kallosType} kallosTokenId={kallosTokenId} />
       <Box>
         <Text d="inline-block">{web3.utils.fromWei(kallosPrice)} SSF</Text>
         {isBuyable ? (

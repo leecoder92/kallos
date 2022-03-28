@@ -56,7 +56,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
 
   return (
     <div>
-      <KallosCard kallosType={kallosType} />
+      <KallosCard kallosType={kallosType} kallosTokenId={kallosTokenId} />
       <div>
         {kallosPrice === "0" ? (
           <>
