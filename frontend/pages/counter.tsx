@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     plus: () => dispatch(increment()),
     minus: () => dispatch(decrement()),
-    getUser: () => dispatch(fetchUser()),
+    getUser: (str) => dispatch(fetchUser(str)),
   };
 };
 
@@ -32,7 +32,7 @@ function Test({ value, users, plus, minus, getUser }) {
       <button onClick={() => minus()}>-</button>
       <span>{value}</span>
       <button onClick={() => plus()}>+</button>
-      <button onClick={() => getUser()}>getUser</button>
+      <button onClick={() => getUser("users")}>getUser</button>
       <div>
         {people && people.map((person) => <p key={person.id}>{person.name}</p>)}
       </div>

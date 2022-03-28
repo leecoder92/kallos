@@ -19,9 +19,9 @@ const initialState: CounterState = {
 
 export const fetchUser = createAsyncThunk(
   "GET/USER", //action명
-  async (_, { rejectWithValue }) => {
+  async (user, { rejectWithValue }) => {
     return await axios
-      .get("https://jsonplaceholder.typicode.com/users")
+      .get(`https://jsonplaceholder.typicode.com/${user}`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -40,9 +40,6 @@ const counterSlice = createSlice({
     incrementByAmount(state, action: PayloadAction<number>) {
       state.value += action.payload;
     },
-    // updateUser(state: CounterState, fetchUser) {
-    //   state.users = fetchUser.payload;
-    // },
   },
   //액션을 따로 정의한 함수에 대한 리듀서를 정의하는 역할
   extraReducers: (builder) => {
