@@ -15,7 +15,7 @@ import Link from "next/link";
 import { login, logout } from "../store/modules/login";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
-import { getArtists, getItems } from "@/store/modules/navbar";
+import { getArtistsByKeyword, getItemsByKeyword } from "@/store/modules/navbar";
 // searchbar
 import Searchbar from "./Searchbar";
 
@@ -38,8 +38,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setLogin: () => dispatch(login()),
     setLogout: () => dispatch(logout()),
-    setArtists: (keyword) => dispatch(getArtists(keyword)),
-    setItems: (keyword) => dispatch(getItems(keyword)),
+    // setArtists: (keyword) => dispatch(getArtistsByKeyword(keyword)),
+    // setItems: (keyword) => dispatch(getItemsByKeyword(keyword)),
   };
 };
 

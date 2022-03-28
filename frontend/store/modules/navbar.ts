@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export type NavBarState = {
@@ -13,7 +13,7 @@ const initialState: NavBarState = {
   fulfilled: false,
 };
 
-export const getArtists = createAsyncThunk(
+export const getArtistsByKeyword = createAsyncThunk(
   "GET/ARTISTS", //action명
   async (keyword, { rejectWithValue }) => {
     return await axios
@@ -23,7 +23,7 @@ export const getArtists = createAsyncThunk(
   }
 );
 
-export const getItems = createAsyncThunk(
+export const getItemsByKeyword = createAsyncThunk(
   "GET/ITEMS", //action명
   async (keyword, { rejectWithValue }) => {
     return await axios
@@ -40,24 +40,24 @@ const navBarSlice = createSlice({
   //액션을 따로 정의한 함수에 대한 리듀서를 정의하는 역할
   extraReducers: (builder) => {
     builder
-      .addCase(getArtists.pending, (state) => {
+      .addCase(getArtistsByKeyword.pending, (state) => {
         state.fulfilled = false;
       })
-      .addCase(getArtists.fulfilled, (state, { payload }) => {
+      .addCase(getArtistsByKeyword.fulfilled, (state, { payload }) => {
         state.fulfilled = true;
         state.artists = payload;
       })
-      .addCase(getArtists.rejected, (state) => {
+      .addCase(getArtistsByKeyword.rejected, (state) => {
         state.fulfilled = false;
       })
-      .addCase(getItems.pending, (state) => {
+      .addCase(getItemsByKeyword.pending, (state) => {
         state.fulfilled = false;
       })
-      .addCase(getItems.fulfilled, (state, { payload }) => {
+      .addCase(getItemsByKeyword.fulfilled, (state, { payload }) => {
         state.fulfilled = true;
         state.items = payload;
       })
-      .addCase(getItems.rejected, (state) => {
+      .addCase(getItemsByKeyword.rejected, (state) => {
         state.fulfilled = false;
       });
   },
