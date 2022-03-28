@@ -6,21 +6,30 @@ import { mintKallosTokenContract, saleKallosTokenAddress } from "web3Config";
 import MyKallosCard, { IMyKallosCard } from "../components/MyKallosCard";
 import Image from "next/image";
 
-import { getUserInfo } from "@/store/modules/user";
+import { getUserInfo, getAllItemsOfUser } from "@/store/modules/user";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state: RootState) => {
   return {
     userInfo: state.userReducer.userInfo,
+    userItems: state.userReducer.userItems,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
     //   setUserInfo: (userAddress) => getUserInfo(userAddress),
+    //   setAllItemsOfUser: (paramObj) => getAllItemsOfUser(paramObj),
   };
 };
+
+//paramObj
+interface ParamObj {
+  userAddress: string;
+  pageNumber: number;
+  itemsPerOnePage: number;
+}
 
 const MyPage = ({ account }) => {
   const [kallosCardArray, setKallosCardArray] = useState<IMyKallosCard[]>();
