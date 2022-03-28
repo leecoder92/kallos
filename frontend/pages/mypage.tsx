@@ -1,13 +1,26 @@
 import { FC } from "react";
-import {
-  Box,
-  Button,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { mintKallosTokenContract, saleKallosTokenAddress } from "web3Config";
 import MyKallosCard, { IMyKallosCard } from "../components/MyKallosCard";
 import Image from "next/image";
+
+import { getUserInfo } from "@/store/modules/user";
+import { RootState } from "../store/modules";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    userInfo: state.userReducer.userInfo,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    //   setUserInfo: (userAddress) => getUserInfo(userAddress),
+  };
+};
 
 const MyPage = ({ account }) => {
   const [kallosCardArray, setKallosCardArray] = useState<IMyKallosCard[]>();
@@ -156,4 +169,4 @@ const MyPage = ({ account }) => {
   );
 };
 
-export default MyPage;
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);

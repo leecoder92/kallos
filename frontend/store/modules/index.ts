@@ -5,6 +5,7 @@ import loginReducer from "./login";
 import navBarReducer from "./navbar";
 import itemReducer from "./item";
 import artistReducer from "./artist";
+import userReducer from "./user";
 
 const rootReducer = combineReducers({
   counterReducer,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   navBarReducer,
   itemReducer,
   artistReducer,
+  userReducer
   // 모듈 추가시 여기에 추가
 });
 
