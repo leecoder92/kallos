@@ -1,9 +1,11 @@
+/* eslint-disable */
+
 // style
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
 // 기능
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -42,6 +44,7 @@ const StyledFilter = styled("div")(({ theme }) => ({
   color: "inherit",
   position: "absolute",
   zIndex: "1",
+  borderRadius: theme.shape.borderRadius,
   backgroundColor: "white",
   border: "1px solid",
   padding: theme.spacing(1, 1, 1, 0),
@@ -49,7 +52,7 @@ const StyledFilter = styled("div")(({ theme }) => ({
   width: "100%",
 }));
 
-const Searchbar = () => {
+function Searchbar() {
   // 테스트용 데이터
   const artList = [
     { artist: "jisu", title: "love1" },
@@ -59,32 +62,62 @@ const Searchbar = () => {
     { artist: "jongjune", title: "love5" },
     { artist: "love", title: "love6" },
   ];
+  // 검색결과창 보여주는 기능
   const [searchValue, setSearchValue] = useState<string>("");
   const [filteredArtistData, setFilteredArtistData] = useState([]);
   const [filteredTitleData, setFilteredTitleData] = useState([]);
-  const handleSearchInput = (event) => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const handleSearchInput = (event: any) => {
     event.preventDefault();
-    const eValue = event.target.value;
-    setSearchValue(eValue);
-    // 아티스트 필터링
-    const newArtistFilter = artList.filter((art) => {
-      return art.artist.toLowerCase().includes(eValue.toLowerCase());
-    });
-    // 작품명 필터링
-    const newTitleFilter = artList.filter((art) => {
-      return art.title.toLowerCase().includes(eValue.toLowerCase());
-    });
-    if (eValue === "") {
-      setFilteredArtistData([]);
-      setFilteredTitleData([]);
-    } else if (eValue.length >= 3) {
-      setFilteredArtistData(newArtistFilter);
-      setFilteredTitleData(newTitleFilter);
-    }
+    setSearchValue(event.target.value);
   };
 
+  useEffect(() => {
+    const searchFilter = setTimeout(() => {
+      // 아티스트 필터링
+      const newArtistFilter = artList.filter((art) => {
+        return art.artist.toLowerCase().includes(searchValue.toLowerCase());
+      });
+      // 작품명 필터링
+      const newTitleFilter = artList.filter((art) => {
+        return art.title.toLowerCase().includes(searchValue.toLowerCase());
+      });
+      if (searchValue.length < 3) {
+        setFilteredArtistData([]);
+        setFilteredTitleData([]);
+        setIsLoading(true);
+      } else if (searchValue.length >= 3) {
+        setFilteredArtistData(newArtistFilter);
+        setFilteredTitleData(newTitleFilter);
+        setIsSearchResult(true);
+        setIsLoading(false);
+      }
+    }, 1000);
+    return () => clearTimeout(searchFilter);
+  }, [searchValue]);
+
+  // 검색영역 밖 클릭시 닫기
+  const searchInputRef = useRef<any>(null);
+  const [isSearchResult, setIsSearchResult] = useState<boolean>(false);
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent): void {
+      if (
+        searchInputRef.current &&
+        !searchInputRef.current.contains(e.target as Node)
+      ) {
+        setIsSearchResult(false);
+      } else {
+        setIsSearchResult(true);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchInputRef]);
+
   return (
-    <Search>
+    <Search ref={searchInputRef}>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
@@ -95,37 +128,40 @@ const Searchbar = () => {
         onChange={handleSearchInput}
       />
       {searchValue &&
-        (searchValue.length >= 3
-          ? (filteredArtistData.length != 0 ||
-              filteredTitleData.length != 0) && (
-              <StyledFilter>
-                <div>Artist</div>
-                <div>=============</div>
-                {filteredArtistData.length != 0 ? (
-                  <div>
-                    {filteredArtistData.slice(0, 3).map((value, key) => {
-                      return <p key={key}>{value.artist}</p>;
-                    })}
-                  </div>
-                ) : (
-                  <div>No result</div>
-                )}
-                <div>Art</div>
-                <div>=============</div>
-                {filteredTitleData.length != 0 ? (
-                  <div>
-                    {filteredTitleData.slice(0, 3).map((value, key) => {
-                      return <p key={key}>{value.title}</p>;
-                    })}
-                  </div>
-                ) : (
-                  <div>No result</div>
-                )}
-              </StyledFilter>
-            )
-          : null)}
+        (searchValue.length >= 3 && !isLoading ? (
+          (filteredArtistData.length != 0 || filteredTitleData.length != 0) && (
+            <StyledFilter
+              style={{ visibility: isSearchResult ? "visible" : "hidden" }}
+            >
+              <div>Artist</div>
+              <div>=============</div>
+              {filteredArtistData.length != 0 ? (
+                <ul>
+                  {filteredArtistData.slice(0, 3).map((value, key) => {
+                    return <li key={key}>{value.artist}</li>;
+                  })}
+                </ul>
+              ) : (
+                <div>No result</div>
+              )}
+              <div>Art</div>
+              <div>=============</div>
+              {filteredTitleData.length != 0 ? (
+                <ul>
+                  {filteredTitleData.slice(0, 3).map((value, key) => {
+                    return <li key={key}>{value.title}</li>;
+                  })}
+                </ul>
+              ) : (
+                <div>No result</div>
+              )}
+            </StyledFilter>
+          )
+        ) : (
+          <StyledFilter>Loading...</StyledFilter>
+        ))}
     </Search>
   );
-};
+}
 
 export default Searchbar;
