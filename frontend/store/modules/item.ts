@@ -33,6 +33,16 @@ export const getItemDetail = createAsyncThunk(
   }
 );
 
+export const addNewItem = createAsyncThunk(
+  "POST/NEWITEM", //action명
+  async (itemInfo, { rejectWithValue }) => {
+    return await axios
+      .post(`https://jsonplaceholder.typicode.com/users`, itemInfo)
+      .then((res) => console.log(res))
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
 const itemSlice = createSlice({
   name: "item",
   initialState,

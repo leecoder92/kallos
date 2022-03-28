@@ -42,10 +42,10 @@ interface SaleKallosProps {
 //paramObj
 interface ParamObj {
   saleOrNot: boolean;
-  searchOption: String;
-  searchKeyword: String;
-  pageNumber: Number;
-  itemsPerOnePage: Number;
+  searchOption: string;
+  searchKeyword: string;
+  pageNumber: number;
+  itemsPerOnePage: number;
 }
 
 const View: FC<SaleKallosProps> = ({ account }) => {
