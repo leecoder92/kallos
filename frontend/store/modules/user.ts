@@ -3,11 +3,13 @@ import axios from "axios";
 
 export type UserState = {
   userInfo: Object;
+  userItems: Array<Object>;
   fulfilled: boolean;
 };
 
 const initialState: UserState = {
   userInfo: {},
+  userItems: [],
   fulfilled: false,
 };
 
@@ -16,6 +18,31 @@ export const getUserInfo = createAsyncThunk(
   async (userAddress, { rejectWithValue }) => {
     return await axios
       .get(`https://jsonplaceholder.typicode.com/users/${userAddress}`)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
+export const getAllItemsOfUser = createAsyncThunk(
+  "GET/ALLITEMSOFUSER", //action명
+  async (paramObj, { rejectWithValue }) => {
+    return await axios
+      .get(`https://jsonplaceholder.typicode.com/users`, { params: paramObj })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
+//paramsObj
+//{
+// saleStatus: true,
+// price: 50
+//}
+export const updateItemInfo = createAsyncThunk(
+  "PUT/ITEMINFO", //action명
+  async (paramObj, { rejectWithValue }) => {
+    return await axios
+      .put(`https://jsonplaceholder.typicode.com/users`, { params: paramObj })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -36,6 +63,16 @@ const userSlice = createSlice({
         state.userInfo = payload;
       })
       .addCase(getUserInfo.rejected, (state) => {
+        state.fulfilled = false;
+      })
+      .addCase(getAllItemsOfUser.pending, (state) => {
+        state.fulfilled = false;
+      })
+      .addCase(getAllItemsOfUser.fulfilled, (state, { payload }) => {
+        state.fulfilled = true;
+        state.userItems = payload;
+      })
+      .addCase(getAllItemsOfUser.rejected, (state) => {
         state.fulfilled = false;
       });
   },

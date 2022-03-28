@@ -2,6 +2,15 @@ import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import KallosCard from "./KallosCard";
 import { saleKallosTokenContract, web3 } from "../web3Config";
 
+import { updateItemInfo } from "@/store/modules/user";
+import { connect } from "react-redux";
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    //   updateItemInfo: (paramsObj) => updateItemInfo(paramsObj),
+  };
+};
+
 export interface IMyKallosCard {
   kallosTokenId: string;
   kallosType: string;
@@ -69,4 +78,4 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
   );
 };
 
-export default MyKallosCard;
+export default connect(null, mapDispatchToProps)(MyKallosCard);
