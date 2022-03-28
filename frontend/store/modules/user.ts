@@ -48,6 +48,16 @@ export const updateItemInfo = createAsyncThunk(
   }
 );
 
+export const updateUserInfo = createAsyncThunk(
+  "PUT/USERINFO", //action명
+  async (paramObj, { rejectWithValue }) => {
+    return await axios
+      .put(`https://jsonplaceholder.typicode.com/users`, { params: paramObj })
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
 const userSlice = createSlice({
   name: "artist",
   initialState,
