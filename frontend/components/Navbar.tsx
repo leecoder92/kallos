@@ -15,12 +15,9 @@ import Link from "next/link";
 import { login, logout } from "../store/modules/login";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
-<<<<<<< HEAD
-import { getArtists } from "@/store/modules/navbar";
-=======
+import { getArtists, getItems } from "@/store/modules/navbar";
 // searchbar
 import Searchbar from "./Searchbar";
->>>>>>> cc544d0396ab9ac478f6f4d5e22cb97694cc9693
 
 // 로그인, 로그아웃 관련
 export interface LoginProps {
@@ -33,6 +30,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     value: state.loginReducer.value,
     artists: state.navBarReducer.artists,
+    items: state.navBarReducer.items,
   };
 };
 
@@ -40,7 +38,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setLogin: () => dispatch(login()),
     setLogout: () => dispatch(logout()),
-    setArtist: (keyword) => dispatch(getArtists(keyword)),
+    setArtists: (keyword) => dispatch(getArtists(keyword)),
+    setItems: (keyword) => dispatch(getItems(keyword)),
   };
 };
 

@@ -23,6 +23,16 @@ export const getArtists = createAsyncThunk(
   }
 );
 
+export const getItems = createAsyncThunk(
+  "GET/ITEMS", //action명
+  async (keyword, { rejectWithValue }) => {
+    return await axios
+      .get(`https://jsonplaceholder.typicode.com/${keyword}`)
+      .then((res) => res.data)
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
 const navBarSlice = createSlice({
   name: "navbar",
   initialState,
@@ -38,6 +48,16 @@ const navBarSlice = createSlice({
         state.artists = payload;
       })
       .addCase(getArtists.rejected, (state) => {
+        state.fulfilled = false;
+      })
+      .addCase(getItems.pending, (state) => {
+        state.fulfilled = false;
+      })
+      .addCase(getItems.fulfilled, (state, { payload }) => {
+        state.fulfilled = true;
+        state.items = payload;
+      })
+      .addCase(getItems.rejected, (state) => {
         state.fulfilled = false;
       });
   },
