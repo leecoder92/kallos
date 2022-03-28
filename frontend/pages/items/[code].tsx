@@ -9,6 +9,21 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Typography from "@mui/material/Typography";
 import { ViewColumn } from "@mui/icons-material";
+import { getItemDetail } from "@/store/modules/item";
+import { RootState } from "../../store/modules";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    itemDetail: state.itemReducer.itemDetail,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    //   setItemDetail: (tokenId) => getItemDetail(tokenId),
+  };
+};
 
 const style = {
   position: "absolute" as "absolute",
@@ -18,14 +33,14 @@ const style = {
   width: 400,
   bgcolor: "background.paper",
   border: "1px solid #000",
-  borderRadius: '5px',
+  borderRadius: "5px",
   boxShadow: 24,
   p: 4,
   display: "flex",
   flexDirection: "column",
 };
 
-const Detail = ({ code }) => {
+const ItemDetail = ({ code }) => {
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -104,4 +119,5 @@ const Detail = ({ code }) => {
     </div>
   );
 };
-export default Detail;
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemDetail);
