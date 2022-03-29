@@ -17,6 +17,19 @@
 				"type": "constructor"
 			},
 			{
+				"inputs": [],
+				"name": "getOnSaleKallosToken",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -24,20 +37,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "getKallosTokenPrice",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getOnSaleKallosTokenArrayLength",
+				"name": "getTokenPrice",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -88,7 +88,7 @@
 						"type": "uint256"
 					}
 				],
-				"name": "onSaleKallosTokenArray",
+				"name": "onSaleKallosToken",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -158,6 +158,14 @@
 		"remappings": []
 	},
 	"sources": {
+		"@openzeppelin/contracts/access/Ownable.sol": {
+			"keccak256": "0x24e0364e503a9bbde94c715d26573a76f14cd2a202d45f96f52134ab806b67b9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e12cbaa7378fd9b62280e4e1d164bedcb4399ce238f5f98fc0eefb7e50577981",
+				"dweb:/ipfs/QmXRoFGUgfsaRkoPT5bxNMtSayKTQ8GZATLPXf69HcRA51"
+			]
+		},
 		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
 			"keccak256": "0x11b84bb56dc112a6590bfe3e0efa118aa1b5891132342200d04c4ef544cb93de",
 			"license": "MIT",
@@ -247,19 +255,19 @@
 			]
 		},
 		"MintKallosToken.sol": {
-			"keccak256": "0x1ae7f91912ee076799beec454b4bd9d6217a36967bfc8dbb5b618897ad0661ab",
+			"keccak256": "0x328a57c58bcac35831eb4996a4b707a4d156d5a42007514105471fadf5113532",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://d254496286f26a502bbb4db5571f0fdca4503df33373a58f2d124f4c82ec4cf0",
-				"dweb:/ipfs/QmSHsX4h5RvQUnNEf3pJmcUpX7p4TNtAyGSLUrurSX2XdP"
+				"bzz-raw://4e09e2ba016adf2b003385ff3d62781f9e1f15c77221e9f6414cc7cd3ecfb63b",
+				"dweb:/ipfs/QmcYGhM44juLAZmNJRpXa8Qrd5Cv3619i5AV3qDTnLWuwt"
 			]
 		},
 		"SaleKallosToken.sol": {
-			"keccak256": "0x5393125d6c4dd57dd8bfecb17ae366b5e36dfbec5eb40908dd2c76dd0d55a469",
+			"keccak256": "0x4338cf2232122bd58920fc7697c599103e8b1c8b17bef3acf9c5d7936ee2c05b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://81abb820d354dff2b82df1f810f1c2792ef76690d7cd78abc27c573e51b81f90",
-				"dweb:/ipfs/Qma3YWpNFLctKfaWZqg1WJ5Ne8a3L6twkXQc7YMvYaqvrj"
+				"bzz-raw://77433a2d3a08001d3e44e3995c2e2a2eb4aa15d7cf9bef4daf18bd4055751b5e",
+				"dweb:/ipfs/QmbhkJxZaV43aCeYDXLnroxmhGfhWKq1xaJd1Wc5YJA3Xn"
 			]
 		}
 	},

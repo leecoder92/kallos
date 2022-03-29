@@ -1,10 +1,25 @@
-import { FC } from "react";
-import { Box, Button } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import {
+  Container,
+  CssBaseline,
+  Typography,
+  Grid,
+  Box,
+  TextField,
+  Stack,
+  Button,
+  Paper,
+} from "@mui/material";
+import CollectionCard from "../components/CollectionCard";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { mintKallosTokenContract, saleKallosTokenAddress } from "web3Config";
-import MyKallosCard, { IMyKallosCard } from "../components/MyKallosCard";
-import Image from "next/image";
+import { IMyKallosData } from "../interfaces";
+import MyKallosCard from "@/components/MyKallosCard";
+
+import {
+  mintKallosTokenContract,
+  saleKallosTokenContract,
+  getKallosTokenContract,
+} from "web3Config";
 
 import { getUserInfo, getAllItemsOfUser } from "@/store/modules/user";
 import { RootState } from "../store/modules";
@@ -31,150 +46,71 @@ interface ParamObj {
   itemsPerOnePage: number;
 }
 
-const MyPage = ({ account }) => {
-  const [kallosCardArray, setKallosCardArray] = useState<IMyKallosCard[]>();
+const MyPage: FC = ({ account }) => {
+  const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
   const [saleStatus, setSaleStatus] = useState<boolean>(false);
 
   const getKallosTokens = async () => {
     try {
-      const balanceLength = await mintKallosTokenContract.methods
-        .balanceOf(account)
+      const response = await getKallosTokenContract.methods
+        .getKallosTokens(account)
         .call();
 
-      if (balanceLength === "0") return;
+      console.log("토큰리스트", response);
 
-      const tempKallosCardArray: IMyKallosCard[] = [];
-
-      const response = await mintKallosTokenContract.methods
-        .getKallosToken(account)
-        .call();
-
-      console.log(response);
-      response.map((item: IMyKallosCard) => {
-        tempKallosCardArray.push({
-          kallosTokenId: item.kallosTokenId,
-          kallosType: item.kallosType,
-          kallosPrice: item.kallosPrice,
-        });
-      });
-      setKallosCardArray(tempKallosCardArray);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getIsApprovedForAll = async () => {
-    try {
-      const response = await mintKallosTokenContract.methods
-        .isApprovedForAll(account, saleKallosTokenAddress)
-        .call();
-
-      if (response) setSaleStatus(true);
-      console.log(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const onClickApproveToggle = async () => {
-    try {
-      if (!account) return;
-
-      const response = await mintKallosTokenContract.methods
-        .setApprovalForAll(saleKallosTokenAddress, !saleStatus)
-        .send({ from: account });
-
-      if (response.status) {
-        setSaleStatus(!saleStatus);
-      }
+      setKallosTokens(response);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    if (!account) return;
-
-    getIsApprovedForAll();
     getKallosTokens();
   }, [account]);
 
-  useEffect(() => {
-    console.log(kallosCardArray);
-  }, [kallosCardArray]);
-
   return (
-    <div className="container">
-      <Link href="/regist">
-        <a>
-          <button>regist</button>
-        </a>
-      </Link>
-      <p>Sale Status: {saleStatus ? "True" : "False"}</p>
-      <button onClick={onClickApproveToggle}>
-        {saleStatus ? "Cancel" : "Approve"}
-      </button>
-
-      <h1>My Page</h1>
-
-      <Box sx={{ display: "flex" }}>
-        <Box
-          sx={{ display: "flex", flexDirection: "column", marginRight: "40px" }}
-        >
-          <Image width={200} height={200} src={"/images/1.png"}></Image>
-          <Box>
-            <Link href="/mypageupdate">
-              <a>
-                <Button>정보수정</Button>
-              </a>
-            </Link>
-            <p>이름</p>
-            <p>계좌(지갑)</p>
-            <p>보유 작품 수</p>
-            <p>등등</p>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, 200px)",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 7,
-            rowGap: 3,
-            columnGap: 1,
-          }}
-        >
-          {kallosCardArray &&
-            kallosCardArray.map((item, idx) => {
+    <>
+      <Container maxWidth="lg" sx={{ pt: 20, justifyContent: "center" }}>
+        <Grid container spacing={10}>
+          <Grid item direction="column" md={3} align="center">
+            <Typography sx={{ mb: 5 }}>프로필 사진</Typography>
+            <Box sx={{ py: 5, px: 3, bgcolor: "text.disabled" }} spacing={8}>
+              <Stack direction="column" spacing={2}>
+                <Link href={"/mypageupdate"} passHref>
+                  <Button
+                    style={{
+                      color: "white",
+                      backgroundColor: "#1b5e20",
+                    }}
+                  >
+                    프로필 편집
+                  </Button>
+                </Link>
+                <Typography>이름</Typography>
+                <Typography>계좌(지갑)</Typography>
+                <Typography>보유 작품 수</Typography>
+                <Typography>등등</Typography>
+              </Stack>
+            </Box>
+          </Grid>
+          <Grid item direction="column" md={9}>
+            <Typography variant="h4">보유 중인 작품</Typography>
+            {kallosTokens?.map((v, i) => {
               return (
                 <MyKallosCard
-                  key={idx}
-                  kallosTokenId={item.kallosTokenId}
-                  kallosType={item.kallosType}
-                  kallosPrice={item.kallosPrice}
+                  key={i}
+                  id={v.id}
+                  uri={v.uri}
+                  price={v.price}
                   saleStatus={saleStatus}
                   account={account}
                 />
               );
             })}
-        </Box>
-      </Box>
-      <style jsx>
-        {`
-          .container {
-            min-width: 800px;
-            margin: 100px 200px;
-          }
-          h1 {
-            text-align: center;
-            margin-bottom: 70px;
-            font-size: 50px;
-          }
-        `}
-      </style>
-    </div>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
   );
 };
 
