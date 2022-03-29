@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import {
   Box,
@@ -96,6 +97,6 @@ const creatorDetail = () => {
       </main>
     </div>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(creatorDetail);

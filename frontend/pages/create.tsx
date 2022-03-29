@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -16,24 +17,63 @@ import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import { mintKallosTokenContract } from "web3Config";
+import { addNewItem } from "@/store/modules/item";
+import { connect } from "react-redux";
+
+interface NewItemInfo {
+  name: string;
+  artist: string;
+  privateKey: string;
+  keyword: string;
+}
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    // addNewItem: (itemInfo) => addNewItem(itemInfo),
+  };
+};
+
+// interface MainProps {
+//   account: string;
+// }
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-export default function Create({ account }) {
+client.pin.add("QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn").then((res) => {
+  console.log(res);
+});
+
+const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({
     name: "",
     description: "",
   });
-
   //이미지 미리보기
   const [image, setImage] = useState({
     image_file: "",
     preview_URL: defaultImage,
   });
+  const [loaded, setLoaded] = useState(false);
+  let inputRef: any;
 
   async function onChange(e) {
     const file = e.target.files[0];
+    e.preventDefault();
+    const fileReader = new FileReader();
+
+    if (e.target.files[0]) {
+      fileReader.readAsDataURL(e.target.files[0]);
+    }
+    let new_image;
+    fileReader.onload = () => {
+      new_image = fileReader.result;
+      setImage({
+        image_file: e.target.files[0],
+        preview_URL: new_image,
+      });
+      setLoaded(true);
+    };
     try {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
@@ -92,47 +132,70 @@ export default function Create({ account }) {
             </Typography>
             <input
               type="file"
-              name="Asset"
-              className="my-4"
+              accept="image/*"
+              ref={(refParam) => (inputRef = refParam)}
               onChange={onChange}
+              style={{ display: "none" }}
             />
-            {fileUrl && (
-              <Image
-                className="rounded mt-4"
-                width="300px"
-                height="300px"
-                src={fileUrl}
-                alt="Input Image"
-              />
-            )}
+            <div style={{ cursor: "pointer" }}>
+              {loaded === false || loaded === true ? (
+                <Image
+                  src={image.preview_URL}
+                  alt="preview-image"
+                  width="350"
+                  height="350"
+                  onClick={() => inputRef.click()}
+                />
+              ) : (
+                <span>이미지를 불러오는 중입니다.</span>
+              )}
+            </div>
           </Stack>
           <Stack direction="row" sx={{ my: 8 }}>
             <Typography variant="h5" sx={{ mr: 7.7 }}>
-              디스크립션
+              작가명
             </Typography>
-            <textarea
-              placeholder="Asset Description"
-              className="mt-2 border rounded p-4"
-              onChange={(e) =>
-                updateFormInput({ ...formInput, description: e.target.value })
-              }
-            />
+            <Typography sx={{ ml: 10, width: 700 }}>
+              !!작가이름 props 필요!!
+            </Typography>
           </Stack>
           <Stack direction="row">
             <Typography variant="h5">제목(작품명)</Typography>
-            <input
-              placeholder="Asset Name"
-              className="mt-8 border rounded p-4"
+            <TextField
+              required
+              variant="standard"
+              sx={{ ml: 10, width: 700 }}
               onChange={(e) =>
                 updateFormInput({ ...formInput, name: e.target.value })
               }
-            />
+            ></TextField>
+          </Stack>
+
+          <Stack direction="row" sx={{ my: 8 }}>
+            <Typography variant="h5">설명</Typography>
+            <TextField
+              required
+              variant="standard"
+              sx={{ ml: 21, width: 700 }}
+              onChange={(e) =>
+                updateFormInput({ ...formInput, description: e.target.value })
+              }
+            ></TextField>
           </Stack>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={createMint}>등록하기</Button>
+          <Button
+            onClick={createMint}
+            variant="contained"
+            size="large"
+            sx={{ mr: 29, mb: 5 }}
+          >
+            등록하기
+          </Button>
         </Box>
       </Container>
     </div>
   );
-}
+};
+
+export default connect(null, mapDispatchToProps)(Create);

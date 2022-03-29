@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { FC, useEffect, useState } from "react";
 import {
   Container,
@@ -44,7 +45,7 @@ interface ParamObj {
   itemsPerOnePage: number;
 }
 
-const MyPage: FC = ({ account }) => {
+const MyPage = ({ account }) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
   const [saleStatus, setSaleStatus] = useState<boolean>(false);
 
@@ -103,7 +104,7 @@ const MyPage: FC = ({ account }) => {
         <Grid container spacing={10}>
           <Grid item direction="column" md={3} alignItems="center">
             <Typography sx={{ mb: 5 }}>프로필 사진</Typography>
-            <Box sx={{ py: 5, px: 3, bgcolor: "text.disabled" }} spacing={8}>
+            <Box sx={{ py: 5, px: 3, bgcolor: "text.disabled" }}>
               <Stack direction="column" spacing={2}>
                 <Link href={"/mypageupdate"} passHref>
                   <Button

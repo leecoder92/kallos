@@ -90,18 +90,6 @@ const View: FC<SaleKallosProps> = ({ account }) => {
     <div className="viewContainer">
       <h1>Explore Calligraphy</h1>
 
-      <Link href="/regist">
-        <a>
-          <button>regist</button>
-        </a>
-      </Link>
-
-      <Link href="/mine">
-        <a>
-          <button>mine</button>
-        </a>
-      </Link>
-
       <Box
         sx={{
           display: "flex",
