@@ -39,10 +39,6 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
-client.pin.add("QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn").then((res) => {
-  console.log(res);
-});
-
 const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({
@@ -112,7 +108,7 @@ const Create = ({ account }) => {
         .mintKallosToken(url)
         .send({ from: account });
 
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +120,6 @@ const Create = ({ account }) => {
         <Typography variant="h3" sx={{ my: 8 }}>
           NFT 등록하기
         </Typography>
-        {/* <h1>NFT 등록하기</h1> */}
         <Box>
           <Stack direction="row" sx={{ mt: 10 }}>
             <Typography variant="h5" sx={{ mr: 14 }}>
@@ -156,7 +151,7 @@ const Create = ({ account }) => {
               작가명
             </Typography>
             <Typography sx={{ ml: 10, width: 700 }}>
-              !!작가이름 props 필요!!
+              !!작가이름 props 필요!! (현재 지갑 주소): {account}
             </Typography>
           </Stack>
           <Stack direction="row">
@@ -170,7 +165,6 @@ const Create = ({ account }) => {
               }
             ></TextField>
           </Stack>
-
           <Stack direction="row" sx={{ my: 8 }}>
             <Typography variant="h5">설명</Typography>
             <TextField
