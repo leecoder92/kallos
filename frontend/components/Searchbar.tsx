@@ -5,8 +5,10 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputBase } from "@mui/material";
 // 기능
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
+// 검색바 스타일
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   border: "1px solid",
@@ -71,7 +73,15 @@ function Searchbar() {
     event.preventDefault();
     setSearchValue(event.target.value);
   };
-
+  // 검색 클릭했을 때 결과창 닫고 검색어 초기화
+  const handleArtistClick = (event: any) => {
+    event.preventDefault();
+    setSearchValue("");
+    setFilteredArtistData([]);
+    setFilteredTitleData([]);
+    setIsLoading(true);
+  };
+  // 검색 필터링
   useEffect(() => {
     const searchFilter = setTimeout(() => {
       // 아티스트 필터링
@@ -126,6 +136,7 @@ function Searchbar() {
         inputProps={{ "aria-label": "search" }}
         fullWidth
         onChange={handleSearchInput}
+        value={searchValue}
       />
       {searchValue &&
         (searchValue.length >= 3 && !isLoading ? (
@@ -138,7 +149,15 @@ function Searchbar() {
               {filteredArtistData.length != 0 ? (
                 <ul>
                   {filteredArtistData.slice(0, 3).map((value, key) => {
-                    return <li key={key}>{value.artist}</li>;
+                    return (
+                      <li
+                        key={key}
+                        onClick={handleArtistClick}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Link href="/artist">{value.artist}</Link>
+                      </li>
+                    );
                   })}
                 </ul>
               ) : (

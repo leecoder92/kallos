@@ -61,7 +61,7 @@ const ItemDetail = ({ code }) => {
           alignItems: "center",
         }}
       >
-        <Image src="/images/5.png" width={250} height={280} />
+        <Image src="/images/5.png" width={250} height={280} alt="token image" />
         <Box
           sx={{
             marginLeft: "30px",
