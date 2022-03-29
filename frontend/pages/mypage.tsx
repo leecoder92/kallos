@@ -72,7 +72,7 @@ const MyPage: FC = ({ account }) => {
     <>
       <Container maxWidth="lg" sx={{ pt: 20, justifyContent: "center" }}>
         <Grid container spacing={10}>
-          <Grid item direction="column" md={3} align="center">
+          <Grid item direction="column" md={3} alignItems="center">
             <Typography sx={{ mb: 5 }}>프로필 사진</Typography>
             <Box sx={{ py: 5, px: 3, bgcolor: "text.disabled" }} spacing={8}>
               <Stack direction="column" spacing={2}>

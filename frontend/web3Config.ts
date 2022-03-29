@@ -75,7 +75,6 @@ const mintKallosTokenAbi: AbiItem[] = [
       {
         indexed: true,
         internalType: "address",
-<<<<<<< HEAD
         name: "previousOwner",
         type: "address",
       },
@@ -95,8 +94,6 @@ const mintKallosTokenAbi: AbiItem[] = [
       {
         indexed: true,
         internalType: "address",
-=======
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
         name: "from",
         type: "address",
       },
@@ -199,7 +196,6 @@ const mintKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
-<<<<<<< HEAD
         internalType: "string",
         name: "_tokenURI",
         type: "string",
@@ -221,60 +217,16 @@ const mintKallosTokenAbi: AbiItem[] = [
       },
     ],
     stateMutability: "view",
-=======
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "kallosTypes",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "tokenURI",
-        type: "string",
-      },
-    ],
-    name: "mintKallosToken",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     type: "function",
   },
   {
     inputs: [],
-<<<<<<< HEAD
     name: "owner",
     outputs: [
       {
         internalType: "address",
         name: "",
         type: "address",
-=======
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
       },
     ],
     stateMutability: "view",
@@ -300,7 +252,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     type: "function",
   },
   {
-<<<<<<< HEAD
     inputs: [],
     name: "renounceOwnership",
     outputs: [],
@@ -308,8 +259,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     type: "function",
   },
   {
-=======
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     inputs: [
       {
         internalType: "address",
@@ -361,22 +310,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     type: "function",
   },
   {
-<<<<<<< HEAD
-=======
-    inputs: [],
-    name: "saleKallosToken",
-    outputs: [
-      {
-        internalType: "contract SaleKallosToken",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     inputs: [
       {
         internalType: "address",
@@ -430,7 +363,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     inputs: [
       {
         internalType: "uint256",
-<<<<<<< HEAD
         name: "index",
         type: "uint256",
       },
@@ -475,9 +407,6 @@ const mintKallosTokenAbi: AbiItem[] = [
       {
         internalType: "uint256",
         name: "_tokenId",
-=======
-        name: "tokenId",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
         type: "uint256",
       },
     ],
@@ -495,7 +424,6 @@ const mintKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
-<<<<<<< HEAD
         internalType: "uint256",
         name: "",
         type: "uint256",
@@ -528,8 +456,6 @@ const mintKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
-=======
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
         internalType: "address",
         name: "from",
         type: "address",
@@ -550,7 +476,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     stateMutability: "nonpayable",
     type: "function",
   },
-<<<<<<< HEAD
   {
     inputs: [
       {
@@ -564,8 +489,6 @@ const mintKallosTokenAbi: AbiItem[] = [
     stateMutability: "nonpayable",
     type: "function",
   },
-=======
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
 ];
 const saleKallosTokenAbi: AbiItem[] = [
   {
@@ -599,7 +522,6 @@ const saleKallosTokenAbi: AbiItem[] = [
         name: "_kallosTokenId",
         type: "uint256",
       },
-<<<<<<< HEAD
     ],
     name: "getTokenPrice",
     outputs: [
@@ -610,48 +532,17 @@ const saleKallosTokenAbi: AbiItem[] = [
       },
     ],
     stateMutability: "view",
-=======
-      {
-        internalType: "uint256",
-        name: "_price",
-        type: "uint256",
-      },
-    ],
-    name: "setForSaleKallosToken",
-    outputs: [],
-    stateMutability: "nonpayable",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     type: "function",
   },
   {
     inputs: [
       {
-<<<<<<< HEAD
         internalType: "uint256",
         name: "",
         type: "uint256",
       },
     ],
     name: "kallosTokenPrices",
-=======
-        internalType: "address",
-        name: "_mintKallosTokenAddress",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_kallosTokenId",
-        type: "uint256",
-      },
-    ],
-    name: "getKallosTokenPrice",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     outputs: [
       {
         internalType: "uint256",
@@ -664,21 +555,12 @@ const saleKallosTokenAbi: AbiItem[] = [
   },
   {
     inputs: [],
-<<<<<<< HEAD
     name: "mintKallosTokenAddress",
     outputs: [
       {
         internalType: "contract MintKallosToken",
         name: "",
         type: "address",
-=======
-    name: "getOnSaleKallosTokenArrayLength",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
       },
     ],
     stateMutability: "view",
@@ -692,11 +574,7 @@ const saleKallosTokenAbi: AbiItem[] = [
         type: "uint256",
       },
     ],
-<<<<<<< HEAD
     name: "onSaleKallosToken",
-=======
-    name: "kallosTokenPrices",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     outputs: [
       {
         internalType: "uint256",
@@ -708,7 +586,6 @@ const saleKallosTokenAbi: AbiItem[] = [
     type: "function",
   },
   {
-<<<<<<< HEAD
     inputs: [
       {
         internalType: "uint256",
@@ -719,25 +596,12 @@ const saleKallosTokenAbi: AbiItem[] = [
     name: "purchaseKallosToken",
     outputs: [],
     stateMutability: "payable",
-=======
-    inputs: [],
-    name: "mintKallosTokenAddress",
-    outputs: [
-      {
-        internalType: "contract MintKallosToken",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     type: "function",
   },
   {
     inputs: [
       {
         internalType: "uint256",
-<<<<<<< HEAD
         name: "_kallosTokenId",
         type: "uint256",
       },
@@ -750,21 +614,6 @@ const saleKallosTokenAbi: AbiItem[] = [
     name: "setForSaleKallosToken",
     outputs: [],
     stateMutability: "nonpayable",
-=======
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "onSaleKallosTokenArray",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
->>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     type: "function",
   },
 ];
