@@ -1,73 +1,122 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  CssBaseline,
-} from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import Web3 from "web3";
+import { create, IPFSHTTPClient } from 'ipfs-http-client'
+import { Box, Button, Container, Stack, TextField, Typography, Dialog, DialogContent, DialogActions, CssBaseline } from "@mui/material";
 import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
+import Link from "next/link";
+import { mintKallosTokenContract, web3} from "web3Config";
 
-import { addNewItem } from "@/store/modules/item";
-import { connect } from "react-redux";
-
-interface NewItemInfo {
-  title: string;
-  artist: string;
-  privateKey: string;
-  keyword: string;
+interface MainProps {
+  account: string;
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    //   addNewItem: (itemInfo) => addNewItem(itemInfo),
-  };
-};
+// ipfs request
+const ipfsClient = require('ipfs-http-client');
+const projectId = '26r91y8NYOlD5hMX5CYsWQ1qFuc';
+const projectSecret = 'de18b82921385c7f06cc1dc10bba3229';
+const auth =
+    'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
-const Create = () => {
-  // modal
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+const client = ipfsClient.create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+});
 
-  //이미지 미리보기
-  const [image, setImage] = useState({
-    image_file: "",
-    preview_URL: defaultImage,
-  });
+client.pin.add('QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn').then((res) => {
+    console.log(res);
+});
 
-  const [loaded, setLoaded] = useState(false);
+const Create = ({ account }) =>  {
+  const [privateKey, setPrivateKey] = useState<string>('');
+  // console.log(account)
 
-  let inputRef;
-
-  const saveImage = (e) => {
-    e.preventDefault();
-    const fileReader = new FileReader();
-
-    if (e.target.files[0]) {
-      setLoaded(true);
-      fileReader.readAsDataURL(e.target.files[0]);
+  //이미지 미리보기 
+    const [image, setImage] = useState({
+      image_file: "",
+      preview_URL: defaultImage,
+    });
+    const [loaded, setLoaded] = useState(false);
+    const [fileUrl, setFileUrl] = useState('');
+    let inputRef:any;
+    // console.log(image);
+    
+    //IPFS  
+    let ipfs: IPFSHTTPClient | undefined;
+    try {
+      ipfs = create({
+        url: "https://ipfs.infura.io:5001/api/v0",
+  
+      });
+    } catch (error) {
+      console.error("IPFS error ", error);
+      ipfs = undefined;
     }
-    //에러부분 수정해주세요!
-    //   fileReader.onload = () => {
-    //     setImage(
-    //       {
-    //         image_file: e.target.files[0],
-    //         preview_URL: fileReader.result
-    //       }
-    //     )
-    //     setLoaded(true);
-    //   }
+    // url 받아오기
+    const saveImage = async (e) => {
+      e.preventDefault();
+      const fileReader = new FileReader();
+      
+      if(e.target.files[0]){
+        fileReader.readAsDataURL(e.target.files[0])
+      }
+      let new_image;
+      fileReader.onload = () => {
+        new_image = fileReader.result
+        setImage(
+          {
+            image_file: e.target.files[0],
+            preview_URL: new_image
+          }
+          )
+        setLoaded(true);
+      }
+      let updateFileUrl;
+      try {
+        const added = await ipfs.add(e.target.files[0]);
+        const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+        setFileUrl(url);
+        console.log(url)
+      } catch (error) {
+        console.log("Error uploading file: ", error);
+      }
+    }
+      
+  const [ formInput, updateFormInput ] = useState({ author : "", title:"", description:""});
+  const createMint = async () => {
+    const { title, description } = formInput;
+    if (!title || !description || !fileUrl) return console.log("값이 비어있음");
+
+    const data = JSON.stringify({
+      title,
+      description,
+      image: fileUrl,
+    });
+
+    try {
+      const added = await client.add(data);
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      console.log("url은", url);
+      createSale(url);
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
+  };
+
+  const createSale = async (url) => {
+    try {
+      const response = await mintKallosTokenContract.methods
+        .mintKallosToken(url)
+        .send({ from: account });
+
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -90,7 +139,7 @@ const Create = () => {
               ref={(refParam) => (inputRef = refParam)}
               style={{ display: "none" }}
             />
-            <div className="img-wrapper" style={{ cursor: "pointer" }}>
+            <div style={{ cursor:'pointer' }}>
               {loaded === false || loaded === true ? (
                 <Image
                   src={image.preview_URL}
@@ -104,56 +153,52 @@ const Create = () => {
               )}
             </div>
           </Stack>
-          <Stack direction="row" sx={{ my: 8 }}>
-            <Typography variant="h5" sx={{ mr: 7.7 }}>
-              작가명
-            </Typography>
-            <TextField
-              required
-              variant="standard"
+          <Stack direction="row" sx={{ my : 8}}>
+            <Typography variant="h5" sx={{mr : 7.7}}>작가명</Typography>
+            <TextField 
+              required 
+              variant="standard" 
               sx={{ ml: 10, width: 700 }}
-            ></TextField>
+              onChange={(e) => updateFormInput({ ...formInput, author : e.target.value})}
+              >
+            </TextField>
           </Stack>
           <Stack direction="row">
             <Typography variant="h5">제목(작품명)</Typography>
-            <TextField
+            <TextField 
+              required 
+              variant="standard" 
+              sx={{ml : 10, width:700}}
+              onChange={(e) => updateFormInput({ ...formInput, title : e.target.value})}
+            >
+            </TextField>
+          </Stack>
+          <Stack direction="row" sx={{ my : 8}}>
+            <Typography variant="h5">설명</Typography>
+            <TextField 
               required
-              variant="standard"
-              sx={{ ml: 10, width: 700 }}
-            ></TextField>
-          </Stack>
-          <Stack direction="row" sx={{ my: 8 }}>
-            <Typography variant="h5">키워드(optional)</Typography>
-            <TextField
-              variant="standard"
-              sx={{ ml: 6, width: 700 }}
-            ></TextField>
-          </Stack>
+              variant="standard" 
+              sx={{ml : 6, width:700}}
+              onChange={(e) => updateFormInput({ ...formInput, description : e.target.value})}
+            >
+            </TextField>
+          </Stack>  
         </Box>
         {/* 버튼 끝으로 옮기기 */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            onClick={handleOpen}
-            variant="contained"
-            size="large"
-            sx={{ mr: 28 }}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+          <Button 
+            onClick={createMint} 
+            variant="contained" 
+            size="large" 
+            sx={{ mr : 28}}
+            // onSubmit={ButtonCreate}
           >
             등록하기
           </Button>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogContent sx={{ width: 400 }}>
-              <h3>등록 승인하기</h3>
-              <TextField label="개인키 입력" sx={{ width: 350 }}></TextField>
-            </DialogContent>
-            <DialogActions>
-              <Button>취소</Button>
-              <Button>승인하기</Button>
-            </DialogActions>
-          </Dialog>
         </Box>
       </Container>
     </div>
   );
 };
 
-export default connect(null, mapDispatchToProps)(Create);
+export default Create;
