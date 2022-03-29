@@ -21,25 +21,29 @@ import {
   getKallosTokenContract,
 } from "web3Config";
 
-function Row() {
-  return (
-    <Grid container>
-      <Stack direction="row">
-        <Grid item xs={3}>
-          <CollectionCard />
-        </Grid>
-        <Grid item xs={3}>
-          <CollectionCard />
-        </Grid>
-        <Grid item xs={3}>
-          <CollectionCard />
-        </Grid>
-        <Grid item xs={3}>
-          <CollectionCard />
-        </Grid>
-      </Stack>
-    </Grid>
-  );
+import { getUserInfo, getAllItemsOfUser } from "@/store/modules/user";
+import { RootState } from "../store/modules";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    userInfo: state.userReducer.userInfo,
+    userItems: state.userReducer.userItems,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    //   setUserInfo: (userAddress) => getUserInfo(userAddress),
+    //   setAllItemsOfUser: (paramObj) => getAllItemsOfUser(paramObj),
+  };
+};
+
+//paramObj
+interface ParamObj {
+  userAddress: string;
+  pageNumber: number;
+  itemsPerOnePage: number;
 }
 
 const MyPage: FC = ({ account }) => {
@@ -110,4 +114,4 @@ const MyPage: FC = ({ account }) => {
   );
 };
 
-export default MyPage;
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);

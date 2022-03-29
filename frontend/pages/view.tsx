@@ -11,20 +11,39 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 
-import ItemCard from "@/components/ItemCard";
-
-const label = { inputProps: { "aria-label": "Switch demo" } };
-
-//여기부터
 import { IMyKallosCard } from "@/components/MyKallosCard";
 import {
   mintKallosTokenContract,
   saleKallosTokenContract,
 } from "../web3Config";
 import SaleKallosCard from "@/components/SaleKallosCard";
+import { getAllItems } from "@/store/modules/item";
+import { RootState } from "../store/modules";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state: RootState) => {
+  return {
+    items: state.itemReducer.allItems,
+  };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    //   setAllItems: (paramsObj) => getAllItems(paramsObj),
+  };
+};
 
 interface SaleKallosProps {
   account: string;
+}
+
+//paramObj
+interface ParamObj {
+  saleOrNot: boolean;
+  searchOption: string;
+  searchKeyword: string;
+  pageNumber: number;
+  itemsPerOnePage: number;
 }
 
 const View: FC<SaleKallosProps> = ({ account }) => {
@@ -248,4 +267,4 @@ const View: FC<SaleKallosProps> = ({ account }) => {
   );
 };
 
-export default View;
+export default connect(mapStateToProps, mapDispatchToProps)(View);

@@ -1,7 +1,7 @@
 /* eslint-disable */
+import React, { useState, useEffect } from "react";
 import "../styles/globals.css";
 import Head from "next/head";
-import { useState, useEffect } from "react";
 import type { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "styled-components";

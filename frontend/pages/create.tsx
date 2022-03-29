@@ -213,4 +213,6 @@ export default function Create({ account }) {
       </Container>
     </div>
   );
-}
+};
+
+export default Create;

@@ -18,9 +18,13 @@
     "@mui/styled-engine-sc": "^5.4.2",
     "@mui/styles": "^5.5.1",
     "@reduxjs/toolkit": "^1.8.0",
+    "axios": "^0.26.1",
     "framer-motion": "^6.2.8",
     "ipfs-http-client": "^56.0.1",
+<<<<<<< HEAD
     "moralis": "^1.5.5",
+=======
+>>>>>>> 635723131f3a768170a6e5b4bbc84a7a1eb2009d
     "next": "12.1.0",
     "next-redux-wrapper": "^7.0.5",
     "nft.storage": "^6.1.0",
