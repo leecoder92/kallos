@@ -2,7 +2,7 @@
 import { AbiItem } from "web3-utils";
 import Web3 from "web3";
 
-const mintKallosTokenAbi: AbiItem[] = [
+export const mintKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
@@ -490,7 +490,7 @@ const mintKallosTokenAbi: AbiItem[] = [
     type: "function",
   },
 ];
-const saleKallosTokenAbi: AbiItem[] = [
+export const saleKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
@@ -618,7 +618,7 @@ const saleKallosTokenAbi: AbiItem[] = [
   },
 ];
 
-const getKallosTokenAbi: AbiItem[] = [
+export const getKallosTokenAbi: AbiItem[] = [
   {
     inputs: [
       {
@@ -729,13 +729,14 @@ const getKallosTokenAbi: AbiItem[] = [
   },
 ];
 
-const mintKallosTokenAddress = "0x45Af8D9c230237a6B413B5cf47CF93Eed107C53C";
+export const mintKallosTokenAddress =
+  "0xF93905925B0b00bC51d37b0CDAbb3E3b0e0E9E87";
 
 export const saleKallosTokenAddress =
-  "0x7914C75227c4c742cbD3d385Be2e3e46109cD842";
+  "0x394971840ACC289Cb17C9034e12897c26E8103A2";
 
 export const getKallosTokenAddress =
-  "0xBa04092057010b729fc55aD2aaCF31dafF82b70c";
+  "0x29109F55EBC72bFbbd2cff4DB2EFFb40E4123340";
 
 declare global {
   interface Window {

@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import React, { useEffect, useState, FC } from "react";
 import Link from "next/link";
 
@@ -10,16 +9,16 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-
-import { IMyKallosCard } from "@/components/MyKallosCard";
 import {
   mintKallosTokenContract,
   saleKallosTokenContract,
+  getKallosTokenContract,
 } from "../web3Config";
 import SaleKallosCard from "@/components/SaleKallosCard";
 import { getAllItems } from "@/store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
+import { IMyKallosData } from "../interfaces";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -47,8 +46,7 @@ interface ParamObj {
 }
 
 const View: FC<SaleKallosProps> = ({ account }) => {
-  const [saleKallosCardArray, setSaleKallosCardArray] =
-    useState<IMyKallosCard[]>();
+  const [onSaleTokens, setOnSaleTokens] = useState<IMyKallosData[]>();
 
   const [option, setOption] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
@@ -72,85 +70,20 @@ const View: FC<SaleKallosProps> = ({ account }) => {
     setShowOnlySale(!showOnlySale);
   };
 
-  //   //임시 데이터
-  //   const items = [
-  //     {
-  //       image: "/images/5.png",
-  //       artist: "sue",
-  //       name: "hi",
-  //       price: 100,
-  //       itemCode: 5,
-  //     },
-  //     {
-  //       image: "/images/4.png",
-  //       artist: "march",
-  //       name: "welcome",
-  //       price: 200,
-  //       itemCode: 4,
-  //     },
-  //     {
-  //       image: "/images/3.png",
-  //       artist: "april",
-  //       name: "hello",
-  //       price: 200,
-  //       itemCode: 3,
-  //     },
-  //     {
-  //       image: "/images/2.png",
-  //       artist: "july",
-  //       name: "seeya",
-  //       price: 200,
-  //       itemCode: 2,
-  //     },
-  //     {
-  //       image: "/images/1.png",
-  //       artist: "june",
-  //       name: "hoho",
-  //       price: 200,
-  //       itemCode: 1,
-  //     },
-  //   ];
-
-  //   useEffect(() => {
-  //     console.log(account);
-  //   }, []);
-
-  const getOnSaleKallosTokens = async () => {
+  const getOnSaleTokens = async () => {
     try {
-      const onSaleKallosTokenArrayLength = await saleKallosTokenContract.methods
-        .getOnSaleKallosTokenArrayLength()
+      const response = await getKallosTokenContract.methods
+        .getSaleKallosTokens()
         .call();
 
-      const tempOnSaleArray: IMyKallosCard[] = [];
-
-      for (let i = 0; i < parseInt(onSaleKallosTokenArrayLength, 10); i++) {
-        const kallosTokenId = await saleKallosTokenContract.methods
-          .onSaleKallosTokenArray(i)
-          .call();
-
-        const kallosType = await mintKallosTokenContract.methods
-          .kallosTypes(kallosTokenId)
-          .call();
-
-        const kallosPrice = await saleKallosTokenContract.methods
-          .kallosTokenPrices(kallosTokenId)
-          .call();
-
-        tempOnSaleArray.push({ kallosTokenId, kallosType, kallosPrice });
-      }
-
-      setSaleKallosCardArray(tempOnSaleArray);
+      setOnSaleTokens(response);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(() => {
-    getOnSaleKallosTokens();
-  }, []);
-
-  useEffect(() => {
-    console.log(saleKallosCardArray);
+    getOnSaleTokens();
   }, []);
 
   return (
@@ -222,19 +155,18 @@ const View: FC<SaleKallosProps> = ({ account }) => {
           columnGap: 1,
         }}
       >
-        {saleKallosCardArray &&
-          saleKallosCardArray.map((v, i) => {
-            return (
-              <SaleKallosCard
-                key={i}
-                kallosType={v.kallosType}
-                kallosPrice={v.kallosPrice}
-                kallosTokenId={v.kallosTokenId}
-                account={account}
-                getOnSaleKallosTokens={getOnSaleKallosTokens}
-              />
-            );
-          })}
+        {onSaleTokens?.map((v, i) => {
+          return (
+            <SaleKallosCard
+              key={i}
+              id={v.id}
+              uri={v.uri}
+              price={v.price}
+              account={account}
+              getOnSaleTokens={getOnSaleTokens}
+            />
+          );
+        })}
       </Box>
       <style jsx>
         {`

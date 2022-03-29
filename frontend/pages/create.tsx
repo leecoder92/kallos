@@ -22,7 +22,7 @@ const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 export default function Create({ account }) {
   const [fileUrl, setFileUrl] = useState(null);
   const [formInput, updateFormInput] = useState({
-    title: "",
+    name: "",
     description: "",
   });
 
@@ -47,11 +47,11 @@ export default function Create({ account }) {
   }
 
   const createMint = async () => {
-    const { title, description } = formInput;
-    if (!title || !description || !fileUrl) return console.log("값이 비어있음");
+    const { name, description } = formInput;
+    if (!name || !description || !fileUrl) return console.log("값이 비어있음");
 
     const data = JSON.stringify({
-      title,
+      name,
       description,
       image: fileUrl,
     });
@@ -102,6 +102,7 @@ export default function Create({ account }) {
                 width="300px"
                 height="300px"
                 src={fileUrl}
+                alt="Input Image"
               />
             )}
           </Stack>
@@ -123,7 +124,7 @@ export default function Create({ account }) {
               placeholder="Asset Name"
               className="mt-8 border rounded p-4"
               onChange={(e) =>
-                updateFormInput({ ...formInput, title: e.target.value })
+                updateFormInput({ ...formInput, name: e.target.value })
               }
             />
           </Stack>

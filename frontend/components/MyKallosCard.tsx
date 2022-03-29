@@ -1,17 +1,10 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import KallosCard from "./KallosCard";
 import { saleKallosTokenContract, web3 } from "../web3Config";
 import { IMyKallosData } from "../interfaces";
 import axios from "axios";
-import {
-  Box,
-  Button,
-  Image,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Text,
-} from "@chakra-ui/react";
+import Image from "next/image";
+import { Co2Sharp } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 
 interface MyKallosCardProps extends IMyKallosData {
   saleStatus: boolean;
@@ -29,6 +22,10 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
   const [sellPrice, setSellPrice] = useState<string>("");
   const [myKallosPrice, setMyKallosPrice] = useState<string>(price);
 
+  const onChangeSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
+    setSellPrice(e.target.value);
+  };
+
   const getMetadata = async () => {
     try {
       const response = await axios.get(uri);
@@ -39,27 +36,23 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
     }
   };
 
-  // const onChangeSellPrice = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setSellPrice(event.target.value);
-  // };
+  const onClickSell = async () => {
+    try {
+      if (!account || !saleStatus) return;
 
-  // const onClickSell = async () => {
-  //   try {
-  //     if (!account || !saleStatus) return;
+      const response = await saleKallosTokenContract.methods
+        .setForSaleKallosToken(id, web3.utils.toWei(sellPrice, "ether"))
+        .send({ from: account });
 
-  //     const response = await saleKallosTokenContract.methods
-  //       .setForSaleKallosToken(
-  //         kallosTokenId,
-  //         web3.utils.toWei(sellPrice, "ether")
-  //       )
-  //       .send({ from: account });
+      // console.dir(response);
 
-  //     if (response.status)
-  //       setMyKallosPrice(web3.utils.toWei(sellPrice, "ether"));
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+      if (response.status) {
+        setMyKallosPrice(web3.utils.toWei(sellPrice, "ether"));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getMetadata();
@@ -67,26 +60,37 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
 
   return (
     <div>
-      {metadata && <Image src={metadata.image} alt="Animal Card" />}
-      {/* <p>제목: {metadata.title}</p>
-      <p>설명: {metadata.description}</p> */}
-      {/* <div>
+      {metadata && (
+        <>
+          <Image
+            width="300px"
+            height="300px"
+            src={metadata.image}
+            alt="Animal Card"
+          />
+          <Typography>제목: {metadata.name}</Typography>
+          <Typography>설명: {metadata.description}</Typography>
+        </>
+      )}
+      <div>
         {myKallosPrice === "0" ? (
           <>
             <form>
               <input
                 type="number"
                 value={sellPrice}
-                // onChange={onChangeSellPrice}
+                onChange={onChangeSellPrice}
               />
               MATIC
             </form>
-            <button>Sell</button>
+            <button onClick={onClickSell} disabled={!saleStatus}>
+              Sell
+            </button>
           </>
         ) : (
-          <p>{web3.utils.fromWei(myKallosPrice)} SSF</p>
+          <p>{web3.utils.fromWei(myKallosPrice)} MATIC</p>
         )}
-      </div> */}
+      </div>
     </div>
   );
 };

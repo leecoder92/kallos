@@ -246,11 +246,11 @@
 			]
 		},
 		"MintKallosToken.sol": {
-			"keccak256": "0x328a57c58bcac35831eb4996a4b707a4d156d5a42007514105471fadf5113532",
+			"keccak256": "0xe666e7cbced151c2faaec0e617ebdd2382c859277a83f7f1347929a7aa9d9076",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4e09e2ba016adf2b003385ff3d62781f9e1f15c77221e9f6414cc7cd3ecfb63b",
-				"dweb:/ipfs/QmcYGhM44juLAZmNJRpXa8Qrd5Cv3619i5AV3qDTnLWuwt"
+				"bzz-raw://5c2cd1e9713d2cf2ef3e8e8a2aff824bb25f6a9b2c926840685d8b12f9caf201",
+				"dweb:/ipfs/QmWVg3aPByU5ETBbuv5eq4Yu9YubaovFdDbYPozA33vifp"
 			]
 		},
 		"SaleKallosToken.sol": {

@@ -10,17 +10,15 @@ import {
   Button,
   Paper,
 } from "@mui/material";
-import CollectionCard from "../components/CollectionCard";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
 import MyKallosCard from "@/components/MyKallosCard";
-
 import {
   mintKallosTokenContract,
   saleKallosTokenContract,
   getKallosTokenContract,
+  saleKallosTokenAddress,
 } from "web3Config";
-
 import { getUserInfo, getAllItemsOfUser } from "@/store/modules/user";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
@@ -64,8 +62,39 @@ const MyPage: FC = ({ account }) => {
     }
   };
 
+  const getSaleStatus = async () => {
+    try {
+      const response = await mintKallosTokenContract.methods
+        .isApprovedForAll(account, saleKallosTokenAddress)
+        .call();
+
+      setSaleStatus(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onClickSaleStatus = async () => {
+    try {
+      if (!account) return;
+
+      const response = await mintKallosTokenContract.methods
+        .setApprovalForAll(saleKallosTokenAddress, !saleStatus)
+        .send({ from: account });
+
+      if (response.status) {
+        setSaleStatus(!saleStatus);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
+    if (!account) return;
+
     getKallosTokens();
+    getSaleStatus();
   }, [account]);
 
   return (
@@ -94,6 +123,17 @@ const MyPage: FC = ({ account }) => {
             </Box>
           </Grid>
           <Grid item direction="column" md={9}>
+            <Typography variant="h5" color={saleStatus ? "success" : "error"}>
+              판매 등록 중 여부:{" "}
+              {saleStatus ? "판매 등록 가능" : "판매 등록 불가능"}
+            </Typography>
+            <Button
+              onClick={onClickSaleStatus}
+              variant="contained"
+              color={saleStatus ? "error" : "success"}
+            >
+              {saleStatus ? "판매 등록 정지" : "판매 등록하기"}
+            </Button>
             <Typography variant="h4">보유 중인 작품</Typography>
             {kallosTokens?.map((v, i) => {
               return (

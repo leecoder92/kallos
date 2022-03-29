@@ -6,38 +6,43 @@ import {
   saleKallosTokenContract,
   web3,
 } from "../web3Config";
-import KallosCard from "./KallosCard";
+import { IMyKallosData } from "../interfaces";
+import axios from "axios";
+import Image from "next/image";
 
-interface SaleKallosCardProps {
-  kallosType: string;
-  kallosPrice: string;
-  kallosTokenId: string;
+interface SaleKallosCardProps extends IMyKallosData {
   account: string;
-  getOnSaleKallosTokens: () => Promise<void>;
+  getOnSaleTokens: () => Promise<void>;
 }
 
 const SaleKallosCard: FC<SaleKallosCardProps> = ({
-  kallosType,
-  kallosPrice,
-  kallosTokenId,
+  id,
+  uri,
+  price,
   account,
-  getOnSaleKallosTokens,
+  getOnSaleTokens,
 }) => {
   //살 수 있나 없나
-  const [isBuyable, setIsBuyable] = useState<boolean>(true);
+  const [metadata, setMetaData] = useState<any>();
+  const [isBuyable, setIsBuyable] = useState<boolean>(false);
+
+  const getMetadata = async () => {
+    try {
+      const response = await axios.get(uri);
+
+      setMetaData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getKallosTokenOwner = async () => {
     try {
-      //owner 주소 불러옴
-      const response = await mintKallosTokenContract.methods
-        .ownerOf(kallosTokenId)
-        .call();
+      const response = await mintKallosTokenContract.methods.ownerOf(id).call();
 
-      // 주소 비교 시 대소문자 다르면 false라서 소문자로 맞춰주고 비교
-      // 작품의 주인일 경우 살 수 없도록 만듬
-      response.toLocaleLowerCase() === account.toLocaleLowerCase()
-        ? setIsBuyable(false)
-        : setIsBuyable(true);
+      setIsBuyable(
+        response.toLocaleLowerCase() === account.toLocaleLowerCase()
+      );
     } catch (error) {
       console.error(error);
     }
@@ -49,11 +54,11 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
       if (!account) return;
 
       const response = await saleKallosTokenContract.methods
-        .purchaseKallosToken(kallosTokenId)
-        .send({ from: account, value: kallosPrice });
+        .purchaseKallosToken(id)
+        .send({ from: account, value: price });
 
       if (response.status) {
-        getOnSaleKallosTokens();
+        getOnSaleTokens();
       }
     } catch (error) {
       console.error(error);
@@ -61,19 +66,27 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
   };
 
   useEffect(() => {
+    getMetadata();
     getKallosTokenOwner();
   }, []);
 
   return (
     <Box textAlign="center" w={150}>
-      <KallosCard kallosType={kallosType} kallosTokenId={kallosTokenId} />
+      {metadata && (
+        <Image
+          width="300px"
+          height="300px"
+          src={metadata.image}
+          alt="NFT Image"
+        />
+      )}
       <Box>
-        <Text d="inline-block">{web3.utils.fromWei(kallosPrice)} SSF</Text>
-        {isBuyable ? (
+        <Text d="inline-block">{web3.utils.fromWei(price)} MATIC</Text>
+        {isBuyable ? null : (
           <Button size="sm" colorScheme="green" m={2} onClick={onClickBuy}>
             Buy
           </Button>
-        ) : null}
+        )}
       </Box>
     </Box>
   );
