@@ -3,19 +3,35 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MintAnimalToken is ERC721Enumerable {
-  constructor() ERC721("h662Animals", "HAS") {}
+contract MintKallosToken is ERC721Enumerable, Ownable {
+    constructor(string memory _name, string memory _symbol)
+        ERC721("kallos", "KLS")
+    {}
 
-  mapping(uint256 => uint256) public animalTypes;
+    mapping(uint256 => string) public tokenURIs;
 
-  function mintAnimalToken() public {
-    uint256 animalTokenId = totalSupply() + 1;
+    function tokenURI(uint256 _tokenId)
+        public
+        view
+        override
+        returns (string memory)
+    {
+        return
+            string(
+                abi.encodePacked(
+                    "https://ipfs.infura.io/ipfs/",
+                    tokenURIs[_tokenId]
+                )
+            );
+    }
 
-    uint256 aninalType = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, animalTokenId))) % 5 + 1;
+    function mintKallosToken(string memory _tokenURI) public onlyOwner {
+        uint256 tokenId = totalSupply() + 1;
 
-    animalTypes[animalTokenId] = aninalType;
+        tokenURIs[tokenId] = _tokenURI;
 
-    _mint(msg.sender, animalTokenId);
-  }
+        _mint(owner(), tokenId);
+    }
 }

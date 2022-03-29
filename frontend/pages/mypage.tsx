@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Container,
   CssBaseline,
@@ -12,7 +12,14 @@ import {
 } from "@mui/material";
 import CollectionCard from "../components/CollectionCard";
 import Link from "next/link";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { IMyKallosData } from "../interfaces";
+import MyKallosCard from "@/components/MyKallosCard";
+
+import {
+  mintKallosTokenContract,
+  saleKallosTokenContract,
+  getKallosTokenContract,
+} from "web3Config";
 
 function Row() {
   return (
@@ -35,7 +42,28 @@ function Row() {
   );
 }
 
-const MyPage: FC = () => {
+const MyPage: FC = ({ account }) => {
+  const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
+  const [saleStatus, setSaleStatus] = useState<boolean>(false);
+
+  const getKallosTokens = async () => {
+    try {
+      const response = await getKallosTokenContract.methods
+        .getKallosTokens(account)
+        .call();
+
+      console.log("토큰리스트", response);
+
+      setKallosTokens(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getKallosTokens();
+  }, [account]);
+
   return (
     <>
       <Container maxWidth="lg" sx={{ pt: 20, justifyContent: "center" }}>
@@ -62,9 +90,19 @@ const MyPage: FC = () => {
             </Box>
           </Grid>
           <Grid item direction="column" md={9}>
-            <Typography>보유 중인 작품</Typography>
-            <Row />
-            <Row />
+            <Typography variant="h4">보유 중인 작품</Typography>
+            {kallosTokens?.map((v, i) => {
+              return (
+                <MyKallosCard
+                  key={i}
+                  id={v.id}
+                  uri={v.uri}
+                  price={v.price}
+                  saleStatus={saleStatus}
+                  account={account}
+                />
+              );
+            })}
           </Grid>
         </Grid>
       </Container>
