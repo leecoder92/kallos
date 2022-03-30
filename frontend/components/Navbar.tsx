@@ -1,16 +1,15 @@
 /* eslint-disable */
 import React, { FC, useEffect, useState } from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  styled,
+} from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 // redux
 import { login, logout } from "../store/modules/login";
 import { RootState } from "../store/modules";
@@ -25,6 +24,11 @@ export interface LoginProps {
   setLogin: any;
   setLogout: any;
 }
+
+const ColorAppbar = styled(AppBar)({
+  backgroundColor: "#2C3C51",
+  color: "in",
+});
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -45,10 +49,8 @@ const mapDispatchToProps = (dispatch: any) => {
 
 // Navbar
 const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const router = useRouter();
+  const [account, setAccount] = useState<string>("");
   const [isLogin, setIsLogin] = useState<boolean>(value);
   const getIsLogin = async () => {
     if (value) {
@@ -63,6 +65,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
     if (myAccount && myAccount.length > 0) {
       setLogin();
       setIsLogin(true);
+      setAccount(myAccount);
     }
   };
 
@@ -74,15 +77,12 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
     getIsLogin();
   }, [isLogin]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const metaLogin = async () => {
     try {
       if (window.ethereum) {
         setLogin();
         setIsLogin(true);
+        alert("환영합니다!");
       } else {
         alert("Metamask를 설치하세요~");
       }
@@ -94,21 +94,23 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const metaLogout = async () => {
     setLogout();
     setIsLogin(false);
+    alert("로그아웃되었습니다.");
   };
 
   return (
     <Box>
-      <AppBar position="static" color="transparent" enableColorOnDark>
+      <ColorAppbar position="static">
         <Toolbar
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            color: "#2C3C51",
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/" passHref>
-              <Button sx={{ color: "black" }}>
+              <Button sx={{ color: "white", ml: 4 }}>
                 {/* 로고로 대체할 예정 */}
                 <Typography variant="h6" noWrap>
                   KALLOS
@@ -117,84 +119,55 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             </Link>
           </Box>
           <Searchbar />
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
             <Link href="/view" passHref>
-              <Button sx={{ color: "black" }}>EXPLORE</Button>
+              <Button
+                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
+              >
+                EXPLORE
+              </Button>
             </Link>
             <Link href="/create" passHref>
-              <Button sx={{ color: "black" }}>CREATE</Button>
-            </Link>
-
-            <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
+              <Button
+                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
               >
-                <AccountCircle />
-              </IconButton>
-              {isLogin ? (
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <Link href="/mypage" passHref>
-                    <MenuItem onClick={handleClose}>Mypage</MenuItem>
-                  </Link>
-                  <MenuItem
-                    onClick={() => {
-                      handleClose();
-                      metaLogout();
+                CREATE
+              </Button>
+            </Link>
+            {isLogin ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Link href="/mypage" passHref>
+                  <Button
+                    sx={{
+                      color: "white",
+                      fontSize: "17px",
+                      fontWeight: "bold",
                     }}
                   >
-                    Logout
-                  </MenuItem>
-                </Menu>
-              ) : (
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
+                    Mypage
+                  </Button>
+                </Link>
+                <Button
+                  sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
+                  onClick={metaLogout}
                 >
-                  <MenuItem
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handleClose();
-                      metaLogin();
-                    }}
-                  >
-                    Login
-                  </MenuItem>
-                </Menu>
-              )}
-            </div>
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <Button
+                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
+                onClick={(event) => {
+                  event.preventDefault();
+                  metaLogin();
+                }}
+              >
+                Login
+              </Button>
+            )}
           </Box>
         </Toolbar>
-      </AppBar>
+      </ColorAppbar>
     </Box>
   );
 };
