@@ -10,6 +10,7 @@ import wrapper from "../store/configureStore";
 import Layout from "../components/Layout";
 import { useSelector, Provider } from "react-redux";
 import { RootState } from "../store/modules";
+import '../styles/Pagination.module.css'
 // import { MoralisProvider } from "react-moralis";
 // import { createStore } from "redux";
 // import { persistStore } from "redux-persist";

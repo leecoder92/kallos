@@ -125,6 +125,7 @@ const Create = ({ account }) => {
   };
 
   return (
+<<<<<<< HEAD
     <div>
       {createLoad ? (
         <>
@@ -208,6 +209,80 @@ const Create = ({ account }) => {
         </Container>
       )}
     </div>
+=======
+      <Container>
+        <Typography variant="h3" sx={{ my: 8 }}>
+          NFT 등록하기
+        </Typography>
+        <Box>
+          <Stack direction="row" sx={{ mt: 10 }}>
+            <Typography variant="h5" sx={{ mr: 14 }}>
+              작품 파일
+            </Typography>
+            <input
+              type="file"
+              accept="image/*"
+              ref={(refParam) => (inputRef = refParam)}
+              onChange={onChange}
+              style={{ display: "none" }}
+            />
+            <div style={{ cursor: "pointer" }}>
+              {loaded === false || loaded === true ? (
+                <Image
+                  src={image.preview_URL}
+                  alt="preview-image"
+                  width="350"
+                  height="350"
+                  onClick={() => inputRef.click()}
+                />
+              ) : (
+                <span>이미지를 불러오는 중입니다.</span>
+              )}
+            </div>
+          </Stack>
+          <Stack direction="row" sx={{ my: 8 }}>
+            <Typography variant="h5" sx={{ mr: 7.7 }}>
+              작가명
+            </Typography>
+            <Typography sx={{ ml: 10, width: 700 }}>
+              !!작가이름 props 필요!! (현재 지갑 주소): {account}
+            </Typography>
+          </Stack>
+          <Stack direction="row">
+            <Typography variant="h5">제목(작품명)</Typography>
+            <TextField
+              required
+              variant="standard"
+              sx={{ ml: 10, width: 700 }}
+              onChange={(e) =>
+                updateFormInput({ ...formInput, name: e.target.value })
+              }
+            ></TextField>
+          </Stack>
+          <Stack direction="row" sx={{ my: 8 }}>
+            <Typography variant="h5">설명</Typography>
+            <TextField
+              required
+              variant="standard"
+              sx={{ ml: 21, width: 700 }}
+              onChange={(e) =>
+                updateFormInput({ ...formInput, description: e.target.value })
+              }
+            ></TextField>
+          </Stack>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            onClick={createMint}
+            variant="contained"
+            size="large"
+            sx={{ mr: 29, mb: 5 }}
+          >
+            등록하기
+          </Button>
+        </Box>
+      </Container>
+>>>>>>> feature/pagination
   );
 };
 
