@@ -4,14 +4,13 @@ import "../styles/globals.css";
 import Head from "next/head";
 import type { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "styled-components";
-import theme from "../utils/theme";
+import { ThemeProvider } from "@mui/material/styles";
 import wrapper from "../store/configureStore";
 import Layout from "../components/Layout";
-import { useSelector, Provider } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
-import '../styles/Pagination.module.css'
-// import { MoralisProvider } from "react-moralis";
+import { createTheme } from "@mui/material/styles";
+
 // import { createStore } from "redux";
 // import { persistStore } from "redux-persist";
 // import { PersistGate } from "redux-persist/integration/react";
@@ -23,6 +22,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   //   const store = createStore(persistedReducer);
   //   const persistor = persistStore(store);
+
+  const theme = createTheme({
+    typography: {
+      fontFamily: "Nanum Bold",
+      // fontFamily: ["Gowun Batang"].join(","),
+      // button: {
+      //   fontWeight: "bold",
+      // },
+    },
+  });
 
   const getAccount = async () => {
     if (isLogin) {

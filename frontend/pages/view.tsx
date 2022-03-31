@@ -19,6 +19,7 @@ import { getAllItems } from "@/store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 import { IMyKallosData } from "../interfaces";
+import { Typography } from "@mui/material";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -88,7 +89,9 @@ const View: FC<SaleKallosProps> = ({ account }) => {
 
   return (
     <div className="viewContainer">
-      <h1>Explore Calligraphy</h1>
+      <Typography variant="h2" align="center" sx={{ mb: 5 }}>
+        Explore Calligraphy
+      </Typography>
 
       <Box
         sx={{
