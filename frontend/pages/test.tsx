@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import Pagination from 'react-js-pagination';
+import Pagination from "react-js-pagination";
 import styles from '../styles/Pagination.module.css';
 
 export interface ReactJsPaginationProps {
@@ -11,12 +11,8 @@ export interface ReactJsPaginationProps {
   nextPageText?: string | React.ReactElement | undefined;
 }
 
-const Paging = () => {
-  const [page, setPage] = useState(1);
-  
-  const handlePageChange = (page) => {
-    setPage(page);
-  };
+const Paging = ({ page, count, setPage}) => {
+
   return (
     <div className={styles.container}>
       <Pagination
@@ -26,7 +22,7 @@ const Paging = () => {
         pageRangeDisplayed={5}
         prevPageText={"‹"}
         nextPageText={"›"}
-        onChange={handlePageChange}
+        onChange={setPage}
       />
     </div>
   )
