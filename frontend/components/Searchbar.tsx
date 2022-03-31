@@ -15,10 +15,6 @@ const Search = styled("div")(({ theme }) => ({
   borderColor: "black",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: "white",
-  // backgroundColor: alpha(theme.palette.common.white, 0.15),
-  // "&:hover": {
-  //   backgroundColor: alpha(theme.palette.common.white, 0.25),
-  // },
   marginLeft: 0,
   width: "50%",
 }));
@@ -145,8 +141,7 @@ function Searchbar() {
             <StyledFilter
               style={{ visibility: isSearchResult ? "visible" : "hidden" }}
             >
-              <div>Artist</div>
-              <div>=============</div>
+              <div>작가</div>
               {filteredArtistData.length != 0 ? (
                 <ul>
                   {filteredArtistData.slice(0, 3).map((value, key) => {
@@ -164,8 +159,7 @@ function Searchbar() {
               ) : (
                 <div>No result</div>
               )}
-              <div>Art</div>
-              <div>=============</div>
+              <div style={{ borderBottom: "1px solid black" }}>작품</div>
               {filteredTitleData.length != 0 ? (
                 <ul>
                   {filteredTitleData.slice(0, 3).map((value, key) => {

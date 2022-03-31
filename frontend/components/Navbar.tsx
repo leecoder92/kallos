@@ -17,6 +17,7 @@ import { connect } from "react-redux";
 import { getArtistsByKeyword, getItemsByKeyword } from "@/store/modules/navbar";
 // searchbar
 import Searchbar from "./Searchbar";
+import { isUserEthereumAddressInBloom } from "web3-utils";
 
 // 로그인, 로그아웃 관련
 export interface LoginProps {
@@ -79,22 +80,25 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
 
   const metaLogin = async () => {
     try {
-      if (window.ethereum) {
+      if (typeof window.ethereum !== "undefined" && !isLogin) {
+        await window.ethereum.request({ method: "eth_requestAccounts" });
         setLogin();
         setIsLogin(true);
-        alert("환영합니다!");
+        alert("로그인되었습니다.");
       } else {
         alert("Metamask를 설치하세요~");
       }
     } catch (error) {
       console.error(error);
+      alert("로그인을 다시 시도해주세요.");
     }
   };
 
   const metaLogout = async () => {
     setLogout();
     setIsLogin(false);
-    alert("로그아웃되었습니다.");
+    alert("로그아웃되었습니다. 메인페이지로 이동합니다.");
+    router.push("/");
   };
 
   return (
@@ -110,7 +114,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/" passHref>
-              <Button sx={{ color: "white", ml: 4 }}>
+              <Button sx={{ color: "white" }}>
                 {/* 로고로 대체할 예정 */}
                 <Typography variant="h6" noWrap>
                   KALLOS
@@ -119,23 +123,28 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             </Link>
           </Box>
           <Searchbar />
-          <Box sx={{ display: "flex", alignItems: "center", mr: 4 }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
             <Link href="/view" passHref>
               <Button
                 sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
               >
-                EXPLORE
+                갤러리
               </Button>
             </Link>
-            <Link href="/create" passHref>
-              <Button
-                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
-              >
-                CREATE
-              </Button>
-            </Link>
+
             {isLogin ? (
               <div style={{ display: "flex", alignItems: "center" }}>
+                <Link href="/create" passHref>
+                  <Button
+                    sx={{
+                      color: "white",
+                      fontSize: "17px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    작품등록
+                  </Button>
+                </Link>
                 <Link href="/mypage" passHref>
                   <Button
                     sx={{
@@ -144,25 +153,22 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
                       fontWeight: "bold",
                     }}
                   >
-                    Mypage
+                    마이페이지
                   </Button>
                 </Link>
                 <Button
                   sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
                   onClick={metaLogout}
                 >
-                  Logout
+                  로그아웃
                 </Button>
               </div>
             ) : (
               <Button
                 sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
-                onClick={(event) => {
-                  event.preventDefault();
-                  metaLogin();
-                }}
+                onClick={metaLogin}
               >
-                Login
+                로그인
               </Button>
             )}
           </Box>

@@ -14,22 +14,27 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import CaliImage from "../public/images/cali.jpg";
+import { minWidth } from "@mui/system";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
   color: "black",
   width: "400px",
+  "&:hover": {
+    backgroundColor: "#F9E6E1",
+    color: "black",
+  },
 });
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <Box minWidth="md" className="home-div">
       {/* <Container> */}
-      <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
-        <Box width="40%" textAlign="center" sx={{ mt: 10, mx: 20 }}>
+      <Stack direction="row" justifyContent="center" sx={{ mt: 5 }}>
+        <Box width="40%" textAlign="center" sx={{ ml: 25 }}>
           <Image src={CaliImage} alt="any image" />
         </Box>
-        <Box width="60%" sx={{ mt: 10, mr: 20 }}>
+        <Box width="60%" sx={{ mr: 25 }}>
           <Typography variant="h3" sx={{ pb: 10 }}>
             당신의 손글씨를 남기고 싶지 않나요?
             <br />
@@ -66,7 +71,14 @@ const Home: NextPage = () => {
         </Box>
       </Stack>
       {/* </Container> */}
-    </div>
+      {/* <style jsx>
+        {`
+          .home-div {
+            min-width: "1000px";
+          }
+        `}
+      </style> */}
+    </Box>
   );
 };
 
