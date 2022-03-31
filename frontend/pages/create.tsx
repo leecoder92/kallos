@@ -115,7 +115,6 @@ const Create = ({ account }) => {
   };
 
   return (
-    <div>
       <Container>
         <Typography variant="h3" sx={{ my: 8 }}>
           NFT 등록하기
@@ -188,7 +187,6 @@ const Create = ({ account }) => {
           </Button>
         </Box>
       </Container>
-    </div>
   );
 };
 
