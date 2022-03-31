@@ -10,10 +10,19 @@ import wrapper from "../store/configureStore";
 import Layout from "../components/Layout";
 import { useSelector, Provider } from "react-redux";
 import { RootState } from "../store/modules";
+// import { MoralisProvider } from "react-moralis";
+// import { createStore } from "redux";
+// import { persistStore } from "redux-persist";
+// import { PersistGate } from "redux-persist/integration/react";
+// import { persistedReducer } from "store/modules";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [account, setAccount] = useState<string>("");
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
+
+  //   const store = createStore(persistedReducer);
+  //   const persistor = persistStore(store);
+
   const getAccount = async () => {
     if (isLogin) {
       try {
@@ -41,6 +50,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [account]);
 
   return (
+    // <PersistGate persistor={persistor} loading={<div>loading...</div>}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Head>
@@ -51,6 +61,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <Component {...pageProps} account={account} />
       </Layout>
     </ThemeProvider>
+    // </PersistGate>
   );
 };
 

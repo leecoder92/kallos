@@ -14,12 +14,13 @@ const Search = styled("div")(({ theme }) => ({
   border: "1px solid",
   borderColor: "black",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  backgroundColor: "white",
+  // backgroundColor: alpha(theme.palette.common.white, 0.15),
+  // "&:hover": {
+  //   backgroundColor: alpha(theme.palette.common.white, 0.25),
+  // },
   marginLeft: 0,
-  width: "60%",
+  width: "50%",
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
@@ -132,7 +133,7 @@ function Searchbar() {
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
-        placeholder="Search collections and accounts."
+        placeholder="작품명 혹은 작가명을 입력하세요."
         inputProps={{ "aria-label": "search" }}
         fullWidth
         onChange={handleSearchInput}
