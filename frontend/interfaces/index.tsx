@@ -1,5 +1,5 @@
 export interface IMyKallosData {
-  id: string;
+  id: number;
   uri: string;
   price: string;
 }

@@ -21,7 +21,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(Test);
 
 function Test({ value, users, plus, minus, getUser }) {
   const [people, setPeople] = useState([]);
+  const params = {
+    user: "users",
+  };
 
+  const getUserFunc = () => {
+};
+useEffect(() => {
+      getUser(params);
+    // setPeople(users);
+  }, []);
   useEffect(() => {
     setPeople(users);
   }, [users]);
@@ -32,7 +41,8 @@ function Test({ value, users, plus, minus, getUser }) {
       <button onClick={() => minus()}>-</button>
       <span>{value}</span>
       <button onClick={() => plus()}>+</button>
-      <button onClick={() => getUser("users")}>getUser</button>
+      <button onClick={getUserFunc}>getUser</button>
+      <button onClick={() => minus()}>reset</button>
       <div>
         {people && people.map((person) => <p key={person.id}>{person.name}</p>)}
       </div>

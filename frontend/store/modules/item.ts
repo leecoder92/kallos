@@ -15,9 +15,22 @@ const initialState: ItemState = {
 
 export const getAllItems = createAsyncThunk(
   "GET/ALLITEMS", //action명
-  async (paramsObj, { rejectWithValue }) => {
+  async (
+    {
+      searchOption,
+      searchKeyword,
+      page,
+      size,
+    }: {
+      searchOption: string;
+      searchKeyword: string;
+      page: number;
+      size: number;
+    },
+    { rejectWithValue }
+  ) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/users`, { params: paramsObj })
+      .get(`https://jsonplaceholder.typicode.com/${searchOption}`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -38,7 +51,7 @@ export const addNewItem = createAsyncThunk(
   async (itemInfo, { rejectWithValue }) => {
     return await axios
       .post(`https://jsonplaceholder.typicode.com/users`, itemInfo)
-      .then((res) => console.log(res))
+      .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
 );
