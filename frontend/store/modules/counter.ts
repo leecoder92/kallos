@@ -19,7 +19,7 @@ const initialState: CounterState = {
 
 export const fetchUser = createAsyncThunk(
   "GET/USER", //action명
-  async (user, { rejectWithValue }) => {
+  async ({user}:{user:string}, { rejectWithValue }) => {
     return await axios
       .get(`https://jsonplaceholder.typicode.com/${user}`)
       .then((res) => res.data)
@@ -35,7 +35,7 @@ const counterSlice = createSlice({
       state.value += 1;
     },
     decrement(state: CounterState) {
-      state.value -= 1;
+      state.users = [];
     },
     incrementByAmount(state, action: PayloadAction<number>) {
       state.value += action.payload;

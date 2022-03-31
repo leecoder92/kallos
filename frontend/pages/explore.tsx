@@ -1,61 +1,66 @@
 /* eslint-disable */
 import React, { useEffect, useState, FC } from "react";
-import Link from "next/link";
 
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import {
-  mintKallosTokenContract,
-  saleKallosTokenContract,
-  getKallosTokenContract,
-} from "../web3Config";
-import SaleKallosCard from "@/components/SaleKallosCard";
-import { getAllItems } from "@/store/modules/item";
+
+import { KallosItemCard } from "../components/KallosItemCard";
+import { getAllItems } from "../store/modules/item";
+
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
-import { IMyKallosData } from "../interfaces";
 
-const mapStateToProps = (state: RootState) => {
+//paramObj
+// interface ParamObj {
+//   searchOption: string;
+//   searchKeyword: string;
+//   page: number;
+//   size: number;
+// }
+
+const mapStateToProps = (state) => {
   return {
     items: state.itemReducer.allItems,
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    //   setAllItems: (paramsObj) => getAllItems(paramsObj),
+    setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
   };
 };
 
 interface SaleKallosProps {
   account: string;
+  items: Array<Object>;
+  setAllItems: any;
 }
 
-//paramObj
-interface ParamObj {
-  saleOrNot: boolean;
-  searchOption: string;
-  searchKeyword: string;
-  pageNumber: number;
-  itemsPerOnePage: number;
-}
-
-const View: FC<SaleKallosProps> = ({ account }) => {
-  const [onSaleTokens, setOnSaleTokens] = useState<IMyKallosData[]>();
+const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
+  const [onSaleItems, setOnSaleItems] = useState([]);
+  const [showOnlySale, setShowOnlySale] = useState<boolean>(false);
 
   const [option, setOption] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
-  const [showOnlySale, setShowOnlySale] = useState<boolean>(false);
 
+  //pagination
+  const [curPage, setCurPage] = useState(0);
+  const [postsPerPage, setPostPerPage] = useState(10);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const paginate = (pageNumber) => setCurPage(pageNumber);
+  const onChangePostsPerPage = (event) => setPostPerPage(event.target.value);
+
+  //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
     setOption(event.target.value as string);
   };
 
+  //검색키워드 설정
   const handleKeyword = (event) => {
     event.preventDefault();
     if (event.key === "Enter") {
@@ -64,27 +69,33 @@ const View: FC<SaleKallosProps> = ({ account }) => {
     }
   };
 
+  //판매 중인 작품만 볼지 여부 설정
   const handleSwitchShowStatus = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setShowOnlySale(!showOnlySale);
   };
 
-  const getOnSaleTokens = async () => {
-    try {
-      const response = await getKallosTokenContract.methods
-        .getSaleKallosTokens()
-        .call();
-
-      setOnSaleTokens(response);
-    } catch (error) {
-      console.error(error);
-    }
+  const params = {
+    searchOption: "users",
+    searchKeyword: keyword,
+    page: curPage,
+    size: postsPerPage,
   };
 
   useEffect(() => {
-    getOnSaleTokens();
+    setAllItems(params);
+    console.log("dk");
   }, []);
+
+  useEffect(() => {
+    setOnSaleItems(items);
+  }, [items]);
+
+  useEffect(() => {
+    console.log(showOnlySale);
+    
+  }, [showOnlySale]);
 
   return (
     <div className="viewContainer">
@@ -143,19 +154,11 @@ const View: FC<SaleKallosProps> = ({ account }) => {
           columnGap: 1,
         }}
       >
-        {onSaleTokens?.map((v, i) => {
-          return (
-            <SaleKallosCard
-              key={i}
-              id={v.id}
-              uri={v.uri}
-              price={v.price}
-              account={account}
-              getOnSaleTokens={getOnSaleTokens}
-            />
-          );
-        })}
+        {onSaleItems?.map((item) => (
+          <KallosItemCard key={item.id} kallosData={item} />
+        ))}
       </Box>
+      {/* <button onClick={onClickButton}>jisu</button> */}
       <style jsx>
         {`
           .viewContainer {

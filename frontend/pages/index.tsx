@@ -15,6 +15,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import CaliImage from "../public/images/cali.jpg";
 import { minWidth } from "@mui/system";
+import Head from "next/head";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
@@ -29,6 +30,12 @@ const ColorButton = styled(Button)({
 const Home: NextPage = () => {
   return (
     <Box minWidth="md" className="home-div">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       {/* <Container> */}
       <Stack direction="row" justifyContent="center" sx={{ mt: 5 }}>
         <Box width="40%" textAlign="center" sx={{ ml: 25 }}>
