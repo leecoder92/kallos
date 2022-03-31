@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Container,
+  createTheme,
   Stack,
   TextField,
   Typography,
@@ -16,6 +17,18 @@ import { addNewItem } from "@/store/modules/item";
 import { connect } from "react-redux";
 import LoadingInterface from "@/components/LoadingInterface";
 import Router from "next/router";
+import { ThemeProvider } from "@emotion/react";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main : '#2C3C51',
+    },
+    secondary: {
+      main: '#F9E6E1'
+    }
+  }
+})
 
 interface NewItemInfo {
   name: string;
@@ -125,7 +138,7 @@ const Create = ({ account }) => {
   };
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       {createLoad ? (
         <>
           <LoadingInterface />
@@ -134,8 +147,8 @@ const Create = ({ account }) => {
           </Typography>
         </>
       ) : (
-        <Container>
-          <Typography variant="h3" sx={{ my: 8 }}>
+        <Container sx={{ my: 18 }}>
+          <Typography variant="h3" >
             NFT 등록하기
           </Typography>
           <Box>
@@ -173,11 +186,11 @@ const Create = ({ account }) => {
               </Typography>
             </Stack>
             <Stack direction="row">
-              <Typography variant="h5">제목(작품명)</Typography>
+              <Typography variant="h5">작품명</Typography>
               <TextField
                 required
                 variant="standard"
-                sx={{ ml: 10, width: 700 }}
+                sx={{ ml: 17, width: 700 }}
                 onChange={(e) =>
                   updateFormInput({ ...formInput, name: e.target.value })
                 }
@@ -188,7 +201,7 @@ const Create = ({ account }) => {
               <TextField
                 required
                 variant="standard"
-                sx={{ ml: 21, width: 700 }}
+                sx={{ ml: 20, width: 700 }}
                 onChange={(e) =>
                   updateFormInput({ ...formInput, description: e.target.value })
                 }
@@ -201,13 +214,14 @@ const Create = ({ account }) => {
               variant="contained"
               size="large"
               sx={{ mr: 29, mb: 5 }}
+              color="secondary"
             >
               등록하기
             </Button>
           </Box>
         </Container>
       )}
-    </div>
+    </ThemeProvider>
   );
 };
 
