@@ -10,7 +10,6 @@ import wrapper from "../store/configureStore";
 import Layout from "../components/Layout";
 import { useSelector, Provider } from "react-redux";
 import { RootState } from "../store/modules";
-// import { MoralisProvider } from "react-moralis";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const [account, setAccount] = useState<string>("");
