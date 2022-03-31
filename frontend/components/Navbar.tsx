@@ -103,7 +103,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
 
   return (
     <Box>
-      <ColorAppbar position="static">
+      <ColorAppbar position="fixed">
         <Toolbar
           sx={{
             display: "flex",

@@ -1,12 +1,23 @@
 /* eslint-disable */
 
 // style
-import { styled, alpha } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
-import { InputBase } from "@mui/material";
+import {
+  InputBase,
+  List,
+  ListItem,
+  Divider,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Button,
+} from "@mui/material";
+import defaultProfile from "../public/images/defaultProfile.png";
 // 기능
 import React, { useState, useRef, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 // 검색바 스타일
 const Search = styled("div")(({ theme }) => ({
@@ -46,12 +57,22 @@ const StyledFilter = styled("div")(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   backgroundColor: "white",
   border: "1px solid",
-  padding: theme.spacing(1, 1, 1, 0),
-  paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+  padding: theme.spacing(1, 1, 1, 1),
+  // paddingLeft: `calc(1em + ${theme.spacing(4)})`,
   width: "100%",
 }));
 
+const StyledList = styled(List)({
+  backgroundColor: "white",
+  border: "1px solid",
+  position: "absolute",
+  borderRadius: 4,
+  zIndex: "1",
+  width: "100%",
+});
+
 function Searchbar() {
+  const router = useRouter();
   // 테스트용 데이터
   const artList = [
     { artist: "jisu", title: "love1" },
@@ -60,6 +81,8 @@ function Searchbar() {
     { artist: "geuntae", title: "love4" },
     { artist: "jongjune", title: "love5" },
     { artist: "love", title: "love6" },
+    { artist: "love2", title: "love7" },
+    { artist: "love3", title: "love8" },
   ];
   // 검색결과창 보여주는 기능
   const [searchValue, setSearchValue] = useState<string>("");
@@ -72,6 +95,15 @@ function Searchbar() {
   };
   // 검색 클릭했을 때 결과창 닫고 검색어 초기화
   const handleArtistClick = (event: any) => {
+    event.preventDefault();
+    setSearchValue("");
+    setFilteredArtistData([]);
+    setFilteredTitleData([]);
+    setIsLoading(true);
+    router.push("/artist");
+  };
+  // X 눌렀을 때 초기화
+  const handleClearText = (event: any) => {
     event.preventDefault();
     setSearchValue("");
     setFilteredArtistData([]);
@@ -125,54 +157,105 @@ function Searchbar() {
 
   return (
     <Search ref={searchInputRef}>
-      <SearchIconWrapper>
-        <SearchIcon />
-      </SearchIconWrapper>
-      <StyledInputBase
-        placeholder="작품명 혹은 작가명을 입력하세요."
-        inputProps={{ "aria-label": "search" }}
-        fullWidth
-        onChange={handleSearchInput}
-        value={searchValue}
-      />
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          placeholder="작품명 혹은 작가명을 입력하세요."
+          inputProps={{ "aria-label": "search" }}
+          fullWidth
+          onChange={handleSearchInput}
+          value={searchValue}
+        />
+        {searchValue ? (
+          <Button sx={{ color: "black" }} onClick={handleClearText}>
+            X
+          </Button>
+        ) : null}
+      </div>
+
       {searchValue &&
         (searchValue.length >= 3 && !isLoading ? (
           (filteredArtistData.length != 0 || filteredTitleData.length != 0) && (
-            <StyledFilter
+            <StyledList
+              sx={{ bgcolor: "background.paper" }}
               style={{ visibility: isSearchResult ? "visible" : "hidden" }}
             >
-              <div>작가</div>
+              <ListItem>
+                <ListItemText primary="작가" />
+              </ListItem>
+              <Divider sx={{ mx: 2 }} />
               {filteredArtistData.length != 0 ? (
-                <ul>
+                <div
+                  style={{ borderBottom: "1px solid black", paddingBottom: 10 }}
+                >
                   {filteredArtistData.slice(0, 3).map((value, key) => {
                     return (
-                      <li
-                        key={key}
-                        onClick={handleArtistClick}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <Link href="/artist">{value.artist}</Link>
-                      </li>
+                      <div>
+                        <ListItem
+                          key={key}
+                          onClick={handleArtistClick}
+                          style={{
+                            cursor: "pointer",
+                            paddingBottom: 0,
+                          }}
+                        >
+                          <ListItemAvatar>
+                            <Avatar>
+                              <Image src={defaultProfile} alt="thumbnail" />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary={`${value.artist}`} />
+                        </ListItem>
+                        <Divider sx={{ mr: 2, ml: 4 }} component="li" />
+                      </div>
                     );
                   })}
-                </ul>
+                </div>
               ) : (
-                <div>No result</div>
+                <ListItem>
+                  <ListItemText primary="No result" />
+                </ListItem>
               )}
-              <div style={{ borderBottom: "1px solid black" }}>작품</div>
+              <ListItem>
+                <ListItemText primary="작품" />
+              </ListItem>
+              <Divider sx={{ mx: 2 }} />
               {filteredTitleData.length != 0 ? (
-                <ul>
+                <div>
                   {filteredTitleData.slice(0, 3).map((value, key) => {
-                    return <li key={key}>{value.title}</li>;
+                    return (
+                      <div>
+                        <ListItem
+                          key={key}
+                          style={{ cursor: "pointer", paddingBottom: 0 }}
+                        >
+                          <ListItemAvatar>
+                            <Avatar>
+                              <Image src={defaultProfile} alt="thumbnail" />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary={`${value.title}`} />
+                        </ListItem>
+                        <Divider sx={{ mr: 2, ml: 4 }} component="li" />
+                      </div>
+                    );
                   })}
-                </ul>
+                </div>
               ) : (
-                <div>No result</div>
+                <ListItem>
+                  <ListItemText primary="No result" />
+                </ListItem>
               )}
-            </StyledFilter>
+            </StyledList>
           )
         ) : (
-          <StyledFilter>Loading...</StyledFilter>
+          <StyledList>
+            <ListItem>
+              <ListItemText primary="Loading..." />
+            </ListItem>
+          </StyledList>
         ))}
     </Search>
   );

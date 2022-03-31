@@ -88,7 +88,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
             </button>
           </>
         ) : (
-          <p>{web3.utils.fromWei(myKallosPrice)} MATIC</p>
+          <Typography>{web3.utils.fromWei(myKallosPrice)} MATIC</Typography>
         )}
       </div>
     </div>

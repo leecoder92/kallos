@@ -134,7 +134,7 @@ const Create = ({ account }) => {
           </Typography>
         </>
       ) : (
-        <Container>
+        <Container sx={{ mt: 18 }}>
           <Typography variant="h3" sx={{ my: 8 }}>
             NFT 등록하기
           </Typography>

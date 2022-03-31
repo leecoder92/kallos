@@ -94,7 +94,6 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   useEffect(() => {
     console.log(showOnlySale);
-    
   }, [showOnlySale]);
 
   return (
