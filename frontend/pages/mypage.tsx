@@ -2,14 +2,14 @@
 import { FC, useEffect, useState } from "react";
 import {
   Container,
-  CssBaseline,
   Typography,
   Grid,
   Box,
-  TextField,
   Stack,
   Button,
-  Paper,
+  Divider,
+  Chip,
+  Avatar,
 } from "@mui/material";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
@@ -23,6 +23,10 @@ import {
 import { getUserInfo, getAllItemsOfUser } from "@/store/modules/user";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
+import Image from "next/image";
+import defaultProfile from "../public/images/defaultProfile.png";
+import maticImage from "../public/images/matic-token.png";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -49,6 +53,8 @@ const MyPage = ({ account }) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
   const [saleStatus, setSaleStatus] = useState<boolean>(false);
 
+  const cutAddress1 = account.substr(0, 5);
+  const cutAddress2 = account.slice(-4);
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
@@ -100,41 +106,61 @@ const MyPage = ({ account }) => {
 
   return (
     <>
-      <Container maxWidth="lg" sx={{ pt: 20, justifyContent: "center" }}>
+      <Container
+        maxWidth="lg"
+        sx={{ mt: 18, justifyContent: "center", mx: 25 }}
+      >
         <Grid container spacing={10}>
-          <Grid item direction="column" md={3} alignItems="center">
-            <Typography sx={{ mb: 5 }}>프로필 사진</Typography>
-            <Box sx={{ py: 5, px: 3, bgcolor: "text.disabled" }}>
+          <Grid item direction="column" md={3.5} align="center">
+            <Image src={defaultProfile} width="200px" height="200px" />
+            <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
+              유저 이름
+            </Typography>
+            <CopyToClipboard text={account}>
+              <Button variant="outlined">
+                {cutAddress1}...{cutAddress2}
+              </Button>
+            </CopyToClipboard>
+            <br></br>
+            {/* <Divider sx={{ borderBottomWidth: 5 }} /> */}
+            <Button
+              sx={{ mt: 1 }}
+              onClick={onClickSaleStatus}
+              variant="contained"
+              color={saleStatus ? "secondary" : "info"}
+            >
+              {saleStatus ? "판매 모드 Off" : "판매 모드 On"}
+            </Button>
+            <Box sx={{ mt: 1, py: 5, px: 3, bgcolor: "#F9E6E1" }}>
               <Stack direction="column" spacing={2}>
-                <Link href={"/mypageupdate"} passHref>
-                  <Button
-                    style={{
-                      color: "white",
-                      backgroundColor: "#1b5e20",
-                    }}
-                  >
-                    프로필 편집
-                  </Button>
-                </Link>
-                <Typography>이름</Typography>
-                <Typography>계좌(지갑)</Typography>
+                {/* <Typography>이름</Typography> */}
+                <Divider>
+                  <Chip label="소개글" />
+                </Divider>
+                {/* <Divider>
+                  <Chip label="지갑 주소" />
+                </Divider> */}
+
                 <Typography>보유 작품 수</Typography>
                 <Typography>등등</Typography>
+                <Link href={"/mypageupdate"} passHref>
+                  <Button>수정</Button>
+                </Link>
               </Stack>
             </Box>
           </Grid>
-          <Grid item direction="column" md={9}>
+          <Grid item direction="column">
             <Typography variant="h5" color={saleStatus ? "success" : "error"}>
               판매 등록 중 여부:{" "}
               {saleStatus ? "판매 등록 가능" : "판매 등록 불가능"}
             </Typography>
-            <Button
+            {/* <Button
               onClick={onClickSaleStatus}
               variant="contained"
               color={saleStatus ? "error" : "success"}
             >
               {saleStatus ? "판매 등록 정지" : "판매 등록하기"}
-            </Button>
+            </Button> */}
             <Typography variant="h4">보유 중인 작품</Typography>
             {kallosTokens?.map((v, i) => {
               return (

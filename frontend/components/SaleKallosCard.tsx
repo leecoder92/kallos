@@ -9,6 +9,7 @@ import {
 import { IMyKallosData } from "../interfaces";
 import axios from "axios";
 import Image from "next/image";
+import { Typography } from "@mui/material";
 
 interface SaleKallosCardProps extends IMyKallosData {
   account: string;
@@ -81,7 +82,9 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
         />
       )}
       <Box>
-        <Text d="inline-block">{web3.utils.fromWei(price)} MATIC</Text>
+        <Typography display="inline">
+          {web3.utils.fromWei(price)} MATIC
+        </Typography>
         {isBuyable ? null : (
           <Button size="sm" colorScheme="green" m={2} onClick={onClickBuy}>
             Buy

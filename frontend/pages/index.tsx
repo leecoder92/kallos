@@ -1,19 +1,11 @@
 /* eslint-disable */
 import type { NextPage } from "next";
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  Typography,
-  ButtonProps,
-  styled,
-} from "@mui/material";
+import React from "react";
+import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import CaliImage from "../public/images/cali.jpg";
+import Head from "next/head";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
@@ -24,13 +16,19 @@ const ColorButton = styled(Button)({
 const Home: NextPage = () => {
   return (
     <div>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&family=Nanum+Pen+Script&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
       {/* <Container> */}
       <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
         <Box width="40%" textAlign="center" sx={{ mt: 10, mx: 20 }}>
           <Image src={CaliImage} alt="any image" />
         </Box>
         <Box width="60%" sx={{ mt: 10, mr: 20 }}>
-          <Typography variant="h3" sx={{ pb: 10 }}>
+          <Typography className="ff" variant="h2" sx={{ pb: 10 }}>
             당신의 손글씨를 남기고 싶지 않나요?
             <br />
             <br />
