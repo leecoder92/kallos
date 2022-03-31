@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -7,11 +7,6 @@ import {
   Stack,
   TextField,
   Typography,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  CssBaseline,
-  ButtonBase,
 } from "@mui/material";
 import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
@@ -19,6 +14,8 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import { mintKallosTokenContract } from "web3Config";
 import { addNewItem } from "@/store/modules/item";
 import { connect } from "react-redux";
+import LoadingInterface from "@/components/LoadingInterface";
+import Router from "next/router";
 
 interface NewItemInfo {
   name: string;
@@ -52,6 +49,9 @@ const Create = ({ account }) => {
   });
   const [loaded, setLoaded] = useState(false);
   let inputRef: any;
+
+  // 작품 등록 중 상태 false: 등록 X, true: 등록 중
+  const [createLoad, setCreateLoad] = useState<Boolean>(false);
 
   async function onChange(e) {
     const file = e.target.files[0];
@@ -106,88 +106,107 @@ const Create = ({ account }) => {
     try {
       const response = await mintKallosTokenContract.methods
         .mintKallosToken(url)
-        .send({ from: account });
+        .send({ from: account })
+        // Metamask Confirm 버튼을 클릭하면 로딩이 시작되게
+        .on("transactionHash", () => {
+          setCreateLoad(true);
+        });
 
-      // console.log(response);
+      if (response.status) {
+        Router.push("/mypage");
+      }
     } catch (error) {
+      // 에러 코드가 4001(reject)일 때 로딩 멈춤
+      // if (error.code === 4001) {
+      //   setCreateLoad(false);
+      // }
       console.error(error);
     }
   };
 
   return (
     <div>
-      <Container>
-        <Typography variant="h3" sx={{ my: 8 }}>
-          NFT 등록하기
-        </Typography>
-        <Box>
-          <Stack direction="row" sx={{ mt: 10 }}>
-            <Typography variant="h5" sx={{ mr: 14 }}>
-              작품 파일
-            </Typography>
-            <input
-              type="file"
-              accept="image/*"
-              ref={(refParam) => (inputRef = refParam)}
-              onChange={onChange}
-              style={{ display: "none" }}
-            />
-            <div style={{ cursor: "pointer" }}>
-              {loaded === false || loaded === true ? (
-                <Image
-                  src={image.preview_URL}
-                  alt="preview-image"
-                  width="350"
-                  height="350"
-                  onClick={() => inputRef.click()}
-                />
-              ) : (
-                <span>이미지를 불러오는 중입니다.</span>
-              )}
-            </div>
-          </Stack>
-          <Stack direction="row" sx={{ my: 8 }}>
-            <Typography variant="h5" sx={{ mr: 7.7 }}>
-              작가명
-            </Typography>
-            <Typography sx={{ ml: 10, width: 700 }}>
-              !!작가이름 props 필요!! (현재 지갑 주소): {account}
-            </Typography>
-          </Stack>
-          <Stack direction="row">
-            <Typography variant="h5">제목(작품명)</Typography>
-            <TextField
-              required
-              variant="standard"
-              sx={{ ml: 10, width: 700 }}
-              onChange={(e) =>
-                updateFormInput({ ...formInput, name: e.target.value })
-              }
-            ></TextField>
-          </Stack>
-          <Stack direction="row" sx={{ my: 8 }}>
-            <Typography variant="h5">설명</Typography>
-            <TextField
-              required
-              variant="standard"
-              sx={{ ml: 21, width: 700 }}
-              onChange={(e) =>
-                updateFormInput({ ...formInput, description: e.target.value })
-              }
-            ></TextField>
-          </Stack>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            onClick={createMint}
-            variant="contained"
-            size="large"
-            sx={{ mr: 29, mb: 5 }}
-          >
-            등록하기
-          </Button>
-        </Box>
-      </Container>
+      {createLoad ? (
+        <>
+          <LoadingInterface />
+          <Typography variant="h6" align="center">
+            작품 등록을 성공하면 마이페이지로 이동합니다.
+          </Typography>
+        </>
+      ) : (
+        <Container>
+          <Typography variant="h3" sx={{ my: 8 }}>
+            NFT 등록하기
+          </Typography>
+          <Box>
+            <Stack direction="row" sx={{ mt: 10 }}>
+              <Typography variant="h5" sx={{ mr: 14 }}>
+                작품 파일
+              </Typography>
+              <input
+                type="file"
+                accept="image/*"
+                ref={(refParam) => (inputRef = refParam)}
+                onChange={onChange}
+                style={{ display: "none" }}
+              />
+              <div style={{ cursor: "pointer" }}>
+                {loaded === false || loaded === true ? (
+                  <Image
+                    src={image.preview_URL}
+                    alt="preview-image"
+                    width="350"
+                    height="350"
+                    onClick={() => inputRef.click()}
+                  />
+                ) : (
+                  <span>이미지를 불러오는 중입니다.</span>
+                )}
+              </div>
+            </Stack>
+            <Stack direction="row" sx={{ my: 8 }}>
+              <Typography variant="h5" sx={{ mr: 7.7 }}>
+                작가명
+              </Typography>
+              <Typography sx={{ ml: 10, width: 700 }}>
+                !!작가이름 props 필요!! (현재 지갑 주소): {account}
+              </Typography>
+            </Stack>
+            <Stack direction="row">
+              <Typography variant="h5">제목(작품명)</Typography>
+              <TextField
+                required
+                variant="standard"
+                sx={{ ml: 10, width: 700 }}
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, name: e.target.value })
+                }
+              ></TextField>
+            </Stack>
+            <Stack direction="row" sx={{ my: 8 }}>
+              <Typography variant="h5">설명</Typography>
+              <TextField
+                required
+                variant="standard"
+                sx={{ ml: 21, width: 700 }}
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, description: e.target.value })
+                }
+              ></TextField>
+            </Stack>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              onClick={createMint}
+              variant="contained"
+              size="large"
+              sx={{ mr: 29, mb: 5 }}
+            >
+              등록하기
+            </Button>
+          </Box>
+        </Container>
+      )}
     </div>
   );
 };

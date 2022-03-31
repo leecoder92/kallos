@@ -20,8 +20,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [account, setAccount] = useState<string>("");
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
 
-//   const store = createStore(persistedReducer);
-//   const persistor = persistStore(store);
+  //   const store = createStore(persistedReducer);
+  //   const persistor = persistStore(store);
 
   const getAccount = async () => {
     if (isLogin) {
@@ -51,19 +51,16 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   return (
     // <PersistGate persistor={persistor} loading={<div>loading...</div>}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Head>
-          <title>KALLOS</title>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-        </Head>
-        <Layout>
-          <Component {...pageProps} account={account} />
-        </Layout>
-      </ThemeProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Head>
+        <title>KALLOS</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      <Layout>
+        <Component {...pageProps} account={account} />
+      </Layout>
+    </ThemeProvider>
     // </PersistGate>
   );
 };
