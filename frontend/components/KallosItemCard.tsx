@@ -7,20 +7,20 @@ import Link from "next/link";
 export const KallosItemCard = ({ kallosData }) => {
   return (
     <Box sx={{ borderRadius: "10px" }}>
-      {/* <Link href={`/items/${kallosData.tokenId}`}>
-        <a> */}
-      <Box sx={{ borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
-        <Image
-          width="100%"
-          height="100%"
-          //   src={kallosData.itemHash}
-          src="/images/3.png"
-          alt="NFT Image"
-          layout="responsive"
-        />
-      </Box>
-      {/* </a>
-      </Link> */}
+      <Link href={`/items/1`}>
+        <a>
+          <Box sx={{ borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
+            <Image
+              width="100%"
+              height="100%"
+              //   src={kallosData.itemHash}
+              src="/images/3.png"
+              alt="NFT Image"
+              layout="responsive"
+            />
+          </Box>
+        </a>
+      </Link>
       <Box
         sx={{
           display: "flex",

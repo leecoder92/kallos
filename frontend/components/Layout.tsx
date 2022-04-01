@@ -6,7 +6,7 @@ import Footer from "./Footer";
 const Layout: NextPage = ({ children }) => {
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh"}}
     >
       <Navbar />
       <main>{children}</main>
