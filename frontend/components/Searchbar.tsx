@@ -50,18 +50,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const StyledFilter = styled("div")(({ theme }) => ({
-  color: "inherit",
-  position: "absolute",
-  zIndex: "1",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "white",
-  border: "1px solid",
-  padding: theme.spacing(1, 1, 1, 1),
-  // paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-  width: "100%",
-}));
-
 const StyledList = styled(List)({
   backgroundColor: "white",
   border: "1px solid",
