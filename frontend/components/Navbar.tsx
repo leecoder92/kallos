@@ -7,7 +7,11 @@ import {
   Toolbar,
   Typography,
   styled,
+  IconButton,
+  Menu,
+  MenuItem,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { useRouter } from "next/router";
 // redux
@@ -50,6 +54,17 @@ const mapDispatchToProps = (dispatch: any) => {
 
 // Navbar
 const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
+  // 반응형 작업
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
   const router = useRouter();
   const [account, setAccount] = useState<string>("");
   const [isLogin, setIsLogin] = useState<boolean>(value);
@@ -112,10 +127,85 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             color: "#2C3C51",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
             <Link href="/" passHref>
               <Button sx={{ color: "white" }}>
-                {/* 로고로 대체할 예정 */}
+                <Typography variant="h6" noWrap>
+                  KALLOS
+                </Typography>
+              </Button>
+            </Link>
+          </Box>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "flex", md: "none" },
+              alignItems: "center",
+            }}
+          >
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="primary"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" },
+              }}
+            >
+              <Link href="/explore" passHref>
+                <MenuItem onClick={handleCloseNavMenu}>갤러리</MenuItem>
+              </Link>
+              {isLogin ? (
+                <div>
+                  <Link href="/create" passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>작품등록</MenuItem>
+                  </Link>
+                  <Link href="/mypage" passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>마이페이지</MenuItem>
+                  </Link>
+                  <MenuItem
+                    onClick={() => {
+                      metaLogout();
+                      handleCloseNavMenu();
+                    }}
+                  >
+                    로그아웃
+                  </MenuItem>
+                </div>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    metaLogin();
+                    handleCloseNavMenu();
+                  }}
+                >
+                  로그인
+                </MenuItem>
+              )}
+            </Menu>
+            <Link href="/" passHref>
+              <Button sx={{ color: "white" }}>
                 <Typography variant="h6" noWrap>
                   KALLOS
                 </Typography>
@@ -123,7 +213,9 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             </Link>
           </Box>
           <Searchbar />
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
+          >
             <Link href="/explore" passHref>
               <Button
                 sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
