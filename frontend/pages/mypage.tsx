@@ -26,7 +26,7 @@ import { connect } from "react-redux";
 import Image from "next/image";
 import defaultProfile from "../public/images/defaultProfile.png";
 import maticImage from "../public/images/matic-token.png";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+// import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const mapStateToProps = (state: RootState) => {
   return {

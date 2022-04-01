@@ -1,0 +1,75 @@
+.toggleBox{
+    display: flex;
+    align-items: center;
+    span{
+        margin-left: 10px;
+        font-weight: 700;
+    }
+}
+
+.toggleContainer {
+  display: none;
+
+  &,
+  &:after,
+  &:before,
+  & *,
+  & *:after,
+  & *:before,
+  & + .toggleBtn {
+    box-sizing: border-box;
+    &::selection {
+      background: none;
+    }
+  }
+
+  + .toggleBtn {
+    outline: 0;
+    display: block;
+    width: 2.8em;
+    height: 1.5em;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    &:after,
+    &:before {
+      position: relative;
+      display: block;
+      content: "";
+      top: 1px;
+      width: 43%;
+      height: 90%;
+    }
+
+    &:after {
+      left: 1px;
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:checked + .toggleBtn:after {
+    left: 55%;
+  }
+}
+
+// 버튼 효과
+.toggleContainer {
+  + .toggleBtn {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    padding: 2px;
+    transition: all 0.4s ease;
+    &:after {
+      border-radius: 50%;
+      background: #fff;
+      transition: all 0.2s ease;
+    }
+  }
+
+  &:checked + .toggleBtn {
+    background: #2C3C51;
+  }
+}

@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState, FC } from "react";
+import styles from "../styles/form.module.scss";
 
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -8,6 +9,8 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import InputBase from "@mui/material/InputBase";
+import { makeStyles, styled } from "@mui/styles";
 
 import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
@@ -15,21 +18,13 @@ import { getAllItems } from "../store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
-//paramObj
-// interface ParamObj {
-//   searchOption: string;
-//   searchKeyword: string;
-//   page: number;
-//   size: number;
-// }
-
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
   };
@@ -41,9 +36,9 @@ interface SaleKallosProps {
   setAllItems: any;
 }
 
-const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
+const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
-  const [showOnlySale, setShowOnlySale] = useState<boolean>(false);
+  const [showOnlySale, setShowOnlySale] = useState(false);
 
   const [option, setOption] = useState<string>("");
   const [keyword, setKeyword] = useState<string>("");
@@ -85,7 +80,6 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   useEffect(() => {
     setAllItems(params);
-    console.log("dk");
   }, []);
 
   useEffect(() => {
@@ -118,34 +112,50 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 label="Option"
                 onChange={handleOption}
               >
-                <MenuItem value={10}>All</MenuItem>
-                <MenuItem value={20}>Artist</MenuItem>
-                <MenuItem value={30}>Item</MenuItem>
+                <MenuItem value={10}>모두</MenuItem>
+                <MenuItem value={20}>작가</MenuItem>
+                <MenuItem value={30}>작품</MenuItem>
               </Select>
             </FormControl>
           </Box>
-
-          <input placeholder="keyword.." onKeyUp={handleKeyword} />
+          <input placeholder="검색어.." onKeyUp={handleKeyword} />
         </Box>
 
         <Box>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showOnlySale}
+          {showOnlySale ? (
+            <div className={styles.toggleBox}>
+              <input
+                id="caseOne"
+                type="checkbox"
+                // value={showOnlySale}
+                className={styles.toggleContainer}
                 onChange={handleSwitchShowStatus}
-                name="sale"
+                checked
               />
-            }
-            label={showOnlySale ? "모든 작품 보기" : "판매중인 작품만 보기"}
-          />
+              <label htmlFor="caseOne" className={styles.toggleBtn}></label>
+              <span>모든 작품 보기</span>
+            </div>
+          ) : (
+            <div className={styles.toggleBox}>
+              <input
+                id="caseTwo"
+                type="checkbox"
+                // value={showOnlySale}
+                className={styles.toggleContainer}
+                onChange={handleSwitchShowStatus}
+                // checked
+              />
+              <label htmlFor="caseTwo" className={styles.toggleBtn}></label>
+              <span>판매중인 작품만 보기</span>
+            </div>
+          )}
         </Box>
       </Box>
 
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, 200px)",
+          gridTemplateColumns: "repeat(auto-fill, 300px)",
           justifyContent: "space-between",
           alignItems: "center",
           marginTop: 7,
@@ -157,11 +167,9 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
           <KallosItemCard key={item.id} kallosData={item} />
         ))}
       </Box>
-      {/* <button onClick={onClickButton}>jisu</button> */}
       <style jsx>
         {`
           .viewContainer {
-            min-width: 800px;
             margin: 150px 200px;
           }
           h1 {
@@ -177,7 +185,7 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
             height: 56px;
             border-radius: 4px;
             outline: none;
-            border: 1px solid black;
+            border: 1px solid #2c3c51;
             opacity: 0.25;
           }
           input:focus {
@@ -189,4 +197,4 @@ const View: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(View);
+export default connect(mapStateToProps, mapDispatchToProps)(Explore);

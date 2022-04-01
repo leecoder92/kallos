@@ -6,6 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import CaliImage from "../public/images/cali.jpg";
 import Head from "next/head";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/modules";
+import { useRouter } from "next/router";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
@@ -18,6 +21,15 @@ const ColorButton = styled(Button)({
 });
 
 const Home: NextPage = () => {
+  const router = useRouter();
+  const isLogin = useSelector((state: RootState) => state.loginReducer.value);
+  const handleForceLogin = () => {
+    if (!isLogin) {
+      alert("로그인을 하셔야 작품등록이 가능합니다.");
+    } else {
+      router.push("/create");
+    }
+  };
   return (
     <div>
       <Head>
@@ -31,7 +43,7 @@ const Home: NextPage = () => {
         <Box width="40%" textAlign="center" sx={{ mt: 10, mx: 20 }}>
           <Image src={CaliImage} alt="any image" />
         </Box>
-        <Box width="60%" sx={{ mt: 10, mr: 20 }}>
+        <Box width="60%" sx={{ mt: 10, mr: 20, textAlign: "center" }}>
           <Typography className="ff" variant="h2" sx={{ pb: 10 }}>
             당신의 손글씨를 남기고 싶지 않나요?
             <br />
@@ -46,16 +58,15 @@ const Home: NextPage = () => {
               alignItems: "center",
             }}
           >
-            <Link href="/create" passHref>
-              <ColorButton
-                variant="contained"
-                size="large"
-                sx={{ fontSize: 18 }}
-              >
-                내 작품 등록하러 가기
-              </ColorButton>
-            </Link>
-            <Link href="/view" passHref>
+            <ColorButton
+              variant="contained"
+              size="large"
+              sx={{ fontSize: 18 }}
+              onClick={handleForceLogin}
+            >
+              내 작품 등록하러 가기
+            </ColorButton>
+            <Link href="/explore" passHref>
               <ColorButton
                 variant="contained"
                 size="large"
