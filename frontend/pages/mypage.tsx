@@ -9,7 +9,7 @@ import {
   Button,
   Divider,
   Chip,
-  Avatar,
+  Tooltip,
 } from "@mui/material";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
@@ -55,6 +55,7 @@ const MyPage = ({ account }) => {
 
   const cutAddress1 = account.substr(0, 5);
   const cutAddress2 = account.slice(-4);
+
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
@@ -116,13 +117,26 @@ const MyPage = ({ account }) => {
             <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
               유저 이름
             </Typography>
+
             <CopyToClipboard text={account}>
-              <Button variant="outlined">
-                {cutAddress1}...{cutAddress2}
-              </Button>
+              <Tooltip title="Copy" placement="right">
+                <Button
+                  style={{
+                    color: "black",
+                  }}
+                  variant="outlined"
+                  sx={{ mt: 1, borderRadius: 16, borderColor: "text.primary" }}
+                >
+                  <Stack direction="row" alignItems="center">
+                    <Image src={maticImage} width="25px" height="25px" />
+                    <Typography>
+                      {cutAddress1}...{cutAddress2}
+                    </Typography>
+                  </Stack>
+                </Button>
+              </Tooltip>
             </CopyToClipboard>
             <br></br>
-            {/* <Divider sx={{ borderBottomWidth: 5 }} /> */}
             <Button
               sx={{ mt: 1 }}
               onClick={onClickSaleStatus}
@@ -133,16 +147,12 @@ const MyPage = ({ account }) => {
             </Button>
             <Box sx={{ mt: 1, py: 5, px: 3, bgcolor: "#F9E6E1" }}>
               <Stack direction="column" spacing={2}>
-                {/* <Typography>이름</Typography> */}
                 <Divider>
                   <Chip label="소개글" />
                 </Divider>
-                {/* <Divider>
-                  <Chip label="지갑 주소" />
-                </Divider> */}
-
-                <Typography>보유 작품 수</Typography>
-                <Typography>등등</Typography>
+                <Divider>
+                  <Chip label="보유 작품 수" />
+                </Divider>
                 <Link href={"/mypageupdate"} passHref>
                   <Button>수정</Button>
                 </Link>
@@ -154,13 +164,6 @@ const MyPage = ({ account }) => {
               판매 등록 중 여부:{" "}
               {saleStatus ? "판매 등록 가능" : "판매 등록 불가능"}
             </Typography>
-            {/* <Button
-              onClick={onClickSaleStatus}
-              variant="contained"
-              color={saleStatus ? "error" : "success"}
-            >
-              {saleStatus ? "판매 등록 정지" : "판매 등록하기"}
-            </Button> */}
             <Typography variant="h4">보유 중인 작품</Typography>
             {kallosTokens?.map((v, i) => {
               return (
