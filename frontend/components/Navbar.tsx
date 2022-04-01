@@ -124,7 +124,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
           </Box>
           <Searchbar />
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Link href="/view" passHref>
+            <Link href="/explore" passHref>
               <Button
                 sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
               >
