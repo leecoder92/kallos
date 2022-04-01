@@ -16,6 +16,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { getArtistInfo, getAllItemsOfArtist } from "@/store/modules/artist";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
+// import Pagination from '../components/pagination';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -64,7 +65,7 @@ const creatorDetail = () => {
         <Box
           sx={{
             bgcolor: "background.paper",
-            pt: 8,
+            pt: 18,
             pb: 6,
           }}
         >
@@ -93,6 +94,7 @@ const creatorDetail = () => {
             <Row />
             <Row />
           </Container>
+          {/* <Pagination /> */}
         </Box>
       </main>
     </div>
