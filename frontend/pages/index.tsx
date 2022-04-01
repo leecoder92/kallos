@@ -5,10 +5,6 @@ import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import CaliImage from "../public/images/cali.jpg";
-<<<<<<< HEAD
-import { minWidth } from "@mui/system";
-=======
->>>>>>> 017410f6dc6ea513f31e8a07b54365f58f0b0c09
 import Head from "next/head";
 
 const ColorButton = styled(Button)({
@@ -23,17 +19,10 @@ const ColorButton = styled(Button)({
 
 const Home: NextPage = () => {
   return (
-<<<<<<< HEAD
-    <Box minWidth="md" className="home-div">
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap"
-=======
     <div>
       <Head>
         <link
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&family=Nanum+Pen+Script&display=swap"
->>>>>>> 017410f6dc6ea513f31e8a07b54365f58f0b0c09
           rel="stylesheet"
         />
       </Head>
@@ -78,7 +67,7 @@ const Home: NextPage = () => {
           </Stack>
         </Box>
       </Stack>
-    </Box>
+    </div>
   );
 };
 
