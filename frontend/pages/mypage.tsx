@@ -10,6 +10,8 @@ import {
   Divider,
   Chip,
   Tooltip,
+  LinearProgress,
+  CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
@@ -56,11 +58,14 @@ interface ParamObj extends SaleKallosProps {
 
 const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
-  const [saleStatus, setSaleStatus] = useState<boolean>(false);
+  const [saleStatus, setSaleStatus] = useState<Boolean>(false);
   const [onSaleItems, setOnSaleItems] = useState([]);
 
   const cutAddress1 = account.substr(0, 5);
   const cutAddress2 = account.slice(-4);
+
+  // 판매 상태 전환 로딩 상태
+  const [saleStatusLoading, setSaleStatusLoading] = useState<Boolean>(false);
 
   const [curPage, setCurPage] = useState(0);
   const [postsPerPage, setPostPerPage] = useState(10);
@@ -99,10 +104,14 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
 
       const response = await mintKallosTokenContract.methods
         .setApprovalForAll(saleKallosTokenAddress, !saleStatus)
-        .send({ from: account });
+        .send({ from: account })
+        .on("transactionHash", () => {
+          setSaleStatusLoading(true);
+        });
 
       if (response.status) {
         setSaleStatus(!saleStatus);
+        setSaleStatusLoading(false);
       }
     } catch (error) {
       console.error(error);
@@ -173,11 +182,13 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
             >
               {saleStatus ? "판매 등록 가능" : "판매 등록 불가능"}
             </Typography>
+            {saleStatusLoading ? <CircularProgress color="primary" /> : null}
+            {/* <CircularProgress /> */}
             <Button
               sx={{ mt: 1 }}
               onClick={onClickSaleStatus}
               variant="contained"
-              color={saleStatus ? "primary" : "error"}
+              color={saleStatus ? "error" : "primary"}
             >
               {saleStatus ? "판매 모드 Off" : "판매 모드 On"}
             </Button>
