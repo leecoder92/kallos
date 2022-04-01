@@ -155,11 +155,11 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, 300px)",
+          gridTemplateColumns: "repeat(auto-fill, 270px)",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: 7,
-          rowGap: 3,
+          marginTop: 5,
+          rowGap: 5,
           columnGap: 1,
         }}
       >
@@ -170,7 +170,8 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
       <style jsx>
         {`
           .viewContainer {
-            margin: 150px 200px;
+            padding: 150px 200px;
+            
           }
           h1 {
             text-align: center;
