@@ -40,10 +40,17 @@ const Home: NextPage = () => {
       </Head>
       {/* <Container> */}
       <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
-        <Box width="40%" textAlign="center" sx={{ mt: 10, mx: 20 }}>
+        <Box
+          width="40%"
+          textAlign="center"
+          sx={{ mt: 10, mx: { lg: 20, md: 10, xs: 5 } }}
+        >
           <Image src={CaliImage} alt="any image" />
         </Box>
-        <Box width="60%" sx={{ mt: 10, mr: 20, textAlign: "center" }}>
+        <Box
+          width="60%"
+          sx={{ mt: 10, mr: { lg: 20, md: 10, xs: 5 }, textAlign: "center" }}
+        >
           <Typography className="ff" variant="h2" sx={{ pb: 10 }}>
             당신의 손글씨를 남기고 싶지 않나요?
             <br />
