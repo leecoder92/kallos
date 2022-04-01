@@ -188,7 +188,6 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
                 px: 3,
                 bgcolor: "#F9E6E1",
                 width: 200,
-                height: 380,
               }}
             >
               <Stack direction="column" spacing={2}>
