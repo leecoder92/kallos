@@ -119,6 +119,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
     console.log(router.query.id);
     setTokenId(router.query.id);
     getItemInfo();
+    getKallosTokenOwner();
   }, [router.isReady]);
 
   return (
