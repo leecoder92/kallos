@@ -67,7 +67,7 @@ const Home: NextPage = () => {
           </Stack>
         </Box>
       </Stack>
-    </Box>
+    </div>
   );
 };
 
