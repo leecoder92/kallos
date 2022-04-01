@@ -26,7 +26,7 @@ import { connect } from "react-redux";
 import Image from "next/image";
 import defaultProfile from "../public/images/defaultProfile.png";
 import maticImage from "../public/images/matic-token.png";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -112,7 +112,7 @@ const MyPage = ({ account }) => {
         sx={{ mt: 18, justifyContent: "center", mx: 25 }}
       >
         <Grid container spacing={10}>
-          <Grid item direction="column" md={3.5} align="center">
+          <Box sx={{display: "flex", flexDirection:"column", alignItems: "center"}}>
             <Image src={defaultProfile} width="200px" height="200px" />
             <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
               유저 이름
@@ -158,7 +158,7 @@ const MyPage = ({ account }) => {
                 </Link>
               </Stack>
             </Box>
-          </Grid>
+          </Box>
           <Grid item direction="column">
             <Typography variant="h5" color={saleStatus ? "success" : "error"}>
               판매 등록 중 여부:{" "}
