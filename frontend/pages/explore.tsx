@@ -41,10 +41,10 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   //pagination
   const [curPage, setCurPage] = useState(0);
-  const [postsPerPage, setPostPerPage] = useState(10);
-  const [totalPosts, setTotalPosts] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-  const onChangePostsPerPage = (event) => setPostPerPage(event.target.value);
+  const onChangeItemsPerPage = (event) => setItemsPerPage(event.target.value);
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
     searchOption: "users",
     searchKeyword: keyword,
     page: curPage,
-    size: postsPerPage,
+    size: itemsPerPage,
   };
 
   useEffect(() => {
