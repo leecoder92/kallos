@@ -23,6 +23,7 @@ import java.util.*;
 @Api(value = "유저 API", tags = {"User"})
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/item")
 public class ItemController {
 
