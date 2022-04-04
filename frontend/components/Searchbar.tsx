@@ -1,8 +1,8 @@
 /* eslint-disable */
-
 // style
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
   InputBase,
   List,
