@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { FC, useEffect, useState } from "react";
-import { Container } from "@mui/material";
+import { Container, Box, Stack } from "@mui/material";
 
 const animationImages = [
   require("../public/images/loading/writing1.png"),
@@ -13,7 +13,7 @@ const animationImages = [
 ];
 
 const LoadingInterface: FC = () => {
-  const [num, setNum] = useState<Number>(1);
+  const [num, setNum] = useState<number>(1);
 
   useEffect(() => {
     let cnt = 0;
@@ -25,8 +25,12 @@ const LoadingInterface: FC = () => {
   }, []);
 
   return (
-    <>
-      <Container align="center" sx={{ mt: 30 }}>
+    <div className="viewContainer">
+      <Stack
+        sx={{
+          alignItems: "center",
+        }}
+      >
         <Image
           src={animationImages[num]}
           key={num}
@@ -34,8 +38,15 @@ const LoadingInterface: FC = () => {
           width="400px"
           height="400px"
         />
-      </Container>
-    </>
+      </Stack>
+      <style jsx>
+        {`
+          .viewContainer {
+            padding: 150px 200px;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 
