@@ -7,14 +7,13 @@ import Link from "next/link";
 export const KallosItemCard = ({ kallosData }) => {
   return (
     <Box sx={{ borderRadius: "10px" }}>
-      <Link href={`/items/1`}>
+      <Link href={`/items/${kallosData.tokenId}`}>
         <a>
           <Box sx={{ borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
             <Image
               width="100%"
               height="100%"
-              //   src={kallosData.itemHash}
-              src="/images/3.png"
+              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${kallosData.itemImg}`}
               alt="NFT Image"
               layout="responsive"
             />
@@ -32,18 +31,18 @@ export const KallosItemCard = ({ kallosData }) => {
         }}
       >
         <Box>
-          {/* <Link href={`/items/${kallosData.tokenId}`}>
-            <a> */}
-          <Typography>{kallosData.name}</Typography>
-          {/* </a>
+          <Link href={`/items/${kallosData.tokenId}`}>
+            <a>
+              <Typography>{kallosData.title}</Typography>
+            </a>
           </Link>
-          <Link href={`/items/${kallosData.makerAddress}`}>
-            <a> */}
-          <Typography>작가이름</Typography>
-          {/* </a>
-          </Link> */}
+          <Link href={`/items/${kallosData.authorAddress}`}>
+            <a>
+              <Typography>{kallosData.authorName}</Typography>
+            </a>
+          </Link>
         </Box>
-        <Typography>가격</Typography>
+        <Typography>{kallosData.price}</Typography>
       </Box>
     </Box>
   );

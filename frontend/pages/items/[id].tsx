@@ -121,14 +121,19 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
   useEffect(() => {
     console.log(router.query.id);
     // setTokenId(router.query.id);
-    getItemInfo();
-    getKallosTokenOwner();
+    // getItemInfo();
+    // getKallosTokenOwner();
+    setItemDetail(router.query.id);
   }, [router.isReady]);
+
+  useEffect(() => {
+    setItemInfo(itemDetail);
+  }, [itemDetail]);
 
   return (
     <Box sx={{ padding: "150px 200px", paddingTop: "0", height: "100%" }}>
       <Typography sx={{ marginTop: "200px", fontSize: "45px" }}>
-        작품 제목
+        {itemInfo.title}
       </Typography>
       <Box>
         <Box
@@ -150,7 +155,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
             }}
           >
             <Image
-              src="/images/5.png"
+              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${itemInfo.itemImg}`}
               width="100%"
               height="100%"
               alt="token image"
@@ -180,13 +185,21 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
               }}
             >
               <Typography sx={{ fontSize: "20px" }}>제목</Typography>
-              <Typography sx={{ fontSize: "20px" }}>abc</Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {itemInfo.title}
+              </Typography>
               <Typography sx={{ fontSize: "20px" }}>작가</Typography>
-              <Typography sx={{ fontSize: "20px" }}>abc</Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {itemInfo.authorName}
+              </Typography>
               <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
-              <Typography sx={{ fontSize: "20px" }}>abc</Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {itemInfo.description}
+              </Typography>
               <Typography sx={{ fontSize: "20px" }}>가격</Typography>
-              <Typography sx={{ fontSize: "20px" }}>abc</Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {itemInfo.price}
+              </Typography>
             </Box>
             {isNotBuyable ? (
               <ColorButton

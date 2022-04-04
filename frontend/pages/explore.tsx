@@ -67,14 +67,14 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
     setShowOnlySale(!showOnlySale);
   };
 
-  const params = {
-    searchOption: "users",
-    searchKeyword: keyword,
-    page: curPage,
-    size: itemsPerPage,
-  };
-
   useEffect(() => {
+    const params = {
+    //   option:"",
+    //   keyword:"",
+    //   pageNo:"1",
+    //   itemPerPage:"4",
+    //   onSaleYN:"0",
+    };
     setAllItems(params);
   }, []);
 

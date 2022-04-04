@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { BACKEND_URL } from "../../config/index";
 
 export type ItemState = {
   allItems: Array<Object>;
@@ -17,20 +18,22 @@ export const getAllItems = createAsyncThunk(
   "GET/ALLITEMS", //action명
   async (
     {
-      searchOption,
-      searchKeyword,
-      page,
-      size,
+      option,
+      keyword,
+      pageNo,
+      itemPerPage,
+      onSaleYN,
     }: {
-      searchOption: string;
-      searchKeyword: string;
-      page: number;
-      size: number;
+      option: string;
+      keyword: string;
+      pageNo: string;
+      itemPerPage: string;
+      onSaleYN: string;
     },
     { rejectWithValue }
   ) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/${searchOption}`)
+      .get(`${BACKEND_URL}/item/view`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -40,7 +43,7 @@ export const getItemDetail = createAsyncThunk(
   "GET/ITEMDETAIL", //action명
   async ({ tokenId }: { tokenId: number }, { rejectWithValue }) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/${tokenId}`)
+      .get(`${BACKEND_URL}/item/detail`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
