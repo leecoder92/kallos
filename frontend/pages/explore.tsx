@@ -14,6 +14,9 @@ import { getAllItems } from "../store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
+import Pagination from '../components/pagination';
+
+
 const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
@@ -44,7 +47,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-  const onChangeItemsPerPage = (event) => setItemsPerPage(event.target.value);
+
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +83,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   useEffect(() => {
     setOnSaleItems(items);
+    setTotalItems(items.length);
   }, [items]);
 
   useEffect(() => {
@@ -160,6 +164,12 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
           <KallosItemCard key={item.id} kallosData={item} />
         ))}
       </Box>
+      <Pagination 
+        curPage={curPage}
+        setCurPage={setCurPage} 
+        totalItems={totalItems} 
+        itemsPerPage={itemsPerPage}
+      />
       <style jsx>
         {`
           .viewContainer {

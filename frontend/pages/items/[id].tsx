@@ -72,20 +72,23 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
   getOnSaleTokens,
 }) => {
   const router = useRouter();
-  const [isBuyable, setIsBuyable] = useState<boolean>(false);
+  const [isNotBuyable, setIsNotBuyable] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [itemInfo, setItemInfo] = useState(itemDetail);
   const [tokenId, setTokenId] = useState("");
 
   const onShowModal = () => setShowModal(!showModal);
+  const onShowAlert = () => alert("이미 구매하신 작품입니다");
 
+  //해당 토큰 아이디에 대한 소유자 주소 반환 후
+  //현 사용자와 일치하는 지 여부 확인(다른 사람이면 살 수 있도록)
   const getKallosTokenOwner = async () => {
     try {
       const response = await mintKallosTokenContract.methods
         .ownerOf(tokenId)
         .call();
 
-      setIsBuyable(
+      setIsNotBuyable(
         response.toLocaleLowerCase() === account.toLocaleLowerCase()
       );
     } catch (error) {
@@ -117,7 +120,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
 
   useEffect(() => {
     console.log(router.query.id);
-    setTokenId(router.query.id);
+    // setTokenId(router.query.id);
     getItemInfo();
     getKallosTokenOwner();
   }, [router.isReady]);
@@ -173,7 +176,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
                 gridTemplateColumns: "1fr 3fr",
                 gridTemplateRows: "repeat(4, 1fr)",
                 height: "inherit",
-                columnGap: 1
+                columnGap: 1,
               }}
             >
               <Typography sx={{ fontSize: "20px" }}>제목</Typography>
@@ -185,9 +188,23 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
               <Typography sx={{ fontSize: "20px" }}>가격</Typography>
               <Typography sx={{ fontSize: "20px" }}>abc</Typography>
             </Box>
-            <ColorButton variant="contained" size="large" onClick={onShowModal}>
-              구매하기
-            </ColorButton>
+            {isNotBuyable ? (
+              <ColorButton
+                variant="contained"
+                size="large"
+                onClick={onShowAlert}
+              >
+                구매완료
+              </ColorButton>
+            ) : (
+              <ColorButton
+                variant="contained"
+                size="large"
+                onClick={onShowModal}
+              >
+                구매하기
+              </ColorButton>
+            )}
             <Modal
               aria-labelledby="transition-modal-title"
               aria-describedby="transition-modal-description"
