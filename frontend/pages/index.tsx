@@ -4,7 +4,10 @@ import React from "react";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import CaliImage from "../public/images/cali.jpg";
+import CaliImage from "../public/images/test_cali/cali.jpg";
+import CssImage from "../public/images/test_cali/css_is_awesome.png";
+import TestImage from "../public/images/5.png";
+import Carousel from "react-material-ui-carousel";
 import Head from "next/head";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
@@ -21,6 +24,11 @@ const ColorButton = styled(Button)({
 });
 
 const Home: NextPage = () => {
+  const testImages = [
+    { image: CaliImage, name: "cali" },
+    { image: TestImage, name: "test image" },
+    { image: CssImage, name: "css image" },
+  ];
   const router = useRouter();
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
   const handleForceLogin = () => {
@@ -38,15 +46,39 @@ const Home: NextPage = () => {
           rel="stylesheet"
         />
       </Head>
-      {/* <Container> */}
       <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
+        {/* <Box
+          width="40%"
+          textAlign="center"
+          sx={{
+            mt: 10,
+            mx: { lg: 20, md: 10, xs: 5 },
+          }}
+        >
+          <Image src={CaliImage} alt="any image" />
+        </Box> */}
         <Box
           width="40%"
           textAlign="center"
-          sx={{ mt: 10, mx: { lg: 20, md: 10, xs: 5 } }}
+          sx={{
+            mt: 10,
+            mx: { lg: 20, md: 10, xs: 5 },
+          }}
         >
-          <Image src={CaliImage} alt="any image" />
+          <Carousel
+            height="50vh"
+            animation="slide"
+            duration={1000}
+            indicators={false}
+            navButtonsAlwaysInvisible={true}
+            stopAutoPlayOnHover={false}
+          >
+            {testImages.map((item, i) => (
+              <Image key={i} src={item.image} alt={item.name} />
+            ))}
+          </Carousel>
         </Box>
+
         <Box
           width="60%"
           sx={{ mt: 10, mr: { lg: 20, md: 10, xs: 5 }, textAlign: "center" }}
