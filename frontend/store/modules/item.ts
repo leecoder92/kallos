@@ -38,7 +38,7 @@ export const getAllItems = createAsyncThunk(
 
 export const getItemDetail = createAsyncThunk(
   "GET/ITEMDETAIL", //action명
-  async (tokenId, { rejectWithValue }) => {
+  async ({ tokenId }: { tokenId: number }, { rejectWithValue }) => {
     return await axios
       .get(`https://jsonplaceholder.typicode.com/${tokenId}`)
       .then((res) => res.data)

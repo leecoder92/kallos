@@ -1,14 +1,6 @@
 /* eslint-disable */
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  createTheme,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, createTheme, Stack, TextField, Typography } from "@mui/material";
 import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
 import { create as ipfsHttpClient } from "ipfs-http-client";
@@ -18,7 +10,10 @@ import { connect } from "react-redux";
 import LoadingInterface from "@/components/LoadingInterface";
 import Router from "next/router";
 import { ThemeProvider } from "@emotion/react";
+import { grey } from '@mui/material/colors';
+import styled from 'styled-components';
 
+const Grey = grey[300]
 const theme = createTheme({
   palette: {
     primary: {
@@ -26,9 +21,22 @@ const theme = createTheme({
     },
     secondary: {
       main: '#F9E6E1'
-    }
+    },
+  },
+  typography: {
+    fontFamily: "Nanum Bold",
   }
 })
+
+const StyledButton = styled(Button)`
+  background-color: '#F9E6E1';
+  color: #000000;
+  padding: 10px 25px;
+  &:hover {
+    background-color: #FFECE6;
+  }
+`;
+
 
 interface NewItemInfo {
   name: string;
@@ -147,35 +155,40 @@ const Create = ({ account }) => {
           </Typography>
         </>
       ) : (
-        <Container sx={{ my: 18 }}>
+        <Container sx={{ my: 18, mx: 25 }}>
           <Typography variant="h3" >
-            NFT 등록하기
+            작품 등록하기
           </Typography>
           <Box>
             <Stack direction="row" sx={{ mt: 10 }}>
-              <Typography variant="h5" sx={{ mr: 14 }}>
-                작품 파일
-              </Typography>
-              <input
-                type="file"
-                accept="image/*"
-                ref={(refParam) => (inputRef = refParam)}
-                onChange={onChange}
-                style={{ display: "none" }}
-              />
-              <div style={{ cursor: "pointer" }}>
-                {loaded === false || loaded === true ? (
-                  <Image
-                    src={image.preview_URL}
-                    alt="preview-image"
-                    width="350"
-                    height="350"
-                    onClick={() => inputRef.click()}
-                  />
-                ) : (
-                  <span>이미지를 불러오는 중입니다.</span>
-                )}
-              </div>
+                <Typography variant="h5" sx={{ mr: 14 }}>
+                  작품 파일
+                </Typography>
+              <Stack>
+                <Typography variant="caption" sx={{ marginBottom: 1, color:"Grey"}} >
+                  업로드 가능한 확장자: JPG, JPEG, PNG
+                </Typography>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={(refParam) => (inputRef = refParam)}
+                  onChange={onChange}
+                  style={{ display: "none" }}
+                />
+                <div style={{ cursor: "pointer" }}>
+                  {loaded === false || loaded === true ? (
+                    <Image
+                      src={image.preview_URL}
+                      alt="preview-image"
+                      width="350"
+                      height="350"
+                      onClick={() => inputRef.click()}
+                    />
+                  ) : (
+                    <span>이미지를 불러오는 중입니다.</span>
+                  )}
+                </div>
+              </Stack>
             </Stack>
             <Stack direction="row" sx={{ my: 8 }}>
               <Typography variant="h5" sx={{ mr: 7.7 }}>
@@ -209,15 +222,15 @@ const Create = ({ account }) => {
             </Stack>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button
+            <StyledButton
               onClick={createMint}
               variant="contained"
               size="large"
-              sx={{ mr: 29, mb: 5 }}
+              sx={{ mr: 30, mb: 5 }}
               color="secondary"
             >
               등록하기
-            </Button>
+            </StyledButton>
           </Box>
         </Container>
       )}

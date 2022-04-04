@@ -11,18 +11,24 @@ export interface ReactJsPaginationProps {
   nextPageText?: string | React.ReactElement | undefined;
 }
 
-const Paging = ({ page, count, setPage}) => {
+// totalCount : 총 아이템의 갯수(totalItemsCount), curPage : 현재 페이지
+// numPerPage : 한 페이지당 아이템 갯수
+const Paging = ({ curPage, totalItems, itemsPerPage, setCurPage}) => {
+
+  const handlePageChange = (curPage) => {
+    setCurPage(curPage)
+  }
 
   return (
     <div className={styles.container}>
       <Pagination
-        activePage={page}
-        itemsCountPerPage={10}
-        totalItemsCount={450}
+        activePage={curPage}
+        itemsCountPerPage={itemsPerPage}
+        totalItemsCount={totalItems}
         pageRangeDisplayed={5}
         prevPageText={"‹"}
         nextPageText={"›"}
-        onChange={setPage}
+        onChange={handlePageChange}
       />
     </div>
   )

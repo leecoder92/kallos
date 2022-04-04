@@ -2,12 +2,12 @@
 import React, { useState, useEffect, FC } from "react";
 import { Box, Button, Container, Stack, TextField, Typography, CssBaseline, Divider, Grid } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { KallosItemCard } from "../components/KallosItemCard";
-import { getAllItems } from "../store/modules/item";
+import { KallosItemCard } from "../../components/KallosItemCard";
+import { getAllItems } from "../../store/modules/item";
 import { getArtistInfo, getAllItemsOfArtist } from "@/store/modules/artist";
-import { RootState } from "../store/modules";
+import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
-import Pagination from '../components/pagination';
+import Pagination from '../../components/pagination';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -19,8 +19,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    //   setArtistInfo: (artistName) => getArtistInfo(artistName),
-    //   setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
+    // setArtistInfo: (artistName) => getArtistInfo(artistName),
+    // setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
     setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
   };
 };

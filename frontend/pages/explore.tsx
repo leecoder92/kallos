@@ -7,10 +7,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import InputBase from "@mui/material/InputBase";
-import { makeStyles, styled } from "@mui/styles";
 
 import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
@@ -45,10 +41,10 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   //pagination
   const [curPage, setCurPage] = useState(0);
-  const [postsPerPage, setPostPerPage] = useState(10);
-  const [totalPosts, setTotalPosts] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-  const onChangePostsPerPage = (event) => setPostPerPage(event.target.value);
+  const onChangeItemsPerPage = (event) => setItemsPerPage(event.target.value);
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,7 +71,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
     searchOption: "users",
     searchKeyword: keyword,
     page: curPage,
-    size: postsPerPage,
+    size: itemsPerPage,
   };
 
   useEffect(() => {
@@ -104,7 +100,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
         <Box sx={{ display: "flex" }}>
           <Box sx={{ width: 200 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Option</InputLabel>
+              <InputLabel id="demo-simple-select-label">분류</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -127,7 +123,6 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
               <input
                 id="caseOne"
                 type="checkbox"
-                // value={showOnlySale}
                 className={styles.toggleContainer}
                 onChange={handleSwitchShowStatus}
                 checked
@@ -140,10 +135,8 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
               <input
                 id="caseTwo"
                 type="checkbox"
-                // value={showOnlySale}
                 className={styles.toggleContainer}
                 onChange={handleSwitchShowStatus}
-                // checked
               />
               <label htmlFor="caseTwo" className={styles.toggleBtn}></label>
               <span>판매중인 작품만 보기</span>
@@ -171,7 +164,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
         {`
           .viewContainer {
             padding: 150px 200px;
-            
+            min-width: 1300px;
           }
           h1 {
             text-align: center;
