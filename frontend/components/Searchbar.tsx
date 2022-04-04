@@ -2,7 +2,6 @@
 // style
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 import {
   InputBase,
   List,
@@ -49,15 +48,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
   },
 }));
-
-const StyledList = styled(List)({
-  backgroundColor: "white",
-  border: "1px solid",
-  position: "absolute",
-  borderRadius: 4,
-  zIndex: "1",
-  width: "100%",
-});
 
 function Searchbar() {
   const router = useRouter();
@@ -166,8 +156,15 @@ function Searchbar() {
       {searchValue &&
         (searchValue.length >= 3 && !isLoading ? (
           (filteredArtistData.length != 0 || filteredTitleData.length != 0) && (
-            <StyledList
-              sx={{ bgcolor: "background.paper" }}
+            <List
+              sx={{
+                bgcolor: "background.paper",
+                position: "absolute",
+                zIndex: 1,
+                width: "100%",
+                border: "1px solid black",
+                borderRadius: 1,
+              }}
               style={{ visibility: isSearchResult ? "visible" : "hidden" }}
             >
               <ListItem>
@@ -236,14 +233,23 @@ function Searchbar() {
                   <ListItemText primary="No result" />
                 </ListItem>
               )}
-            </StyledList>
+            </List>
           )
         ) : (
-          <StyledList>
+          <List
+            sx={{
+              backgroundColor: "white",
+              position: "absolute",
+              zIndex: 1,
+              width: "100%",
+              border: "1px solid black",
+              borderRadius: 1,
+            }}
+          >
             <ListItem>
               <ListItemText primary="Loading..." />
             </ListItem>
-          </StyledList>
+          </List>
         ))}
     </Search>
   );
