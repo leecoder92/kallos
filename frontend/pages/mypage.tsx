@@ -32,6 +32,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
 import { SaleKallosProps } from "../interfaces";
+import Pagination from '../components/pagination';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -68,10 +69,10 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
   const [saleStatusLoading, setSaleStatusLoading] = useState<Boolean>(false);
 
   const [curPage, setCurPage] = useState(0);
-  const [postsPerPage, setPostPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-  const onChangePostsPerPage = (event) => setPostPerPage(event.target.value);
-
+  
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
@@ -128,7 +129,7 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
   const params = {
     searchOption: "users",
     page: curPage,
-    size: postsPerPage,
+    size: itemsPerPage,
   };
 
   useEffect(() => {
@@ -137,6 +138,7 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
 
   useEffect(() => {
     setOnSaleItems(items);
+    setTotalItems(items.length);
   }, [items]);
 
   return (
@@ -235,6 +237,12 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
                 <KallosItemCard key={item.id} kallosData={item} />
               ))}
             </Box>
+            <Pagination 
+              curPage={curPage}
+              setCurPage={setCurPage} 
+              totalItems={totalItems} 
+              itemsPerPage={itemsPerPage}
+            />
             {/* {kallosTokens?.map((v, i) => {
               return (
                 <MyKallosCard
