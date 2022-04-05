@@ -191,7 +191,7 @@ function Searchbar() {
                     <div key={key}>
                       <ListItem
                         onClick={(event) => {
-                          router.push(`/artists/${value.name}`);
+                          router.push(`/artist/${value.address}`);
                           handleArtistClick(event);
                         }}
                         style={{
