@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, FC } from "react";
-import { apiInstance } from "../../api/index";
-
-const api = apiInstance();
 
 import {
   Button,
@@ -38,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const style = {
-  //   position: "absolute" as "absolute",
+  position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -75,6 +72,7 @@ const ItemDetail = ({
   getOnSaleTokens,
 }) => {
   const router = useRouter();
+
   const [isNotBuyable, setIsNotBuyable] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [itemInfo, setItemInfo] = useState({
@@ -82,16 +80,15 @@ const ItemDetail = ({
     authorName: "",
     itemImg: "",
     description: "",
-    price: "",
+    price: "prce",
   });
-  const [tokenId, setTokenId] = useState("");
 
   const onShowModal = () => setShowModal(!showModal);
   const onShowAlert = () => alert("이미 구매하신 작품입니다");
 
   //해당 토큰 아이디에 대한 소유자 주소 반환 후
   //현 사용자와 일치하는 지 여부 확인(다른 사람이면 살 수 있도록)
-  const getKallosTokenOwner = async () => {
+  const getKallosTokenOwner = async (tokenId) => {
     try {
       const response = await mintKallosTokenContract.methods
         .ownerOf(tokenId)
@@ -106,7 +103,7 @@ const ItemDetail = ({
   };
 
   //구매 로직
-  const onClickBuy = async () => {
+  const onClickBuy = async (tokenId) => {
     setShowModal(!showModal);
     try {
       if (!account) return;
@@ -123,43 +120,18 @@ const ItemDetail = ({
     }
   };
 
-  //   const getItemInfo = () => {
-  //     setItemDetail(tokenId);
-  //   };
-
-  const getDetail = async (tokenId) => {
-    await api
-      .get(`/item/detail/${tokenId}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-    // await api
-    //   .post(`/user/register`, obj)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-    // await api
-    //   .put(`item/buy`, obj)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-    // await api
-    //   .put(`item/sell`, obj)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-  };
-
   useEffect(() => {
-    let tokenId = "43";
-    setItemDetail(tokenId);
+    setItemDetail(router.query.id);
   }, [router.isReady]);
 
   useEffect(() => {
     setItemInfo(itemDetail);
-    console.log(itemInfo);
   }, [itemDetail]);
 
   return (
     <Box sx={{ padding: "150px 200px", paddingTop: "0", height: "100%" }}>
       <Typography sx={{ marginTop: "200px", fontSize: "45px" }}>
-        {itemInfo.title}
+        {itemInfo ? itemInfo.title : null}
       </Typography>
       <Box>
         <Box
@@ -178,15 +150,18 @@ const ItemDetail = ({
               overflow: "hidden",
               width: "400px",
               height: "400px",
+              boxShadow: "0 0 5px #cfd4d1",
             }}
           >
-            <Image
-              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/32030e1d-674b-4ea4-beef-b0910ec9d53c.jpg`}
-              width="100%"
-              height="100%"
-              alt="token image"
-              layout="responsive"
-            />
+            {itemInfo ? (
+              <Image
+                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${itemInfo.itemImg}`}
+                width="100%"
+                height="100%"
+                alt="token image"
+                layout="responsive"
+              />
+            ) : null}
           </Box>
           <Box
             sx={{
@@ -196,7 +171,7 @@ const ItemDetail = ({
               justifyContent: "space-between",
               height: "400px",
               padding: "30px",
-              border: "1px solid #cfd4d1",
+              boxShadow: "0 0 5px #cfd4d1",
               borderRadius: "10px",
               width: "inherit",
             }}
@@ -212,19 +187,19 @@ const ItemDetail = ({
             >
               <Typography sx={{ fontSize: "20px" }}>제목</Typography>
               <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo.title}
+                {itemInfo ? itemInfo.title : null}
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>작가</Typography>
               <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo.authorName}
+                {itemInfo ? itemInfo.authorName : null}
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
               <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo.description}
+                {itemInfo ? itemInfo.description : null}
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>가격</Typography>
               <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo.price} MATIC
+                {itemInfo ? itemInfo.price : null} MATIC
               </Typography>
             </Box>
             {isNotBuyable ? (

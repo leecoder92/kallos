@@ -79,7 +79,7 @@ const itemSlice = createSlice({
       })
       .addCase(getAllItems.fulfilled, (state, { payload }) => {
         state.fulfilled = true;
-        state.allItems = payload;
+        state.allItems = payload.itemsByAll;
       })
       .addCase(getAllItems.rejected, (state) => {
         state.fulfilled = false;
