@@ -16,6 +16,10 @@ import { connect } from "react-redux";
 
 import Pagination from "../components/pagination";
 
+import axios from'axios';
+import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
+
+
 const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
@@ -34,7 +38,7 @@ interface SaleKallosProps {
   setAllItems: any;
 }
 
-const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
+const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
   const [showOnlySale, setShowOnlySale] = useState(false);
 
@@ -128,7 +132,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 checked
               />
               <label htmlFor="caseOne" className={styles.toggleBtn}></label>
-              <span>모든 작품 보기</span>
+              <span>판매중인 작품만 보기</span>
             </div>
           ) : (
             <div className={styles.toggleBox}>
@@ -139,7 +143,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 onChange={handleSwitchShowStatus}
               />
               <label htmlFor="caseTwo" className={styles.toggleBtn}></label>
-              <span>판매중인 작품만 보기</span>
+              <span>모든 작품 보기</span>
             </div>
           )}
         </Box>

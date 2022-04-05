@@ -10,18 +10,19 @@ export const KallosItemCard = ({ kallosData }) => {
       sx={{
         borderRadius: "10px",
         boxShadow: "0 0 5px #cfd4d1",
+        overflow: "hidden"
       }}
     >
       <Link href={`/items/${kallosData.tokenId}`}>
         <a>
-          <Box sx={{ borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
-            {/* <Image
+          <Box sx={{ borderRadius: "20px 20px 0 0" }}>
+            <Image
               width="100%"
               height="100%"
               src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${kallosData.itemImg}`}
               alt="NFT Image"
               layout="responsive"
-            /> */}
+            />
           </Box>
         </a>
       </Link>
