@@ -14,6 +14,7 @@ import { ThemeProvider } from "@emotion/react";
 import styled from 'styled-components';
 import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
 import axios from "axios";
+import artist from "./artist";
 
 
 const theme = createTheme({
@@ -47,6 +48,8 @@ interface NewItemInfo {
   keyword: string;
 }
 
+
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
     // addNewItem: (itemInfo) => addNewItem(itemInfo),
@@ -54,7 +57,6 @@ const mapDispatchToProps = (dispatch: any) => {
 };
 
 const ipfsClient = require('ipfs-http-client');
-
 const auth =
     'Basic ' + Buffer.from(PROJECT_ID + ':' + PROJECT_SECRET).toString('base64');
 
@@ -78,6 +80,7 @@ const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [artistName, setArtistName] = useState<string>('');
 
   //이미지 미리보기
   const [image, setImage] = useState({
@@ -164,62 +167,42 @@ const Create = ({ account }) => {
   // 작가 정보 불러오기
   const getArtistDetail = async (account) => {
     try{
-      const res = await axios.get(`${BACKEND_URL}user/artist/${account}`);
+      const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
       console.log("artist Detail: ", res)
+      setArtistName(res.data.name)
     }catch (err) {
       console.log(err)
     }
   }
 
-  // 작품 등록 페이지 백엔드로 데이터 보내기
-  const form = new FormData()
-  form.append('address', "0xf41b82b92fa4259bc013ac64edcf4a46b52b9bc3")
-  form.append('name', "다예") // 작가명
-  form.append('title', "충전")
-  form.append('description', "충전")
-  form.append('tokenId', "47") // tokenId
-  form.append('file', "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz")
-
+  // 민팅과 동시에(로딩중에) 작품 등록 페이지 백엔드로 데이터 보내기
   const sendItemDetail = async () => {
-    try {
-      const res = await axios.post(`${BACKEND_URL}/item/create`, form, {
-        headers: {
-          'Content-type': 'multipart/form-data'
-        }
+    const form = new FormData()
+      form.append('address', account)
+      form.append('name', "다예") // 작가명
+      form.append('title', "충전")
+      form.append('description', "충전")
+      form.append('tokenId', "47") // tokenId
+      form.append('file', "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz")
+    await axios
+      .post(`${BACKEND_URL}/item/create`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
-      console.log("아이템 테이블: ", res) 
-    } catch(err) {
-      console.log(err)
-    }
-  } 
+        .then((res) => console.log("성공!!", res))
+        .catch((err) => console.log(err));
+  }; 
 
   useEffect(() => {
     sendItemDetail()
   }, [])
-
-  // const sendItemDetail =() => {
-  //   const data= {
-  //     address : "0xf41b82b92fa4259bc013ac64edcf4a46b52b9bc3",
-  //     title: "충전",
-  //     name: "다예",
-  //     description: "충전",
-  //     tokenId: "47",
-  //     file: "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz" 
-  //   }
-  //   axios.post(`${BACKEND_URL}/item/create`, data)
-  //     .then((res) => {
-  //       console.log("아이템 테이블: ", res)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  // }
 
 
   useEffect(()=> {
     getArtistDetail(account)
   }, [account])
 
+
+  // console.log("!!!!!!", artistDetail)
   return (
     <ThemeProvider theme={theme}>
       {createLoad ? (
@@ -270,7 +253,7 @@ const Create = ({ account }) => {
                 작가명
               </Typography>
               <Typography sx={{ ml: 10, width: 700 }}>
-                !!작가이름 props 필요!! (현재 지갑 주소): {account}
+                {artistName}
               </Typography>
             </Stack>
             <Stack direction="row">

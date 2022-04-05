@@ -16,6 +16,10 @@ import { connect } from "react-redux";
 
 import Pagination from "../components/pagination";
 
+import axios from'axios';
+import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
+
+
 const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
@@ -34,7 +38,7 @@ interface SaleKallosProps {
   setAllItems: any;
 }
 
-const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
+const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
   const [showOnlySale, setShowOnlySale] = useState(false);
 
