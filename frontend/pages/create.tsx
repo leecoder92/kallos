@@ -12,6 +12,7 @@ import Router from "next/router";
 import { ThemeProvider } from "@emotion/react";
 import { grey } from '@mui/material/colors';
 import styled from 'styled-components';
+import { PROJECT_ID, PROJECT_SECRET } from "../config/index";
 
 const Grey = grey[300]
 const theme = createTheme({
@@ -51,11 +52,26 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-// interface MainProps {
-//   account: string;
-// }
+const ipfsClient = require('ipfs-http-client');
 
-const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
+const auth =
+    'Basic ' + Buffer.from(PROJECT_ID + ':' + PROJECT_SECRET).toString('base64');
+
+const client = ipfsClient.create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth,
+    },
+});
+
+client.pin.add('QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn').then((res) => {
+    console.log(res);
+});
+
+
+// const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
@@ -95,6 +111,7 @@ const Create = ({ account }) => {
       const added = await client.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
+
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       setFileUrl(url);
       console.log("file url:", fileUrl);
