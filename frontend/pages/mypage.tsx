@@ -166,10 +166,16 @@ const MyPage: FC<ParamObj> = ({
               mt: 10,
             }}
           >
-            {userInfo.profile_img === null ? (
-              <Image src={defaultProfile} width="200px" height="200px" />
+            {userInfo.profile_img !== null ? (
+              <Image
+                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
+                alt="user profile image"
+                width="200px"
+                height="200px"
+              />
             ) : (
-              <Typography>이미지 불러와야함</Typography>
+              // <Typography>이미지 불러와야함</Typography>
+              <Image src={defaultProfile} width="200px" height="200px" />
               // <Image src={defaultProfile} width="200px" height="200px" />
             )}
             {/* <Image src={defaultProfile} width="200px" height="200px" /> */}
@@ -223,7 +229,8 @@ const MyPage: FC<ParamObj> = ({
                 <Divider>
                   <Chip label="소개글" />
                 </Divider>
-                {userInfo.description === null ? (
+                {userInfo.description === null ||
+                userInfo.description === "null" ? (
                   <Typography align="center">소개글이 없습니다.</Typography>
                 ) : (
                   <Typography align="center">{userInfo.description}</Typography>
