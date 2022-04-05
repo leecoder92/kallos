@@ -155,7 +155,7 @@ const Create = ({ account }) => {
           setCreateLoad(true);
         });
       if (response.status) {
-        // Router.push("/mypage");
+        Router.push("/mypage");
         getKallosTokens();
       }
     } catch (error) {
