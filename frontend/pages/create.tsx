@@ -12,6 +12,7 @@ import Router from "next/router";
 import { ThemeProvider } from "@emotion/react";
 import { grey } from '@mui/material/colors';
 import styled from 'styled-components';
+import { PROJECT_ID, PROJECT_SECRET } from "../config/index";
 
 const Grey = grey[300]
 const theme = createTheme({
@@ -53,11 +54,8 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const ipfsClient = require('ipfs-http-client');
 
-const projectId = process.env.NEXT_PUBLIC_IPFS_PROJECT_ID;
-console.log(projectId)
-const projectSecret = process.env.NEXT_PUBLIC_IPFS_PROJECT_SECRECT;
 const auth =
-    'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
+    'Basic ' + Buffer.from(PROJECT_ID + ':' + PROJECT_SECRET).toString('base64');
 
 const client = ipfsClient.create({
     host: 'ipfs.infura.io',

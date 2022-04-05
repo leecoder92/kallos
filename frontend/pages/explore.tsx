@@ -14,8 +14,7 @@ import { getAllItems } from "../store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
-import Pagination from '../components/pagination';
-
+import Pagination from "../components/pagination";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -25,7 +24,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
+    setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
 
@@ -39,15 +38,14 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
   const [showOnlySale, setShowOnlySale] = useState(false);
 
-  const [option, setOption] = useState<string>("");
+  const [option, setOption] = useState<string>("all");
   const [keyword, setKeyword] = useState<string>("");
 
   //pagination
-  const [curPage, setCurPage] = useState(0);
+  const [curPage, setCurPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-  const paginate = (pageNumber) => setCurPage(pageNumber);
-
+  //   const paginate = (pageNumber) => setCurPage(pageNumber);
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,10 +55,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   //검색키워드 설정
   const handleKeyword = (event) => {
     event.preventDefault();
-    if (event.key === "Enter") {
-      setKeyword(event.target.value as string);
-      //   event.target.value = "";
-    }
+    setKeyword(event.target.value as string);
   };
 
   //판매 중인 작품만 볼지 여부 설정
@@ -72,18 +67,19 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   useEffect(() => {
     const params = {
-    //   option:"",
-    //   keyword:"",
-    //   pageNo:"1",
-    //   itemPerPage:"4",
-    //   onSaleYN:"0",
+      option,
+      keyword,
+      pageNo: curPage,
+      itemPerPage: itemsPerPage,
+      onSaleYN: showOnlySale ? 1 : 0,
     };
     setAllItems(params);
-  }, []);
+  }, [option, keyword, curPage, showOnlySale]);
 
   useEffect(() => {
     setOnSaleItems(items);
     setTotalItems(items.length);
+    console.log(items);
   }, [items]);
 
   useEffect(() => {
@@ -112,13 +108,13 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 label="Option"
                 onChange={handleOption}
               >
-                <MenuItem value={10}>모두</MenuItem>
-                <MenuItem value={20}>작가</MenuItem>
-                <MenuItem value={30}>작품</MenuItem>
+                <MenuItem value="all">모두</MenuItem>
+                <MenuItem value="name">작가</MenuItem>
+                <MenuItem value="title">작품</MenuItem>
               </Select>
             </FormControl>
           </Box>
-          <input placeholder="검색어.." onKeyUp={handleKeyword} />
+          <input placeholder="검색어.." onChange={handleKeyword} />
         </Box>
 
         <Box>
@@ -161,13 +157,13 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
         }}
       >
         {onSaleItems?.map((item) => (
-          <KallosItemCard key={item.id} kallosData={item} />
+          <KallosItemCard key={item.item_id} kallosData={item} />
         ))}
       </Box>
-      <Pagination 
+      <Pagination
         curPage={curPage}
-        setCurPage={setCurPage} 
-        totalItems={totalItems} 
+        setCurPage={setCurPage}
+        totalItems={totalItems}
         itemsPerPage={itemsPerPage}
       />
       <style jsx>
