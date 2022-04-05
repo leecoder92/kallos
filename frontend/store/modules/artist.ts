@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "../../config/index";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -15,9 +16,9 @@ const initialState: ArtistState = {
 
 export const getArtistInfo = createAsyncThunk(
   "GET/ARTISTINFO", //action명
-  async (artistName, { rejectWithValue }) => {
+  async (account:string, { rejectWithValue }) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/users/${artistName}`)
+      .get(`${BACKEND_URL}/user/artist/${account}`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -25,9 +26,26 @@ export const getArtistInfo = createAsyncThunk(
 
 export const getAllItemsOfArtist = createAsyncThunk(
   "GET/ALLITEMOFARTIST", //action명
-  async (paramsObj, { rejectWithValue }) => {
+  async (
+    {
+      address,
+      pageNo,
+      itemPerPage
+  } : {
+    address: string;
+    pageNo: string;
+    itemPerPage: string;
+  }, 
+    { rejectWithValue }
+  ) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/users`, { params: paramsObj })
+      .get(`${BACKEND_URL}/user/artist/items`, { 
+        params: {
+          address,
+          pageNo,
+          itemPerPage,
+      }, 
+    })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }

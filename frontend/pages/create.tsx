@@ -1,5 +1,6 @@
 /* eslint-disable */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import FormData from 'form-data';
 import { Box, Button, Container, createTheme, Stack, TextField, Typography } from "@mui/material";
 import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
@@ -10,11 +11,11 @@ import { connect } from "react-redux";
 import LoadingInterface from "@/components/LoadingInterface";
 import Router from "next/router";
 import { ThemeProvider } from "@emotion/react";
-import { grey } from '@mui/material/colors';
 import styled from 'styled-components';
-import { PROJECT_ID, PROJECT_SECRET } from "../config/index";
+import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
+import axios from "axios";
 
-const Grey = grey[300]
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -40,7 +41,7 @@ const StyledButton = styled(Button)`
 
 
 interface NewItemInfo {
-  name: string;
+  title: string;
   artist: string;
   privateKey: string;
   keyword: string;
@@ -75,10 +76,9 @@ client.pin.add('QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn').then((res) => {
 
 const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
-  const [formInput, updateFormInput] = useState({
-    name: "",
-    description: "",
-  });
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   //이미지 미리보기
   const [image, setImage] = useState({
     image_file: "",
@@ -121,11 +121,11 @@ const Create = ({ account }) => {
   }
 
   const createMint = async () => {
-    const { name, description } = formInput;
-    if (!name || !description || !fileUrl) return console.log("값이 비어있음");
+    // const { name, description } = formInput;
+    if (!title || !description || !fileUrl) return console.log("값이 비어있음");
 
     const data = JSON.stringify({
-      name,
+      title,
       description,
       image: fileUrl,
     });
@@ -135,6 +135,7 @@ const Create = ({ account }) => {
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       console.log("url은", url);
       createSale(url);
+      
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
@@ -149,7 +150,6 @@ const Create = ({ account }) => {
         .on("transactionHash", () => {
           setCreateLoad(true);
         });
-
       if (response.status) {
         Router.push("/mypage");
       }
@@ -161,6 +161,64 @@ const Create = ({ account }) => {
       console.error(error);
     }
   };
+  // 작가 정보 불러오기
+  const getArtistDetail = async (account) => {
+    try{
+      const res = await axios.get(`${BACKEND_URL}user/artist/${account}`);
+      console.log("artist Detail: ", res)
+    }catch (err) {
+      console.log(err)
+    }
+  }
+
+  // 작품 등록 페이지 백엔드로 데이터 보내기
+  const form = new FormData()
+  form.append('address', "0xf41b82b92fa4259bc013ac64edcf4a46b52b9bc3")
+  form.append('name', "다예") // 작가명
+  form.append('title', "충전")
+  form.append('description', "충전")
+  form.append('tokenId', "47") // tokenId
+  form.append('file', "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz")
+
+  const sendItemDetail = async () => {
+    try {
+      const res = await axios.post(`${BACKEND_URL}/item/create`, form, {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        }
+      })
+      console.log("아이템 테이블: ", res) 
+    } catch(err) {
+      console.log(err)
+    }
+  } 
+
+  useEffect(() => {
+    sendItemDetail()
+  }, [])
+
+  // const sendItemDetail =() => {
+  //   const data= {
+  //     address : "0xf41b82b92fa4259bc013ac64edcf4a46b52b9bc3",
+  //     title: "충전",
+  //     name: "다예",
+  //     description: "충전",
+  //     tokenId: "47",
+  //     file: "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz" 
+  //   }
+  //   axios.post(`${BACKEND_URL}/item/create`, data)
+  //     .then((res) => {
+  //       console.log("아이템 테이블: ", res)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }
+
+
+  useEffect(()=> {
+    getArtistDetail(account)
+  }, [account])
 
   return (
     <ThemeProvider theme={theme}>
@@ -222,7 +280,7 @@ const Create = ({ account }) => {
                 variant="standard"
                 sx={{ ml: 17, width: 700 }}
                 onChange={(e) =>
-                  updateFormInput({ ...formInput, name: e.target.value })
+                  setTitle(e.target.value)
                 }
               ></TextField>
             </Stack>
@@ -233,7 +291,7 @@ const Create = ({ account }) => {
                 variant="standard"
                 sx={{ ml: 20, width: 700 }}
                 onChange={(e) =>
-                  updateFormInput({ ...formInput, description: e.target.value })
+                  setDescription(e.target.value)
                 }
               ></TextField>
             </Stack>
