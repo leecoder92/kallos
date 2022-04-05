@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     setArtistInfo: (account) => getArtistInfo(account),
     setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
-    setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
+    setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
 
@@ -65,7 +65,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   // 작가 정보 불러오기
   const getArtistDetail = async (account) => {
     try{
-      const res = await axios.get(`${BACKEND_URL}user/artist/${account}`);
+      const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
       console.log("artist Detail: ", res)
     }catch (err) {
       console.log(err)
