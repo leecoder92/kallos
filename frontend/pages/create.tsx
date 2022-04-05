@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
 import axios from "axios";
 import artist from "./artist";
+import { getKallosTokenContract } from "web3Config";
 
 
 const theme = createTheme({
@@ -155,6 +156,7 @@ const Create = ({ account }) => {
         });
       if (response.status) {
         Router.push("/mypage");
+        getKallosTokens();
       }
     } catch (error) {
       // 에러 코드가 4001(reject)일 때 로딩 멈춤
@@ -174,16 +176,47 @@ const Create = ({ account }) => {
       console.log(err)
     }
   }
+  // 토큰id가져오기
+  const [kallosTokens, setKallosTokens] = useState([]);
+  const [tokenId, setTokenId] = useState('');
+
+  const getKallosTokens = async () => {
+    try {
+      const response = await getKallosTokenContract.methods
+        .getKallosTokens(account)
+        .call();
+
+      console.log("토큰리스트", response);
+
+      setKallosTokens(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (kallosTokens.length == 0) return
+    setTokenId(kallosTokens[kallosTokens.length -1][0])
+    // console.log("!!!", kallosTokens[kallosTokens.length -1][0])
+  }, [kallosTokens])
+
+  useEffect(()=> {
+    sendItemDetail()
+  }, [tokenId])
+
+  useEffect(() => {
+    getKallosTokens()
+  }, [])
 
   // 민팅과 동시에(로딩중에) 작품 등록 페이지 백엔드로 데이터 보내기
   const sendItemDetail = async () => {
     const form = new FormData()
       form.append('address', account)
-      form.append('name', "다예") // 작가명
-      form.append('title', "충전")
-      form.append('description', "충전")
-      form.append('tokenId', "47") // tokenId
-      form.append('file', "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz")
+      form.append('name', artistName) // 작가명
+      form.append('title', title)
+      form.append('description', description)
+      form.append('tokenId', tokenId) // tokenId
+      form.append('file', image.image_file)
     await axios
       .post(`${BACKEND_URL}/item/create`, form, {
         headers: { "Content-Type": "multipart/form-data" },
