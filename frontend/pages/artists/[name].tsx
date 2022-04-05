@@ -8,6 +8,9 @@ import { getArtistInfo, getAllItemsOfArtist } from "@/store/modules/artist";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
 import Pagination from '../../components/pagination';
+import axios from "axios";
+import { BACKEND_URL } from "../../config/index";
+
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -19,8 +22,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    // setArtistInfo: (artistName) => getArtistInfo(artistName),
-    // setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
+      setArtistInfo: (artistName) => getArtistInfo(artistName),
+      setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
     setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
   };
 };
@@ -38,7 +41,7 @@ interface ParamObj {
   itemsPerOnePage: number;
 }
 
-const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems }) => {
+const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
 
   const [option, setOption] = useState<string>("");
@@ -59,9 +62,8 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   // console.log(items.length);
   // console.log(curPage);
 
-  useEffect(() => {
-    setAllItems(params);
-  }, []);
+  
+
 
   useEffect(() => {
     setOnSaleItems(items);
@@ -85,13 +87,11 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems }) => {
               {/* 프로필 사진 */}
               <AccountCircleIcon sx={{ fontSize: 170 }} />
               <Box sx={{ m: 2.5 }}>
-                <Typography variant="h5" sx={{ mb : 1}}>작가명</Typography>
+                <Typography variant="h5" sx={{ my : 1.5}}>작가명</Typography>
                 <Typography>
-                  Something short and leading about the collection below—its
-                  contents, the creator, etc.
+                  Never mind, I'll find someone like you. I wish nothing but the best of you too..
                   <br />
-                  Make it short and sweet, but not too short so folks don't
-                  simply skip over it entirely.
+                  Don't forget me, I beg. I remember you said sometimes it lasts in love, but sometimes it hurts instead.
                 </Typography>
               </Box>
             </Stack>
