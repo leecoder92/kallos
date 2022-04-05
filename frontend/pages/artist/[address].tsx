@@ -8,9 +8,9 @@ import { getArtistInfo, getAllItemsOfArtist } from "@/store/modules/artist";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
 import Pagination from '../../components/pagination';
-import axios from "axios";
 import { BACKEND_URL } from "../../config/index";
-
+import axios from "axios";
+import { sizeWidth } from "@mui/system";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -22,9 +22,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-      setArtistInfo: (artistName) => getArtistInfo(artistName),
-      setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
-    setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
+    setArtistInfo: (account) => getArtistInfo(account),
+    setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
+    setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
 
@@ -62,8 +62,39 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   // console.log(items.length);
   // console.log(curPage);
 
-  
+  // 작가 정보 불러오기
+  const getArtistDetail = async (account) => {
+    try{
+      const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
+      console.log("작가 정보: ", res)
+    }catch (err) {
+      console.log(err)
+    }
+  }
 
+  // 작가의 아이템 불러오기
+  const getArtistItems = async (account) => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/user/artist/items`, {
+        params: {
+          address: account,
+          pageNo: curPage,
+          itemPerPage: 8,
+        }
+      });
+      console.log("작가 아이템 목록: ", res)
+    }catch(err) {
+      console.log(err)
+    }
+  }
+  useEffect(()=> {
+    getArtistDetail(account)
+    getArtistItems(account)
+  }, [account, curPage])
+
+  useEffect(() => {
+    setAllItems(params);
+  }, []);
 
   useEffect(() => {
     setOnSaleItems(items);
