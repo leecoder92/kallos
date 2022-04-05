@@ -1,16 +1,29 @@
 /* eslint-disable */
 import React, { useState, useEffect, FC } from "react";
-import { Box, Button, Container, Stack, TextField, Typography, CssBaseline, Divider, Grid } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  TextField,
+  Typography,
+  CssBaseline,
+  Divider,
+  Grid,
+  Avatar,
+} from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { KallosItemCard } from "../../components/KallosItemCard";
 import { getAllItems } from "../../store/modules/item";
 import { getArtistInfo, getAllItemsOfArtist } from "@/store/modules/artist";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
-import Pagination from '../../components/pagination';
+import Pagination from "../../components/pagination";
 import { BACKEND_URL } from "../../config/index";
 import axios from "axios";
 import { sizeWidth } from "@mui/system";
+import { useRouter } from "next/router";
+import Image from "next/image";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -42,6 +55,9 @@ interface ParamObj {
 }
 
 const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
+  const router = useRouter();
+  const userAddress = router.query.address;
+
   const [onSaleItems, setOnSaleItems] = useState([]);
 
   const [option, setOption] = useState<string>("");
@@ -63,34 +79,39 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   // console.log(curPage);
 
   // 작가 정보 불러오기
-  const getArtistDetail = async (account) => {
-    try{
-      const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
-      console.log("작가 정보: ", res)
-    }catch (err) {
-      console.log(err)
+  const [artistDetail, setArtistDetail] = useState(null);
+
+  const getArtistDetail = async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/user/artist/${userAddress}`);
+      console.log("작가 정보: ", res);
+      setArtistDetail(res.data);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   // 작가의 아이템 불러오기
-  const getArtistItems = async (account) => {
+  const [itemsOfArtist, setItemsOfArtist] = useState(null);
+  const getArtistItems = async () => {
     try {
       const res = await axios.get(`${BACKEND_URL}/user/artist/items`, {
         params: {
-          address: account,
+          address: userAddress,
           pageNo: curPage,
           itemPerPage: 8,
-        }
+        },
       });
-      console.log("작가 아이템 목록: ", res)
-    }catch(err) {
-      console.log(err)
+      console.log("작가 아이템 목록: ", res);
+      setItemsOfArtist(res.data.items);
+    } catch (err) {
+      console.log(err);
     }
-  }
-  useEffect(()=> {
-    getArtistDetail(account)
-    getArtistItems(account)
-  }, [account, curPage])
+  };
+  useEffect(() => {
+    getArtistDetail();
+    getArtistItems();
+  }, [userAddress, curPage]);
 
   useEffect(() => {
     setAllItems(params);
@@ -100,7 +121,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     setOnSaleItems(items);
     setTotalItems(items.length);
   }, [items]);
-
 
   return (
     <div>
@@ -115,21 +135,32 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
         >
           <Container>
             <Stack direction="row" sx={{ justifyContent: "center" }}>
-              {/* 프로필 사진 */}
-              <AccountCircleIcon sx={{ fontSize: 170 }} />
+              {artistDetail &&
+                (artistDetail.profile_img ? (
+                  <Avatar sx={{ width: 170, height: 170 }}>
+                    <Image
+                      layout="fill"
+                      src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${artistDetail.profile_img}`}
+                      alt="profile image"
+                    />
+                  </Avatar>
+                ) : (
+                  <AccountCircleIcon sx={{ fontSize: 170 }} />
+                ))}
+
               <Box sx={{ m: 2.5 }}>
-                <Typography variant="h5" sx={{ my : 1.5}}>작가명</Typography>
+                <Typography variant="h5" sx={{ my: 1.5 }}>
+                  {artistDetail && artistDetail.name}
+                </Typography>
                 <Typography>
-                  Never mind, I'll find someone like you. I wish nothing but the best of you too..
-                  <br />
-                  Don't forget me, I beg. I remember you said sometimes it lasts in love, but sometimes it hurts instead.
+                  {artistDetail &&
+                    (artistDetail.description
+                      ? artistDetail.description
+                      : "작가상세가 없습니다.")}
                 </Typography>
               </Box>
             </Stack>
-            <Divider
-              variant="middle"
-              sx={{ my: 5 }}
-            />
+            <Divider variant="middle" sx={{ my: 5 }} />
             <Typography variant="h4" align="center">
               판매 작품
             </Typography>
@@ -144,20 +175,21 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
                 columnGap: 1,
               }}
             >
-            {onSaleItems
-              .slice(
-                (curPage - 1) * itemsPerPage,
-                (curPage - 1) * itemsPerPage + itemsPerPage
-              )
-              .map((item) => (
-              <KallosItemCard key={item.id} kallosData={item} />
-            ))}
+              {itemsOfArtist &&
+                itemsOfArtist
+                  .slice(
+                    (curPage - 1) * itemsPerPage,
+                    (curPage - 1) * itemsPerPage + itemsPerPage
+                  )
+                  .map((item) => (
+                    <KallosItemCard key={item.id} kallosData={item} />
+                  ))}
             </Box>
           </Container>
-          <Pagination 
+          <Pagination
             curPage={curPage}
-            setCurPage={setCurPage} 
-            totalItems={totalItems} 
+            setCurPage={setCurPage}
+            totalItems={totalItems}
             itemsPerPage={itemsPerPage}
           />
         </Box>
