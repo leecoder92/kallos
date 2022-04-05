@@ -155,7 +155,6 @@ const Create = ({ account }) => {
           setCreateLoad(true);
         });
       if (response.status) {
-        Router.push("/mypage");
         getKallosTokens();
       }
     } catch (error) {
@@ -195,18 +194,19 @@ const Create = ({ account }) => {
   };
 
   useEffect(() => {
-    if (kallosTokens.length == 0) return
+    if (kallosTokens.length === 0) return
     setTokenId(kallosTokens[kallosTokens.length -1][0])
     // console.log("!!!", kallosTokens[kallosTokens.length -1][0])
   }, [kallosTokens])
 
   useEffect(()=> {
+    if (tokenId === "") return
     sendItemDetail()
   }, [tokenId])
 
-  useEffect(() => {
-    getKallosTokens()
-  }, [])
+  // useEffect(() => {
+  //   getKallosTokens()
+  // }, [])
 
   // 민팅과 동시에(로딩중에) 작품 등록 페이지 백엔드로 데이터 보내기
   const sendItemDetail = async () => {
@@ -221,19 +221,12 @@ const Create = ({ account }) => {
       .post(`${BACKEND_URL}/item/create`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-        .then((res) => console.log("성공!!", res))
+        .then((res) => {
+          console.log("성공!!", res);
+          Router.push("/mypage");
+        })
         .catch((err) => console.log(err));
   }; 
-
-  useEffect(() => {
-    sendItemDetail()
-  }, [])
-
-
-  useEffect(()=> {
-    getArtistDetail(account)
-  }, [account])
-
 
   // console.log("!!!!!!", artistDetail)
   return (
