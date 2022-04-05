@@ -33,7 +33,15 @@ export const getAllItems = createAsyncThunk(
     { rejectWithValue }
   ) => {
     return await axios
-      .get(`${BACKEND_URL}/item/view`)
+      .get(`${BACKEND_URL}/item/view/`, {
+        params: {
+          option,
+          keyword,
+          pageNo,
+          itemPerPage,
+          onSaleYN,
+        },
+      })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -41,9 +49,9 @@ export const getAllItems = createAsyncThunk(
 
 export const getItemDetail = createAsyncThunk(
   "GET/ITEMDETAIL", //action명
-  async ({ tokenId }: { tokenId: number }, { rejectWithValue }) => {
+  async (tokenId: string, { rejectWithValue }) => {
     return await axios
-      .get(`${BACKEND_URL}/item/detail`)
+      .get(`${BACKEND_URL}/item/detail/${tokenId}`)
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
