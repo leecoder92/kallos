@@ -1,11 +1,11 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.service.AwsS3Service;
-import com.ssafy.api.service.ItemService;
-import com.ssafy.api.service.ItemServiceImpl;
+import com.ssafy.api.service.*;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Item;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.ItemRepository;
+import com.ssafy.db.repository.UserRepository;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,16 @@ public class ItemController {
 
 	@Autowired
 	ItemServiceImpl itemServiceImpl;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	UserServiceImpl userServiceImpl;
+
 
 	private final AwsS3Service awsS3Service;
 
@@ -93,7 +103,6 @@ public class ItemController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-
 	@PutMapping("/buy")
 	public ResponseEntity buyItem (@RequestBody Map<String,Object> body) {
 		String tokenId = body.get("tokenId").toString();
@@ -111,13 +120,13 @@ public class ItemController {
 		String keywords = keyword;
 
 		List<Item> itemsByTitle = itemRepository.findByTitleContains(keywords);
-		List<Item> itemsByName = itemRepository.findByAuthorNameContains(keywords);
+		List<User> usersByName = userRepository.findByNameContains(keywords);
 
 		Map resMap = new HashMap()
 		{
 			{
 				put("itemsByTitle", itemsByTitle);
-				put("itemsByName", itemsByName);
+				put("usersByName", usersByName);
 			}
 		};
 		return new ResponseEntity(resMap,HttpStatus.OK);
@@ -280,14 +289,7 @@ public class ItemController {
 
 	public List<Item> onSaleYN(List<Item> items, int YN) {
 		List<Item> distinctItems = new ArrayList<Item>();
-		if(YN == 0) {
-			for (int i=0; i<items.size(); i++) {
-				if(items.get(i).getOnSaleYN() == 0) {
-					distinctItems.add(items.get(i));
-				}
-			}
-			return distinctItems;
-		} else {
+		if(YN == 1) {
 			for (int i=0; i<items.size(); i++) {
 				if(items.get(i).getOnSaleYN() == 1) {
 					distinctItems.add(items.get(i));
@@ -295,6 +297,7 @@ public class ItemController {
 			}
 			return distinctItems;
 		}
+		return items;
 	}
 
 }

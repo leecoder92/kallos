@@ -12,11 +12,10 @@ import java.util.Optional;
  */
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    // 아래와 같이, Query Method 인터페이스(반환값, 메소드명, 인자) 정의를 하면 자동으로 Query Method 구현됨.
-//    Optional<Item> findByAuthorAddress(String address);
     Optional<Item> findByAuthorName(String name);
     Optional<Item> findByTokenId(String tokenId);
     List<Item> findByAuthorAddress(String address);
+    List<Item> findByOwnerAddress(String address);
     List<Item> findByTitleContains(String title);
     List<Item> findByAuthorNameContains(String title);
     int countByOwnerAddress(String address);

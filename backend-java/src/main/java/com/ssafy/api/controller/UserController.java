@@ -57,10 +57,8 @@ public class UserController {
 
 		Optional<User> user = userRepository.findByAddress(userAddress);
 		if(user.isPresent()) {
-			System.out.printf("기존유저");
 			return new ResponseEntity(user,HttpStatus.OK);
 		} else {
-			System.out.printf("첫유저");
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "FirstVisit"));
 		}
 	}
@@ -72,9 +70,9 @@ public class UserController {
 
 		String check = userService.checkUser(userAddress, userName);
 		if(check.equals("duplicateAddress")){
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "이미 등록된 지갑주소입니다"));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 등록된 지갑주소입니다"));
 		} else if (check.equals("duplicateName")) {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "이미 존재하는 유저명입니다"));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 유저명입니다"));
 		} else {
 			userService.createUser(userAddress, userName);
 			Optional<User> user = userRepository.findByAddress(userAddress);
@@ -90,7 +88,7 @@ public class UserController {
 		if(user.isPresent()) {
 			return new ResponseEntity(user,HttpStatus.OK);
 		} else {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "존재하지 않는 유저입니다"));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "존재하지 않는 유저입니다"));
 		}
 	}
 
@@ -104,8 +102,6 @@ public class UserController {
 		int pageNo = Integer.parseInt(pageNum);
 		int itemPerPage = Integer.parseInt(itemPerPages);
 
-
-
 		int itemCnt = itemRepository.countByOwnerAddress(userAddress);
 		int count = itemCnt;
 		int totalPage = count/itemPerPage;
@@ -114,7 +110,7 @@ public class UserController {
 			totalPage += 1;
 		}
 
-		List<Item> items = itemRepository.findByAuthorAddress(userAddress);
+		List<Item> items = itemRepository.findByOwnerAddress(userAddress);
 
 		List<Item> pageItems = new ArrayList<>();
 
@@ -129,6 +125,7 @@ public class UserController {
 		}
 
 		int finalTotalPage = totalPage;
+
 		Map resMap = new HashMap()
 		{
 			{
@@ -137,7 +134,6 @@ public class UserController {
 				put("totalPage", finalTotalPage);
 				put("items", pageItems);
 			}
-
 		};
 
 		return new ResponseEntity(resMap, HttpStatus.OK);
@@ -147,20 +143,33 @@ public class UserController {
 
 	@PutMapping("/mypageupdate")
 	public ResponseEntity updateMyInfo(
-			@RequestPart(value="file",required = false) List< MultipartFile > multipartFile,
-			@RequestPart(value="address",required = false) String address,
+			@RequestPart(value="profile_img",required = false) List<MultipartFile> multipartFile,
+			@RequestPart(value="address") String address,
 			@RequestPart(value="name",required = false) String name,
 			@RequestPart(value="description",required = false) String description) {
 
 		Optional<User> userInfo = userRepository.findByAddress(address);
+
 		if(!userInfo.isPresent()) {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "존재하지 않는 유저입니다"));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "존재하지 않는 유저입니다"));
 		}
 
 		User user = userServiceImpl.getUserByAddress(address);
-		user.setName(name);
-		user.setDescription(description);
-		user.setProfile_img(awsS3Service.uploadProfileImage(multipartFile).get(0));
+
+		if (name != null) {
+			Optional<User> userCheck = userRepository.findByName(name);
+			if (userCheck.isPresent() && !user.getName().equals(name)) {
+				return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 유저명입니다"));
+			}
+			user.setName(name);
+		}
+
+		if (description != null){
+			user.setDescription(description);
+		}
+		if (multipartFile != null){
+			user.setProfile_img(awsS3Service.uploadProfileImage(multipartFile).get(0));
+		}
 		userRepository.save(user);
 
 		userInfo = userRepository.findByAddress(address);
@@ -168,14 +177,14 @@ public class UserController {
 	}
 
 	@GetMapping("/artist/{address}")
-	public ResponseEntity getArtistInfo (@PathVariable Long address){
-		String userAddress = address.toString();
+	public ResponseEntity getArtistInfo (@PathVariable String address){
+		String userAddress = address;
 
 		Optional<User> user = userRepository.findByAddress(userAddress);
 		if(user.isPresent()) {
 			return new ResponseEntity(user,HttpStatus.OK);
 		} else {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "존재하지 않는 유저입니다"));
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "존재하지 않는 유저입니다"));
 		}
 	}
 
