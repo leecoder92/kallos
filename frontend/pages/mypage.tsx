@@ -89,7 +89,7 @@ const MyPage: FC<ParamObj> = ({
         .getKallosTokens(account)
         .call();
 
-      // console.log("토큰리스트", response);
+      console.log("토큰리스트", response);
 
       setKallosTokens(response);
     } catch (error) {
