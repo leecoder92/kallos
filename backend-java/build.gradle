@@ -17,9 +17,6 @@ buildscript{
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVer}"
         classpath "io.spring.gradle:dependency-management-plugin:${springDependencyMgmtVer}.RELEASE"
         classpath "org.springframework:springloaded:${springLoadedVer}.RELEASE"
-        //이클립스인 경우를 위한 QueryDSL 플러그인. IntelliJ는 불필요. [시작]
-//        classpath "gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVer}"
-        //[끝] 
         classpath "com.github.node-gradle:gradle-node-plugin:3.1.0"
     }
 }
@@ -33,8 +30,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'eclipse'
 apply plugin: 'com.github.node-gradle.node'
-//이클립스인 경우를 위한 QueryDSL 플러그인. IntelliJ는 불필요.
-//apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+
 
 
 repositories {
@@ -50,78 +46,16 @@ group 'com.ssafy'
 version '1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-//node {
-//    download = true
-//    version = '14.17.0'
-//    // Set the work directory where node_modules should be located
-//    nodeModulesDir = file("${project.projectDir}/../frontend")
-//}
 
 configurations {
     providedRuntime
 }
 
-/*task npmInstall(type: NpmTask, overwrite: true) {
-    args = ['install']
-}*/
-
-//task webpack(type: NpmTask, dependsOn: 'npmInstall') {
-//    args = ['run','build']
-//}
-
-// processResources is a Java task. Run the webpack bundling before this task using the 'build' task in the package.json
-//processResources.dependsOn 'webpack'
-
-//set build time and inject value to application.properties
 def buildTime() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd_HHmm')
     return formattedDate
 }
-
-//project.ext.set("build.date", buildTime())
-//
-//processResources {
-//    with copySpec {
-//        from "src/main/resources"
-//        include "**/application*.yml"
-//        include "**/application*.yaml"
-//        include "**/application*.properties"
-//        project.properties.findAll().each {
-//            prop ->
-//                if (prop.value != null) {
-//                    filter(ReplaceTokens, tokens: [ (prop.key): String.valueOf(prop.value)])
-//                    filter(ReplaceTokens, tokens: [ ('project.' + prop.key): String.valueOf(prop.value)])
-//                    filter(ReplaceTokens, tokens: [ ('project.ext.' + prop.key): String.valueOf(prop.value)])
-//                }
-//        }
-//    }
-//}
-
-//이클립스인 경우를 위한 QueryDSL 설정. IntelliJ는 불필요. [시작]
-//def querydslDir = 'src/main/generated'
-//querydsl {
-//    library = "com.querydsl:querydsl-apt"
-//    jpa = true
-//    querydslSourcesDir = querydslDir
-//}
-
-//sourceSets {
-//    main {
-//        java {
-//            srcDirs = ['src/main/java', querydslDir]
-//        }
-//    }
-//}
-
-//compileQuerydsl {
-//    options.annotationProcessorPath = configurations.querydsl
-//}
-//
-//configurations {
-//    querydsl.extendsFrom compileClasspath
-//}
-//[끝]
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -137,7 +71,9 @@ dependencies {
     //s3 의존성 추가
     implementation('org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE')
 
-
+    //CORS
+    testImplementation 'org.apache.httpcomponents:httpclient'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.0.RELEASE'
 
     implementation('commons-io:commons-io:2.6')
     implementation("org.apache.commons:commons-collections4:4.4")

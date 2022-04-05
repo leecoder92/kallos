@@ -6,32 +6,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-//import com.ssafy.api.request.UserLoginGetReq;
-//import com.ssafy.api.request.UserRegisterPostReq;
-//import com.ssafy.api.response.UserLoginPostRes;
-import com.ssafy.api.response.UserRes;
 import com.ssafy.db.repository.UserRepository;
 
 import com.ssafy.api.service.UserServiceImpl;
 import com.ssafy.common.model.response.BaseResponseBody;
-//import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.Item;
-//import com.ssafy.db.repository.UserRepositorySupport;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.ApiIgnore;
-
-import org.springframework.web.multipart.MultipartFile;
-
 
 import java.util.*;
 
@@ -66,9 +51,9 @@ public class UserController {
 
 	private final AwsS3Service awsS3Service;
 
-	@GetMapping("/login")
-	public ResponseEntity loginInfo (@RequestBody Map<String,Object> body) {
-		String userAddress = body.get("address").toString();
+	@GetMapping("/login/{address}")
+	public ResponseEntity loginInfo (@PathVariable String address){
+		String userAddress = address;
 
 		Optional<User> user = userRepository.findByAddress(userAddress);
 		if(user.isPresent()) {
@@ -97,9 +82,9 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/mypage/userInfo")
-	public ResponseEntity getUserInfo (@RequestBody Map<String,Object> body) {
-		String userAddress = body.get("address").toString();
+	@GetMapping("/mypage/userInfo/{address}")
+	public ResponseEntity getUserInfo (@PathVariable String address){
+		String userAddress = address;
 
 		Optional<User> user = userRepository.findByAddress(userAddress);
 		if(user.isPresent()) {
@@ -110,10 +95,16 @@ public class UserController {
 	}
 
 	@GetMapping("/mypage/items")
-	public ResponseEntity getMyItems (@RequestBody Map<String,Object> body) {
-		String userAddress = body.get("address").toString();
-		int pageNo = Integer.parseInt(body.get("pageNo").toString());
-		int itemPerPage = Integer.parseInt(body.get("itemPerPage").toString());
+	public ResponseEntity getMyItems (
+			@RequestParam("address") String address,
+			@RequestParam("pageNo") String pageNum,
+			@RequestParam("itemPerPage") String itemPerPages
+	) {
+		String userAddress = address;
+		int pageNo = Integer.parseInt(pageNum);
+		int itemPerPage = Integer.parseInt(itemPerPages);
+
+
 
 		int itemCnt = itemRepository.countByOwnerAddress(userAddress);
 		int count = itemCnt;
@@ -176,9 +167,9 @@ public class UserController {
 		return new ResponseEntity(userInfo,HttpStatus.OK);
 	}
 
-	@GetMapping("/artist")
-	public ResponseEntity getArtistInfo (@RequestBody Map<String,Object> body) {
-		String userAddress = body.get("address").toString();
+	@GetMapping("/artist/{address}")
+	public ResponseEntity getArtistInfo (@PathVariable Long address){
+		String userAddress = address.toString();
 
 		Optional<User> user = userRepository.findByAddress(userAddress);
 		if(user.isPresent()) {
@@ -189,10 +180,14 @@ public class UserController {
 	}
 
 	@GetMapping("/artist/items")
-	public ResponseEntity getArtistItems (@RequestBody Map<String,Object> body) {
-		String userAddress = body.get("address").toString();
-		int pageNo = Integer.parseInt(body.get("pageNo").toString());
-		int itemPerPage = Integer.parseInt(body.get("itemPerPage").toString());
+	public ResponseEntity getArtistItems (
+			@RequestParam("address") String address,
+			@RequestParam("pageNo") String pageNum,
+			@RequestParam("itemPerPage") String itemPerPages
+	) {
+		String userAddress = address;
+		int pageNo = Integer.parseInt(pageNum);
+		int itemPerPage = Integer.parseInt(itemPerPages);
 
 		int itemCnt = itemRepository.countByAuthorAddress(userAddress);
 		int count = itemCnt;

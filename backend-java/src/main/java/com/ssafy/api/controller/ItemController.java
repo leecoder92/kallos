@@ -5,7 +5,6 @@ import com.ssafy.api.service.ItemService;
 import com.ssafy.api.service.ItemServiceImpl;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Item;
-import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.ItemRepository;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 /**
- * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
+ * 아이템 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
-@Api(value = "유저 API", tags = {"User"})
+@Api(value = "아이템 API", tags = {"Item"})
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -60,11 +59,11 @@ public class ItemController {
 		return new ResponseEntity(item,HttpStatus.OK);
 	}
 
-	@GetMapping("/detail")
-	public ResponseEntity itemInfo (@RequestBody Map<String,Object> body) {
-		String tokenId = body.get("tokenId").toString();
+	@GetMapping("/detail/{tokenId}")
+	public ResponseEntity itemInfo (@PathVariable String tokenId) {
+		String token = tokenId;
 
-		Optional<Item> item = itemRepository.findByTokenId(tokenId);
+		Optional<Item> item = itemRepository.findByTokenId(token);
 
 		return new ResponseEntity(item,HttpStatus.OK);
 	}
@@ -107,12 +106,12 @@ public class ItemController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@GetMapping("/search")
-	public ResponseEntity getSearchItems (@RequestBody Map<String,Object> body) {
-		String keyword = body.get("keyword").toString();
+	@GetMapping("/search/{keyword}")
+	public ResponseEntity getSearchItems (@PathVariable String keyword) {
+		String keywords = keyword;
 
-		List<Item> itemsByTitle = itemRepository.findByTitleContains(keyword);
-		List<Item> itemsByName = itemRepository.findByAuthorNameContains(keyword);
+		List<Item> itemsByTitle = itemRepository.findByTitleContains(keywords);
+		List<Item> itemsByName = itemRepository.findByAuthorNameContains(keywords);
 
 		Map resMap = new HashMap()
 		{
@@ -125,13 +124,17 @@ public class ItemController {
 	}
 
 	@GetMapping("/view")
-	public ResponseEntity getMyItems (@RequestBody Map<String,Object> body) {
-		String option = body.get("option").toString();
-		String keyword = body.get("keyword").toString();
+	public ResponseEntity getItems (
+			@RequestParam("option") String option,
+			@RequestParam("keyword") String keyword,
+			@RequestParam("pageNo") String pageNum,
+			@RequestParam("itemPerPage") String itemPerPages,
+			@RequestParam("onSaleYN") String onSaleYNs
+	) {
 
-		int pageNo = Integer.parseInt(body.get("pageNo").toString());
-		int itemPerPage = Integer.parseInt(body.get("itemPerPage").toString());
-		int onSaleYN = Integer.parseInt(body.get("onSaleYN").toString());
+		int pageNo = Integer.parseInt(pageNum);
+		int itemPerPage = Integer.parseInt(itemPerPages);
+		int onSaleYN = Integer.parseInt(onSaleYNs);
 
 		if (option.equals("all")) {
 			List<Item> itemsByTitle = itemRepository.findByTitleContains(keyword);
