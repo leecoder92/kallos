@@ -104,6 +104,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
       });
       console.log("작가 아이템 목록: ", res);
       setItemsOfArtist(res.data.items);
+      setTotalItems(res.data.items.length);
     } catch (err) {
       console.log(err);
     }
@@ -116,11 +117,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   useEffect(() => {
     setAllItems(params);
   }, []);
-
-  useEffect(() => {
-    setOnSaleItems(items);
-    setTotalItems(items.length);
-  }, [items]);
 
   return (
     <div>
