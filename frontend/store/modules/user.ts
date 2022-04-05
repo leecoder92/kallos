@@ -15,9 +15,11 @@ const initialState: UserState = {
 
 export const getUserInfo = createAsyncThunk(
   "GET/USERINFO", //action명
-  async (userAddress, { rejectWithValue }) => {
+  async (userAddress: string, { rejectWithValue }) => {
     return await axios
-      .get(`https://jsonplaceholder.typicode.com/users/${userAddress}`)
+      .get(
+        `https://j6c107.p.ssafy.io:8443/api/user/mypage/userInfo/${userAddress}`
+      )
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
@@ -50,9 +52,27 @@ export const updateItemInfo = createAsyncThunk(
 
 export const updateUserInfo = createAsyncThunk(
   "PUT/USERINFO", //action명
-  async (paramObj, { rejectWithValue }) => {
+  async (
+    {
+      address,
+      name,
+      description,
+      profile_img,
+    }: {
+      address: string;
+      name: string;
+      description: string;
+      profile_img: string;
+    },
+    { rejectWithValue }
+  ) => {
     return await axios
-      .put(`https://jsonplaceholder.typicode.com/users`, { params: paramObj })
+      .put(`https://j6c107.p.ssafy.io:8443/api/user/mypageupdate`, {
+        address,
+        name,
+        description,
+        profile_img,
+      })
       .then((res) => res.data)
       .catch((err) => rejectWithValue(err.response.data));
   }
