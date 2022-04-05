@@ -33,6 +33,7 @@ import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
 import { SaleKallosProps } from "../interfaces";
 import Pagination from "../components/pagination";
+import axios from "axios";
 // import { BACKEND_URL } from "../config/index";
 
 const mapStateToProps = (state: RootState) => {
