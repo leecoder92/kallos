@@ -8,7 +8,6 @@ import CaliImage from "../public/images/test_cali/cali.jpg";
 import CssImage from "../public/images/test_cali/css_is_awesome.png";
 import TestImage from "../public/images/5.png";
 import Carousel from "react-material-ui-carousel";
-import Head from "next/head";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
 import { useRouter } from "next/router";
@@ -40,23 +39,7 @@ const Home: NextPage = () => {
   };
   return (
     <div>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&family=Nanum+Pen+Script&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
-        {/* <Box
-          width="40%"
-          textAlign="center"
-          sx={{
-            mt: 10,
-            mx: { lg: 20, md: 10, xs: 5 },
-          }}
-        >
-          <Image src={CaliImage} alt="any image" />
-        </Box> */}
         <Box
           width="40%"
           textAlign="center"

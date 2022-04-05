@@ -55,9 +55,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     getAccount();
   }, [isLogin]);
 
-  useEffect(() => {
-    console.log(account);
-  }, [account]);
+  // useEffect(() => {
+  //   console.log(account);
+  // }, [account]);
 
   return (
     // <PersistGate persistor={persistor} loading={<div>loading...</div>}>
