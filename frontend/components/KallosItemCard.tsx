@@ -6,7 +6,12 @@ import Link from "next/link";
 //kallosData: 작품 정보 prop
 export const KallosItemCard = ({ kallosData }) => {
   return (
-    <Box sx={{ borderRadius: "10px" }}>
+    <Box
+      sx={{
+        borderRadius: "10px",
+        boxShadow: "0 0 5px #cfd4d1",
+      }}
+    >
       <Link href={`/items/${kallosData.tokenId}`}>
         <a>
           <Box sx={{ borderRadius: "20px 20px 0 0", overflow: "hidden" }}>
@@ -25,9 +30,7 @@ export const KallosItemCard = ({ kallosData }) => {
           display: "flex",
           justifyContent: "space-between",
           padding: "10px 15px",
-          border: "1px solid #cfd4d1",
-          borderTop: "none",
-          borderRadius: "0 0 20px 20px",
+          borderTop: "1px solid #cfd4d1",
         }}
       >
         <Box>
@@ -42,7 +45,10 @@ export const KallosItemCard = ({ kallosData }) => {
             </a>
           </Link>
         </Box>
-        <Typography>{kallosData.price}</Typography>
+        <Box sx={{ textAlign: "right" }}>
+          <Typography>{kallosData.price}</Typography>
+          <Typography>MATIC</Typography>
+        </Box>
       </Box>
     </Box>
   );
