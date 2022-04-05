@@ -22,7 +22,6 @@ import { ThemeProvider } from "@emotion/react";
 import styled from "styled-components";
 import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
 import axios from "axios";
-import artist from "./artist";
 import { getKallosTokenContract } from "web3Config";
 
 const theme = createTheme({
