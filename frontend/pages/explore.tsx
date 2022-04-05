@@ -14,8 +14,7 @@ import { getAllItems } from "../store/modules/item";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
 
-import Pagination from '../components/pagination';
-
+import Pagination from "../components/pagination";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -25,7 +24,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
+    setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
 
@@ -47,7 +46,6 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,11 +70,11 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
 
   useEffect(() => {
     const params = {
-    //   option:"",
-    //   keyword:"",
-    //   pageNo:"1",
-    //   itemPerPage:"4",
-    //   onSaleYN:"0",
+      option: "",
+      keyword: "",
+      pageNo: "1",
+      itemPerPage: "4",
+      onSaleYN: "0",
     };
     setAllItems(params);
   }, []);
@@ -164,12 +162,12 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
           <KallosItemCard key={item.id} kallosData={item} />
         ))}
       </Box>
-      <Pagination 
+      {/* <Pagination 
         curPage={curPage}
         setCurPage={setCurPage} 
         totalItems={totalItems} 
         itemsPerPage={itemsPerPage}
-      />
+      /> */}
       <style jsx>
         {`
           .viewContainer {

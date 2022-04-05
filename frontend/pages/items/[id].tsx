@@ -1,6 +1,9 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, FC } from "react";
+import { apiInstance } from "../../api/index";
+
+const api = apiInstance();
 
 import {
   Button,
@@ -18,24 +21,24 @@ import {
   web3,
 } from "../../web3Config";
 import { IMyKallosData } from "../../interfaces";
-import { getItemDetail } from "@/store/modules/item";
+import { getItemDetail } from "../../store/modules/item";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state) => {
   return {
     itemDetail: state.itemReducer.itemDetail,
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setItemDetail: (tokenId) => getItemDetail(tokenId),
+    setItemDetail: (obj) => dispatch(getItemDetail(obj)),
   };
 };
 
 const style = {
-  position: "absolute" as "absolute",
+  //   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -58,23 +61,29 @@ const ColorButton = styled(Button)({
   },
 });
 
-interface SaleKallosCardProps extends IMyKallosData {
-  account: string;
-  getOnSaleTokens: () => Promise<void>;
-  itemDetail: any;
-  setItemDetail: any;
-}
+// interface SaleKallosCardProps extends IMyKallosData {
+//   account: string;
+//   getOnSaleTokens: () => Promise<void>;
+//   itemDetail: any;
+//   setItemDetail: any;
+// }
 
-const ItemDetail: FC<SaleKallosCardProps> = ({
+const ItemDetail = ({
   account,
   itemDetail,
   setItemDetail,
   getOnSaleTokens,
 }) => {
   const router = useRouter();
-  const [isNotBuyable, setIsNotBuyable] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [itemInfo, setItemInfo] = useState(itemDetail);
+  const [isNotBuyable, setIsNotBuyable] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [itemInfo, setItemInfo] = useState({
+    title: "",
+    authorName: "",
+    itemImg: "",
+    description: "",
+    price: "",
+  });
   const [tokenId, setTokenId] = useState("");
 
   const onShowModal = () => setShowModal(!showModal);
@@ -114,20 +123,37 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
     }
   };
 
-  const getItemInfo = () => {
-    setItemDetail(tokenId);
+  //   const getItemInfo = () => {
+  //     setItemDetail(tokenId);
+  //   };
+
+  const getDetail = async (tokenId) => {
+    await api
+      .get(`/item/detail/${tokenId}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    // await api
+    //   .post(`/user/register`, obj)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
+    // await api
+    //   .put(`item/buy`, obj)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
+    // await api
+    //   .put(`item/sell`, obj)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    console.log(router.query.id);
-    // setTokenId(router.query.id);
-    // getItemInfo();
-    // getKallosTokenOwner();
-    setItemDetail(router.query.id);
+    let tokenId = "43";
+    setItemDetail(tokenId);
   }, [router.isReady]);
 
   useEffect(() => {
     setItemInfo(itemDetail);
+    console.log(itemInfo);
   }, [itemDetail]);
 
   return (
@@ -155,7 +181,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
             }}
           >
             <Image
-              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${itemInfo.itemImg}`}
+              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/32030e1d-674b-4ea4-beef-b0910ec9d53c.jpg`}
               width="100%"
               height="100%"
               alt="token image"
@@ -198,7 +224,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>가격</Typography>
               <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo.price}
+                {itemInfo.price} MATIC
               </Typography>
             </Box>
             {isNotBuyable ? (
