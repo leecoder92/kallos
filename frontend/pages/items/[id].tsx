@@ -123,33 +123,90 @@ const ItemDetail = ({
     }
   };
 
-  const [image, setImage] = useState("");
+  //   const [image, setImage] = useState("");
 
-  const onSetImage = (event) => setImage(event.target.files[0]);
+  //   const onSetImage = (event) => setImage(event.target.files[0]);
 
-  const onClickTest = async () => {
-    await axios
-      .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/userInfo/${account}`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  //   const onClickTest = async () => {
+  // //유저 정보 조회
+  // await axios
+  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/userInfo/${account}`)
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  //작가 정보 조회
+  // await axios
+  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/artist/${account}`)
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  //작품 판매 취소
+  // await axios
+  //   .put(`https://j6c107.p.ssafy.io:8443/api/item/cancel`, { tokenId: "43" })
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  //유저 보유 작품 조회
+  // await axios
+  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/items`, {
+  //     params: {
+  //       address: account,
+  //       pageNo: 1,
+  //       itemPerPage: 1,
+  //     },
+  //   })
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  //작가 작품 조회
+  // await axios
+  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/artist/items`, {
+  //     params: {
+  //       address: account,
+  //       pageNo: 1,
+  //       itemPerPage: 1,
+  //     },
+  //   })
+  //   .then((res) => console.log(res))
+  //   .catch((err) => console.log(err));
+  //   };
 
-  const updateUserData = async () => {
-    const formData = new FormData();
-    formData.append("address", account);
-    formData.append("description", "안녕?");
-    formData.append("profile_img", image);
-    await axios
-      .put(`https://j6c107.p.ssafy.io:8443/api/user/mypageupdate`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  //유저정보 수정
+  //   const updateUserData = async () => {
+  //     const formData = new FormData();
+  //     formData.append("address", account);
+  //     formData.append("name", "oooo");
+  //     formData.append("description", "바이?");
+  //     formData.append("profile_img", image);
+  //     await axios
+  //       .put(`https://j6c107.p.ssafy.io:8443/api/user/mypageupdate`, formData, {
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       })
+  //       .then((res) => console.log(res))
+  //       .catch((err) => console.log(err));
+  //   };
 
-  useEffect(() => {
-    updateUserData();
-  }, [image]);
+  //   //등록
+  //   const registNft = async () => {
+  //     const formData = new FormData();
+  //     formData.append("address", account);
+  //     formData.append("title", "junho");
+  //     formData.append("name", "daye");
+  //     formData.append("description", "dd");
+  //     formData.append("tokenId", "90");
+  //     formData.append("file", image);
+  //     await axios
+  //       .post(`https://j6c107.p.ssafy.io:8443/api/item/create`, formData, {
+  //         headers: { "Content-Type": "multipart/form-data" },
+  //       })
+  //       .then((res) => console.log(res))
+  //       .catch((err) => console.log(err));
+  //   };
+
+  //   const onClickRegist = () => {
+  //     registNft();
+  //   };
+
+  //   useEffect(() => {
+  //     // updateUserData();
+  //     // registNft();
+  //   }, [image]);
 
   useEffect(() => {
     setItemDetail(router.query.id);
@@ -295,8 +352,9 @@ const ItemDetail = ({
           `}
         </style>
       </Box>
-      <input type="file" onChange={onSetImage} />
+      {/* <input type="file" onChange={onSetImage} />
       <button onClick={onClickTest}>getUserInfo</button>
+      <button onClick={onClickRegist}>regist</button> */}
     </Box>
   );
 };

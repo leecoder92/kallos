@@ -128,7 +128,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 checked
               />
               <label htmlFor="caseOne" className={styles.toggleBtn}></label>
-              <span>모든 작품 보기</span>
+              <span>판매중인 작품만 보기</span>
             </div>
           ) : (
             <div className={styles.toggleBox}>
@@ -139,7 +139,7 @@ const Explore: FC<SaleKallosProps> = ({ items, setAllItems }) => {
                 onChange={handleSwitchShowStatus}
               />
               <label htmlFor="caseTwo" className={styles.toggleBtn}></label>
-              <span>판매중인 작품만 보기</span>
+              <span>모든 작품 보기</span>
             </div>
           )}
         </Box>
