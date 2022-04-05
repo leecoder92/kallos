@@ -10,7 +10,6 @@ import {
   Divider,
   Chip,
   Tooltip,
-  LinearProgress,
   CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
@@ -33,6 +32,7 @@ import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
 import { SaleKallosProps } from "../interfaces";
 import Pagination from "../components/pagination";
+import axios from "axios";
 // import { BACKEND_URL } from "../config/index";
 
 const mapStateToProps = (state: RootState) => {
@@ -77,9 +77,12 @@ const MyPage: FC<ParamObj> = ({
   // 판매 상태 전환 로딩 상태
   const [saleStatusLoading, setSaleStatusLoading] = useState<Boolean>(false);
 
-  const [curPage, setCurPage] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
+  const [curPage, setCurPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [myItems, setMyItems] = useState([]);
+
   const paginate = (pageNumber) => setCurPage(pageNumber);
 
   const getKallosTokens = async () => {
@@ -89,6 +92,7 @@ const MyPage: FC<ParamObj> = ({
         .call();
 
       // console.log("토큰리스트", response);
+      // setTotalItems(response.length);
 
       setKallosTokens(response);
     } catch (error) {
@@ -128,30 +132,54 @@ const MyPage: FC<ParamObj> = ({
     }
   };
 
+  const getUserItems = async () => {
+    const getItemParams = {
+      address: account,
+      pageNo: curPage,
+      itemPerPage: itemsPerPage,
+    };
+
+    await axios
+      .get("https://j6c107.p.ssafy.io:8443/api/user/mypage/items", {
+        params: getItemParams,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setTotalPages(res.data.totalPage);
+        setMyItems(res.data.items);
+      });
+  };
+
   useEffect(() => {
     if (!account) return;
 
     getKallosTokens();
     getSaleStatus();
     setUserInfo(account);
+    getUserItems();
   }, [account]);
 
-  console.log("userInfo:::", userInfo);
-
-  const params = {
-    searchOption: "users",
-    page: curPage,
-    size: itemsPerPage,
-  };
-
   useEffect(() => {
-    setAllItems(params);
-  }, []);
+    getUserItems();
+  }, [curPage]);
 
-  useEffect(() => {
-    setOnSaleItems(items);
-    setTotalItems(items.length);
-  }, [items]);
+  // console.log("userInfo:::", userInfo);
+  console.log("My Itmes:::", myItems);
+
+  // const params = {
+  //   searchOption: "users",
+  //   page: curPage,
+  //   size: itemsPerPage,
+  // };
+
+  // useEffect(() => {
+  //   setAllItems(params);
+  // }, []);
+
+  // useEffect(() => {
+  //   setOnSaleItems(items);
+  //   setTotalItems(items.length);
+  // }, [items]);
 
   return (
     <div className="viewContainer">
@@ -235,11 +263,6 @@ const MyPage: FC<ParamObj> = ({
                 ) : (
                   <Typography align="center">{userInfo.description}</Typography>
                 )}
-                {/* <Typography align="center">
-                  I need you baby And if it's quite all right I need you baby
-                  And if its quite alright I need you baby To warm the lonely
-                  nights I love you baby Trust in me when I say its okay
-                </Typography> */}
                 <Link href={"/mypageupdate"} passHref>
                   <Button>프로필 수정</Button>
                 </Link>
@@ -261,15 +284,16 @@ const MyPage: FC<ParamObj> = ({
                 columnGap: 1,
               }}
             >
-              {onSaleItems?.map((item) => (
-                <KallosItemCard key={item.id} kallosData={item} />
+              {myItems?.map((item) => (
+                <KallosItemCard key={item.item_id} kallosData={item} />
               ))}
             </Box>
             <Pagination
               curPage={curPage}
               setCurPage={setCurPage}
-              totalItems={totalItems}
+              totalPages={totalPages}
               itemsPerPage={itemsPerPage}
+              totalItems={totalPages * itemsPerPage}
             />
             {/* {kallosTokens?.map((v, i) => {
               return (
