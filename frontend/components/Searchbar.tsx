@@ -69,8 +69,6 @@ function Searchbar() {
 
   // 검색 클릭했을 때 결과창 닫고 검색어 초기화
   const handleArtistClick = (event: any) => {
-    event.preventDefault();
-    router.push(`/artists/${searchValue}`);
     setSearchValue("");
     setFilteredArtistData([]);
     setFilteredTitleData([]);
@@ -114,7 +112,7 @@ function Searchbar() {
         })
           .then((res) => {
             console.log(res.data);
-            setFilteredArtistData(res.data.itemsByName);
+            setFilteredArtistData(res.data.usersByName);
             setFilteredTitleData(res.data.itemsByTitle);
             setIsSearchResult(true);
             setIsLoading(false);
@@ -188,11 +186,14 @@ function Searchbar() {
               <div
                 style={{ borderBottom: "1px solid black", paddingBottom: 10 }}
               >
-                {filteredArtistData.slice(0, 3).map((value, key) => {
+                {filteredArtistData.slice(0, 4).map((value, key) => {
                   return (
                     <div key={key}>
                       <ListItem
-                        onClick={handleArtistClick}
+                        onClick={(event) => {
+                          router.push(`/artists/${value.name}`);
+                          handleArtistClick(event);
+                        }}
                         style={{
                           cursor: "pointer",
                           paddingBottom: 0,
@@ -200,10 +201,18 @@ function Searchbar() {
                       >
                         <ListItemAvatar>
                           <Avatar>
-                            <Image src={defaultProfile} alt="thumbnail" />
+                            <Image
+                              layout="fill"
+                              src={
+                                value.profile_img
+                                  ? `https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${value.profile_img}`
+                                  : defaultProfile
+                              }
+                              alt="thumbnail"
+                            />
                           </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={`${value.authorName}`} />
+                        <ListItemText primary={`${value.name}`} />
                       </ListItem>
                       <Divider sx={{ mr: 2, ml: 4 }} component="li" />
                     </div>
@@ -221,7 +230,7 @@ function Searchbar() {
             <Divider sx={{ mx: 2 }} />
             {filteredTitleData.length != 0 ? (
               <div>
-                {filteredTitleData.slice(0, 3).map((value, key) => {
+                {filteredTitleData.slice(0, 4).map((value, key) => {
                   return (
                     <div key={key}>
                       <ListItem

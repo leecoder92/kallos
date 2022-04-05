@@ -39,10 +39,12 @@ const MyPageUpdate: FC<ParamObj> = ({
   const [loaded, setLoaded] = useState(false);
   let inputRef: any;
 
-  const [image, setImage] = useState({
+  const [image, setImage] = useState<any>({
     image_file: "",
     preview_URL: defaultProfile,
   });
+
+  const [profileImage, setProfileImage] = useState("");
 
   const [userName, setUserName] = useState<string>(userInfo.name);
   const [userDescription, setUserDescription] = useState<string>(
@@ -57,15 +59,6 @@ const MyPageUpdate: FC<ParamObj> = ({
     setUserDescription(e.target.value);
   };
 
-  console.log("account:", account);
-
-  const sendData = {
-    address: account,
-    name: userName,
-    description: userDescription,
-    profile_img: image.preview_URL,
-  };
-
   async function onChange(e) {
     const file = e.target.files[0];
     e.preventDefault();
@@ -74,6 +67,7 @@ const MyPageUpdate: FC<ParamObj> = ({
     const fileReader = new FileReader();
 
     if (e.target.files[0]) {
+      setProfileImage(e.target.files[0]);
       fileReader.readAsDataURL(e.target.files[0]);
     }
     let new_image;
@@ -93,17 +87,24 @@ const MyPageUpdate: FC<ParamObj> = ({
   // };
 
   const onChangeInfo = async () => {
+    const formData = new FormData();
+    formData.append("address", account);
+    formData.append("name", userName);
+    formData.append("description", userDescription);
+    formData.append("profile_img", profileImage);
+
     await axios
-      .put("https://j6c107.p.ssafy.io:8443/api/user/mypageupdate", {
-        address: account,
-        name: userName,
-        description: userDescription,
-        profile_img: image.preview_URL,
+      .put("https://j6c107.p.ssafy.io:8443/api/user/mypageupdate", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
         if (res.status === 200) {
-          alert("수정 완료");
+          alert("수정이 완료되었습니다.");
+          window.location.href = "/mypage";
         }
+      })
+      .catch((err) => {
+        alert("중복된 닉네임입니다.");
       });
   };
 
@@ -111,9 +112,15 @@ const MyPageUpdate: FC<ParamObj> = ({
     if (!account) return;
 
     setUserInfo(account);
-  }, [account]);
 
-  console.log(userInfo);
+    if (userInfo.profile_img !== null) {
+      const profileImage = `https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`;
+      setImage({
+        image_file: "",
+        preview_URL: profileImage,
+      });
+    }
+  }, [account]);
 
   return (
     <div className="viewContainer">
@@ -182,7 +189,6 @@ const MyPageUpdate: FC<ParamObj> = ({
                     defaultValue={userInfo.name}
                     onChange={onChangeName}
                   ></TextField>
-                  <Button variant="contained">중복 확인</Button>
                 </Stack>
                 <Stack
                   direction="row"
@@ -191,10 +197,15 @@ const MyPageUpdate: FC<ParamObj> = ({
                   alignItems="center"
                 >
                   <Typography sx={{ width: 50 }}>소개글</Typography>
-                  <TextField
-                    defaultValue={userInfo.description}
-                    onChange={onChangeDescription}
-                  ></TextField>
+                  {userInfo.description === null ||
+                  userInfo.description === "null" ? (
+                    <TextField onChange={onChangeDescription}></TextField>
+                  ) : (
+                    <TextField
+                      defaultValue={userInfo.description}
+                      onChange={onChangeDescription}
+                    ></TextField>
+                  )}
                 </Stack>
                 <Grid
                   direction="row"
