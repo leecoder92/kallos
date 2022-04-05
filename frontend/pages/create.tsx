@@ -1,7 +1,15 @@
 /* eslint-disable */
 import React, { useEffect, useState } from "react";
-import FormData from 'form-data';
-import { Box, Button, Container, createTheme, Stack, TextField, Typography } from "@mui/material";
+import FormData from "form-data";
+import {
+  Box,
+  Button,
+  Container,
+  createTheme,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import defaultImage from "../public/images/default-image.jpg";
 import Image from "next/image";
 import { create as ipfsHttpClient } from "ipfs-http-client";
@@ -11,35 +19,33 @@ import { connect } from "react-redux";
 import LoadingInterface from "@/components/LoadingInterface";
 import Router from "next/router";
 import { ThemeProvider } from "@emotion/react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
 import axios from "axios";
 import artist from "./artist";
 
-
 const theme = createTheme({
   palette: {
     primary: {
-      main : '#2C3C51',
+      main: "#2C3C51",
     },
     secondary: {
-      main: '#F9E6E1'
+      main: "#F9E6E1",
     },
   },
   typography: {
     fontFamily: "Nanum Bold",
-  }
-})
+  },
+});
 
 const StyledButton = styled(Button)`
-  background-color: '#F9E6E1';
+  background-color: "#F9E6E1";
   color: #000000;
   padding: 10px 25px;
   &:hover {
-    background-color: #FFECE6;
+    background-color: #ffece6;
   }
 `;
-
 
 interface NewItemInfo {
   title: string;
@@ -48,39 +54,36 @@ interface NewItemInfo {
   keyword: string;
 }
 
-
-
 const mapDispatchToProps = (dispatch: any) => {
   return {
     // addNewItem: (itemInfo) => addNewItem(itemInfo),
   };
 };
 
-const ipfsClient = require('ipfs-http-client');
+const ipfsClient = require("ipfs-http-client");
 const auth =
-    'Basic ' + Buffer.from(PROJECT_ID + ':' + PROJECT_SECRET).toString('base64');
+  "Basic " + Buffer.from(PROJECT_ID + ":" + PROJECT_SECRET).toString("base64");
 
 const client = ipfsClient.create({
-    host: 'ipfs.infura.io',
-    port: 5001,
-    protocol: 'https',
-    headers: {
-        authorization: auth,
-    },
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    authorization: auth,
+  },
 });
 
-client.pin.add('QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn').then((res) => {
-    console.log(res);
+client.pin.add("QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn").then((res) => {
+  console.log(res);
 });
-
 
 // const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 
 const Create = ({ account }) => {
   const [fileUrl, setFileUrl] = useState(null);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [artistName, setArtistName] = useState<string>('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [artistName, setArtistName] = useState<string>("");
 
   //이미지 미리보기
   const [image, setImage] = useState({
@@ -138,7 +141,6 @@ const Create = ({ account }) => {
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       console.log("url은", url);
       createSale(url);
-      
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
@@ -154,6 +156,8 @@ const Create = ({ account }) => {
           setCreateLoad(true);
         });
       if (response.status) {
+        console.log(response);
+
         Router.push("/mypage");
       }
     } catch (error) {
@@ -166,41 +170,42 @@ const Create = ({ account }) => {
   };
   // 작가 정보 불러오기
   const getArtistDetail = async (account) => {
-    try{
+    try {
       const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
-      console.log("artist Detail: ", res)
-      setArtistName(res.data.name)
-    }catch (err) {
-      console.log(err)
+      console.log("artist Detail: ", res);
+      setArtistName(res.data.name);
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
 
   // 민팅과 동시에(로딩중에) 작품 등록 페이지 백엔드로 데이터 보내기
   const sendItemDetail = async () => {
-    const form = new FormData()
-      form.append('address', account)
-      form.append('name', "다예") // 작가명
-      form.append('title', "충전")
-      form.append('description', "충전")
-      form.append('tokenId', "47") // tokenId
-      form.append('file', "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz")
+    const form = new FormData();
+    form.append("address", account);
+    form.append("name", "다예"); // 작가명
+    form.append("title", "충전");
+    form.append("description", "충전");
+    form.append("tokenId", "47"); // tokenId
+    form.append(
+      "file",
+      "https://ipfs.infura.io/ipfs/QmakiU2apA2pT629dW34euMFmapTqQEFwg6uwwh1UBMauz"
+    );
     await axios
       .post(`${BACKEND_URL}/item/create`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-        .then((res) => console.log("성공!!", res))
-        .catch((err) => console.log(err));
-  }; 
+      .then((res) => console.log("성공!!", res))
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
-    sendItemDetail()
-  }, [])
+    sendItemDetail();
+  }, []);
 
-
-  useEffect(()=> {
-    getArtistDetail(account)
-  }, [account])
-
+  useEffect(() => {
+    getArtistDetail(account);
+  }, [account]);
 
   // console.log("!!!!!!", artistDetail)
   return (
@@ -214,16 +219,17 @@ const Create = ({ account }) => {
         </>
       ) : (
         <Container sx={{ my: 18, mx: 25 }}>
-          <Typography variant="h3" >
-            작품 등록하기
-          </Typography>
+          <Typography variant="h3">작품 등록하기</Typography>
           <Box>
             <Stack direction="row" sx={{ mt: 10 }}>
-                <Typography variant="h5" sx={{ mr: 14 }}>
-                  작품 파일
-                </Typography>
+              <Typography variant="h5" sx={{ mr: 14 }}>
+                작품 파일
+              </Typography>
               <Stack>
-                <Typography variant="caption" sx={{ marginBottom: 1, color:"Grey"}} >
+                <Typography
+                  variant="caption"
+                  sx={{ marginBottom: 1, color: "Grey" }}
+                >
                   업로드 가능한 확장자: JPG, JPEG, PNG
                 </Typography>
                 <input
@@ -252,9 +258,7 @@ const Create = ({ account }) => {
               <Typography variant="h5" sx={{ mr: 7.7 }}>
                 작가명
               </Typography>
-              <Typography sx={{ ml: 10, width: 700 }}>
-                {artistName}
-              </Typography>
+              <Typography sx={{ ml: 10, width: 700 }}>{artistName}</Typography>
             </Stack>
             <Stack direction="row">
               <Typography variant="h5">작품명</Typography>
@@ -262,9 +266,7 @@ const Create = ({ account }) => {
                 required
                 variant="standard"
                 sx={{ ml: 17, width: 700 }}
-                onChange={(e) =>
-                  setTitle(e.target.value)
-                }
+                onChange={(e) => setTitle(e.target.value)}
               ></TextField>
             </Stack>
             <Stack direction="row" sx={{ my: 8 }}>
@@ -273,9 +275,7 @@ const Create = ({ account }) => {
                 required
                 variant="standard"
                 sx={{ ml: 20, width: 700 }}
-                onChange={(e) =>
-                  setDescription(e.target.value)
-                }
+                onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Stack>
           </Box>
