@@ -32,7 +32,8 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
 import { SaleKallosProps } from "../interfaces";
-import Pagination from '../components/pagination';
+import Pagination from "../components/pagination";
+// import { BACKEND_URL } from "../config/index";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -44,7 +45,7 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    //   setUserInfo: (userAddress) => getUserInfo(userAddress),
+    setUserInfo: (userAddress) => dispatch(getUserInfo(userAddress)),
     //   setAllItemsOfUser: (paramObj) => getAllItemsOfUser(paramObj),
     setAllItems: (paramObj) => dispatch(getAllItems(paramObj)),
   };
@@ -55,9 +56,17 @@ interface ParamObj extends SaleKallosProps {
   userAddress: string;
   pageNumber: number;
   itemsPerOnePage: number;
+  userInfo: any;
+  setUserInfo: any;
 }
 
-const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
+const MyPage: FC<ParamObj> = ({
+  account,
+  items,
+  setAllItems,
+  userInfo,
+  setUserInfo,
+}) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
   const [saleStatus, setSaleStatus] = useState<Boolean>(false);
   const [onSaleItems, setOnSaleItems] = useState([]);
@@ -72,14 +81,14 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const paginate = (pageNumber) => setCurPage(pageNumber);
-  
+
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
         .getKallosTokens(account)
         .call();
 
-      console.log("토큰리스트", response);
+      // console.log("토큰리스트", response);
 
       setKallosTokens(response);
     } catch (error) {
@@ -124,7 +133,10 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
 
     getKallosTokens();
     getSaleStatus();
+    setUserInfo(account);
   }, [account]);
+
+  console.log("userInfo:::", userInfo);
 
   const params = {
     searchOption: "users",
@@ -154,11 +166,16 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
               mt: 10,
             }}
           >
-            <Image src={defaultProfile} width="200px" height="200px" />
+            {userInfo.profile_img === null ? (
+              <Image src={defaultProfile} width="200px" height="200px" />
+            ) : (
+              <Typography>이미지 불러와야함</Typography>
+              // <Image src={defaultProfile} width="200px" height="200px" />
+            )}
+            {/* <Image src={defaultProfile} width="200px" height="200px" /> */}
             <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
-              한석봉
+              {userInfo.name}
             </Typography>
-
             <CopyToClipboard text={account}>
               <Tooltip title="Copy" placement="right">
                 <Button
@@ -185,7 +202,6 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
               {saleStatus ? "판매 등록 가능" : "판매 등록 불가능"}
             </Typography>
             {saleStatusLoading ? <CircularProgress color="primary" /> : null}
-            {/* <CircularProgress /> */}
             <Button
               sx={{ mt: 1 }}
               onClick={onClickSaleStatus}
@@ -207,11 +223,16 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
                 <Divider>
                   <Chip label="소개글" />
                 </Divider>
-                <Typography align="center">
+                {userInfo.description === null ? (
+                  <Typography align="center">소개글이 없습니다.</Typography>
+                ) : (
+                  <Typography align="center">{userInfo.description}</Typography>
+                )}
+                {/* <Typography align="center">
                   I need you baby And if it's quite all right I need you baby
                   And if its quite alright I need you baby To warm the lonely
                   nights I love you baby Trust in me when I say its okay
-                </Typography>
+                </Typography> */}
                 <Link href={"/mypageupdate"} passHref>
                   <Button>프로필 수정</Button>
                 </Link>
@@ -237,10 +258,10 @@ const MyPage: FC<ParamObj> = ({ account, items, setAllItems }) => {
                 <KallosItemCard key={item.id} kallosData={item} />
               ))}
             </Box>
-            <Pagination 
+            <Pagination
               curPage={curPage}
-              setCurPage={setCurPage} 
-              totalItems={totalItems} 
+              setCurPage={setCurPage}
+              totalItems={totalItems}
               itemsPerPage={itemsPerPage}
             />
             {/* {kallosTokens?.map((v, i) => {

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, FC } from "react";
+import axios from "axios";
 
 import {
   Button,
@@ -121,6 +122,34 @@ const ItemDetail = ({
       console.error(error);
     }
   };
+
+  const [image, setImage] = useState("");
+
+  const onSetImage = (event) => setImage(event.target.files[0]);
+
+  const onClickTest = async () => {
+    await axios
+      .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/userInfo/${account}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const updateUserData = async () => {
+    const formData = new FormData();
+    formData.append("address", account);
+    formData.append("description", "안녕?");
+    formData.append("profile_img", image);
+    await axios
+      .put(`https://j6c107.p.ssafy.io:8443/api/user/mypageupdate`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    updateUserData();
+  }, [image]);
 
   useEffect(() => {
     setItemDetail(router.query.id);
@@ -266,6 +295,8 @@ const ItemDetail = ({
           `}
         </style>
       </Box>
+      <input type="file" onChange={onSetImage} />
+      <button onClick={onClickTest}>getUserInfo</button>
     </Box>
   );
 };
