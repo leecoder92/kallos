@@ -18,7 +18,7 @@ import {
   web3,
 } from "../../web3Config";
 import { IMyKallosData } from "../../interfaces";
-import { getItemDetail } from "../../store/modules/item";
+import { getItemDetail, changeOwnerAfterBuy } from "../../store/modules/item";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
 
@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setItemDetail: (obj) => dispatch(getItemDetail(obj)),
+    setNewOwner: (obj) => dispatch(changeOwnerAfterBuy(obj)),
   };
 };
 
@@ -70,6 +71,7 @@ const ItemDetail = ({
   itemDetail,
   setItemDetail,
   getOnSaleTokens,
+  setNewOwner,
 }) => {
   const router = useRouter();
 

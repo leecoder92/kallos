@@ -57,6 +57,19 @@ export const getItemDetail = createAsyncThunk(
   }
 );
 
+export const changeOwnerAfterBuy = createAsyncThunk(
+  "PUT/CHANGEOWNER",
+  async (
+    { address, tokenId }: { address: string; tokenId: string },
+    { rejectWithValue }
+  ) => {
+    return await axios
+      .put(`${BACKEND_URL}/item/buy/`, { address, tokenId })
+      .then((res) => console.log(res))
+      .catch((err) => rejectWithValue(err.response.data));
+  }
+);
+
 export const addNewItem = createAsyncThunk(
   "POST/NEWITEM", //action명
   async (itemInfo, { rejectWithValue }) => {
