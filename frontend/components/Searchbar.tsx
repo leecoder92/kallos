@@ -69,19 +69,27 @@ function Searchbar() {
 
   // 검색 클릭했을 때 결과창 닫고 검색어 초기화
   const handleArtistClick = (event: any) => {
-    // event.preventDefault();
+    event.preventDefault();
+    router.push(`/artists/${searchValue}`);
     setSearchValue("");
     setFilteredArtistData([]);
     setFilteredTitleData([]);
     setIsLoading(true);
-    router.push("/artist");
   };
-  // 엔터 눌렀을 때 explore로 푸쉬(3글자 이상일 때)
+
+  const handleItemClick = (event) => {
+    setSearchValue("");
+    setFilteredArtistData([]);
+    setFilteredTitleData([]);
+    setIsLoading(true);
+  };
+
+  // 엔터 눌렀을 때 explore로 푸쉬()
   const handleEnterAndEsc = (event: any) => {
-    if (event.key === "Enter" && searchValue.length >= 3) {
-      router.push(`/explore/${searchValue}`);
-    } else if (event.key === "Enter" && searchValue.length < 3) {
-      alert("세 글자 이상 입력하세요");
+    if (event.key === "Enter" && searchValue) {
+      router.push({ pathname: `/explore`, query: { keyword: searchValue } });
+    } else if (event.key === "Enter" && !searchValue) {
+      alert("검색어를 입력하세요.");
     }
   };
   // X 눌렀을 때 초기화
@@ -95,19 +103,19 @@ function Searchbar() {
   // 검색어 불러오기
   useEffect(() => {
     const searchFilter = setTimeout(() => {
-      if (searchValue.length < 3) {
+      if (!searchValue) {
         setFilteredArtistData([]);
         setFilteredTitleData([]);
         setIsLoading(true);
-      } else if (searchValue.length >= 3) {
+      } else if (searchValue) {
         axios({
           method: "get",
           url: `${BEUrl}/item/search/${searchValue}`,
         })
           .then((res) => {
             console.log(res.data);
-            setFilteredArtistData(res.data.itemsByTitle);
-            setFilteredTitleData(res.data.itemsByName);
+            setFilteredArtistData(res.data.itemsByName);
+            setFilteredTitleData(res.data.itemsByTitle);
             setIsSearchResult(true);
             setIsLoading(false);
           })
@@ -160,85 +168,91 @@ function Searchbar() {
         ) : null}
       </div>
       {searchValue &&
-        (searchValue.length >= 3 && !isLoading ? (
-          (filteredArtistData.length != 0 || filteredTitleData.length != 0) && (
-            <List
-              sx={{
-                bgcolor: "background.paper",
-                position: "absolute",
-                zIndex: 1,
-                width: "100%",
-                border: "1px solid black",
-                borderRadius: 1,
-                visibility: isSearchResult ? "visible" : "hidden",
-              }}
-            >
+        (!isLoading ? (
+          <List
+            sx={{
+              bgcolor: "background.paper",
+              position: "absolute",
+              zIndex: 1,
+              width: "100%",
+              border: "1px solid black",
+              borderRadius: 1,
+              visibility: isSearchResult ? "visible" : "hidden",
+            }}
+          >
+            <ListItem>
+              <ListItemText primary="작가" />
+            </ListItem>
+            <Divider sx={{ mx: 2 }} />
+            {filteredArtistData.length != 0 ? (
+              <div
+                style={{ borderBottom: "1px solid black", paddingBottom: 10 }}
+              >
+                {filteredArtistData.slice(0, 3).map((value, key) => {
+                  return (
+                    <div key={key}>
+                      <ListItem
+                        onClick={handleArtistClick}
+                        style={{
+                          cursor: "pointer",
+                          paddingBottom: 0,
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar>
+                            <Image src={defaultProfile} alt="thumbnail" />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={`${value.authorName}`} />
+                      </ListItem>
+                      <Divider sx={{ mr: 2, ml: 4 }} component="li" />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
               <ListItem>
-                <ListItemText primary="작가" />
+                <ListItemText primary="검색 결과가 없습니다." />
               </ListItem>
-              <Divider sx={{ mx: 2 }} />
-              {filteredArtistData.length != 0 ? (
-                <div
-                  style={{ borderBottom: "1px solid black", paddingBottom: 10 }}
-                >
-                  {filteredArtistData.slice(0, 3).map((value, key) => {
-                    return (
-                      <div key={key}>
-                        <ListItem
-                          onClick={handleArtistClick}
-                          style={{
-                            cursor: "pointer",
-                            paddingBottom: 0,
-                          }}
-                        >
-                          <ListItemAvatar>
-                            <Avatar>
-                              <Image src={defaultProfile} alt="thumbnail" />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText primary={`${value.artist}`} />
-                        </ListItem>
-                        <Divider sx={{ mr: 2, ml: 4 }} component="li" />
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <ListItem>
-                  <ListItemText primary="No result" />
-                </ListItem>
-              )}
+            )}
+            <ListItem>
+              <ListItemText primary="작품" />
+            </ListItem>
+            <Divider sx={{ mx: 2 }} />
+            {filteredTitleData.length != 0 ? (
+              <div>
+                {filteredTitleData.slice(0, 3).map((value, key) => {
+                  return (
+                    <div key={key}>
+                      <ListItem
+                        onClick={(event) => {
+                          router.push(`/items/${value.tokenId}`);
+                          handleItemClick(event);
+                        }}
+                        style={{ cursor: "pointer", paddingBottom: 0 }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar>
+                            <Image
+                              layout="fill"
+                              src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${value.itemImg}`}
+                              alt="thumbnail"
+                            />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={`${value.title}`} />
+                      </ListItem>
+                      <Divider sx={{ mr: 2, ml: 4 }} component="li" />
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
               <ListItem>
-                <ListItemText primary="작품" />
+                <ListItemText primary="검색 결과가 없습니다." />
               </ListItem>
-              <Divider sx={{ mx: 2 }} />
-              {filteredTitleData.length != 0 ? (
-                <div>
-                  {filteredTitleData.slice(0, 3).map((value, key) => {
-                    return (
-                      <div key={key}>
-                        <ListItem
-                          style={{ cursor: "pointer", paddingBottom: 0 }}
-                        >
-                          <ListItemAvatar>
-                            <Avatar>
-                              <Image src={defaultProfile} alt="thumbnail" />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText primary={`${value.title}`} />
-                        </ListItem>
-                        <Divider sx={{ mr: 2, ml: 4 }} component="li" />
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <ListItem>
-                  <ListItemText primary="No result" />
-                </ListItem>
-              )}
-            </List>
-          )
+            )}
+          </List>
         ) : (
           <List
             sx={{

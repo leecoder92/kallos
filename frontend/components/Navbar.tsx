@@ -87,14 +87,21 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const getAccount = async () => {
     try {
       if (typeof window.ethereum !== "undefined") {
-        const myAccount = await window.ethereum.request({
+        const myAccounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        if (myAccount && myAccount.length > 0) {
+        if (myAccounts && myAccounts.length > 0) {
           setLogin();
           setIsLogin(true);
-          setAccount(myAccount[0]);
+          setAccount(myAccounts[0]);
         }
+        window.ethereum.on("accountsChanged", () => {
+          alert("계좌가 바뀌었습니다. 새로 로그인해주세요.");
+          router.push("/");
+          setLogout();
+          setIsLogin(false);
+          setAccount("");
+        });
       }
     } catch (err) {
       console.error(err);
