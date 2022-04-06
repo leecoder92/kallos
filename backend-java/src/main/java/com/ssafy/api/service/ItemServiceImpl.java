@@ -28,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
 		item.setTitle(title);
 		item.setOwnerAddress(address);
 		item.setOnSaleYN(0);
-		item.setPrice(0);
+		item.setPrice(0.0);
 		item.setItemImg(img);
 		item.setCreated_at(LocalDateTime.now());
 		return itemRepository.save(item);

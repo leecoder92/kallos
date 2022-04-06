@@ -81,7 +81,7 @@ public class ItemController {
 	@PutMapping("/sell")
 	public ResponseEntity sellItem (@RequestBody Map<String,Object> body) {
 		String tokenId = body.get("tokenId").toString();
-		int price = Integer.parseInt(body.get("price").toString());
+		Double price = Double.parseDouble(body.get("price").toString());
 
 		Item item = itemServiceImpl.getItemByTokenId(tokenId);
 		item.setPrice(price);
@@ -96,7 +96,7 @@ public class ItemController {
 		String tokenId = body.get("tokenId").toString();
 
 		Item item = itemServiceImpl.getItemByTokenId(tokenId);
-		item.setPrice(0);
+		item.setPrice(0.0);
 		item.setOnSaleYN(0);
 		itemRepository.save(item);
 
@@ -110,6 +110,8 @@ public class ItemController {
 
 		Item item = itemServiceImpl.getItemByTokenId(tokenId);
 		item.setOwnerAddress(address);
+		item.setPrice(0.0);
+		item.setOnSaleYN(0);
 		itemRepository.save(item);
 
 		return new ResponseEntity(HttpStatus.OK);
@@ -181,6 +183,10 @@ public class ItemController {
 			int count = itemCnt;
 			int totalPage = count/itemPerPage;
 
+			if(count%itemPerPage!=0) {
+				totalPage += 1;
+			}
+
 			List<Item> pageItems = new ArrayList<>();
 
 			int cntValue = 0;
@@ -220,6 +226,10 @@ public class ItemController {
 			int count = itemCnt;
 			int totalPage = count/itemPerPage;
 
+			if(count%itemPerPage!=0) {
+				totalPage += 1;
+			}
+
 			List<Item> pageItems = new ArrayList<>();
 
 			int cntValue = 0;
@@ -258,6 +268,10 @@ public class ItemController {
 			int itemCnt = finalOnSaleItems.size();
 			int count = itemCnt;
 			int totalPage = count/itemPerPage;
+
+			if(count%itemPerPage!=0) {
+				totalPage += 1;
+			}
 
 			List<Item> pageItems = new ArrayList<>();
 

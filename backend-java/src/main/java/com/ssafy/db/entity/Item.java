@@ -42,7 +42,7 @@ public class Item {
     private Integer onSaleYN;
 
     @ColumnDefault("0")
-    private Integer price;
+    private Double price;
 
     @Column(nullable = false)
     private LocalDateTime created_at;
@@ -51,7 +51,7 @@ public class Item {
     public Item (Long item_id, String tokenId, String itemImg,
                  String title,String description,String authorName,
                  String authorAddress,String ownerAddress,
-                 Integer onSaleYN,Integer price,LocalDateTime created_at) {
+                 Integer onSaleYN,Double price,LocalDateTime created_at) {
 
         this.item_id = item_id;
         this.tokenId = tokenId;
