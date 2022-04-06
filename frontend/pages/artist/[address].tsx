@@ -35,9 +35,9 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setArtistInfo: (account) => getArtistInfo(account),
-    setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
-    setAllItems: (params) => dispatch(getAllItems(params)),
+    // setArtistInfo: (account) => dispatch(getArtistInfo(account)),
+    // setAllItemsOfArtist: (paramsObj) => dispatch(getAllItemsOfArtist(paramsObj)),
+    // setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
 
@@ -65,9 +65,8 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
 
   //pagination
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
-  const [totalItems, setTotalItems] = useState(0);
-  // const paginate = (pageNumber) => setCurPage(pageNumber);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const params = {
     searchOption: "users",
@@ -104,7 +103,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
       });
       console.log("작가 아이템 목록: ", res);
       setItemsOfArtist(res.data.items);
-      setTotalItems(res.data.items.length);
+      setTotalPages(res.data.items.length);
     } catch (err) {
       console.log(err);
     }
@@ -185,8 +184,9 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
           <Pagination
             curPage={curPage}
             setCurPage={setCurPage}
-            totalItems={totalItems}
+            totalPages={totalPages}
             itemsPerPage={itemsPerPage}
+            totalItems={totalPages * itemsPerPage}
           />
         </Box>
       </main>

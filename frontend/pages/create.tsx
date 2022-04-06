@@ -156,10 +156,7 @@ const Create = ({ account }) => {
           setCreateLoad(true);
         });
       if (response.status) {
-<<<<<<< HEAD
-=======
         // Router.push("/mypage");
->>>>>>> 19aa8466c02678e92f34d7a3065c0272b6fa7204
         getKallosTokens();
       }
     } catch (error) {
@@ -199,21 +196,6 @@ const Create = ({ account }) => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (kallosTokens.length === 0) return
-    setTokenId(kallosTokens[kallosTokens.length -1][0])
-    // console.log("!!!", kallosTokens[kallosTokens.length -1][0])
-  }, [kallosTokens])
-
-  useEffect(()=> {
-    if (tokenId === "") return
-    sendItemDetail()
-  }, [tokenId])
-
-  // useEffect(() => {
-  //   getKallosTokens()
-  // }, [])
-=======
     if (kallosTokens.length === 0) return;
     setTokenId(kallosTokens[kallosTokens.length - 1][0]);
     // console.log("!!!", kallosTokens[kallosTokens.length -1][0])
@@ -227,7 +209,6 @@ const Create = ({ account }) => {
   // useEffect(() => {
   //   getKallosTokens();
   // }, []);
->>>>>>> 19aa8466c02678e92f34d7a3065c0272b6fa7204
 
   // 민팅과 동시에(로딩중에) 작품 등록 페이지 백엔드로 데이터 보내기
   const sendItemDetail = async () => {
@@ -242,15 +223,6 @@ const Create = ({ account }) => {
       .post(`${BACKEND_URL}/item/create`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       })
-<<<<<<< HEAD
-        .then((res) => {
-          console.log("성공!!", res);
-          Router.push("/mypage");
-        })
-        .catch((err) => console.log(err));
-  }; 
-
-=======
       .then((res) => {
         console.log("성공!!", res);
         Router.push("/mypage");
@@ -266,7 +238,6 @@ const Create = ({ account }) => {
     getArtistDetail(account);
   }, [account]);
 
->>>>>>> 19aa8466c02678e92f34d7a3065c0272b6fa7204
   // console.log("!!!!!!", artistDetail)
   return (
     <ThemeProvider theme={theme}>

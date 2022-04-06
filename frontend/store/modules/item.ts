@@ -6,12 +6,14 @@ export type ItemState = {
   allItems: Array<Object>;
   itemDetail: Object;
   fulfilled: boolean;
+  allItemTotalPage: number;
 };
 
 const initialState: ItemState = {
   allItems: [],
   itemDetail: {},
   fulfilled: false,
+  allItemTotalPage: 0,
 };
 
 export const getAllItems = createAsyncThunk(
@@ -93,6 +95,7 @@ const itemSlice = createSlice({
       .addCase(getAllItems.fulfilled, (state, { payload }) => {
         state.fulfilled = true;
         state.allItems = payload.itemsByAll;
+        state.allItemTotalPage = payload.totalPage;
       })
       .addCase(getAllItems.rejected, (state) => {
         state.fulfilled = false;
