@@ -730,13 +730,13 @@ export const getKallosTokenAbi: AbiItem[] = [
 ];
 
 export const mintKallosTokenAddress =
-  "0xF93905925B0b00bC51d37b0CDAbb3E3b0e0E9E87";
+  "0xd9145CCE52D386f254917e481eB44e9943F39138";
 
 export const saleKallosTokenAddress =
-  "0x394971840ACC289Cb17C9034e12897c26E8103A2";
+  "0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8";
 
 export const getKallosTokenAddress =
-  "0x29109F55EBC72bFbbd2cff4DB2EFFb40E4123340";
+  "0xf8e81D47203A594245E36C48e151709F0C19fBe8";
 
 declare global {
   interface Window {
