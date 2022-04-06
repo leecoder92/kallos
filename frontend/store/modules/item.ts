@@ -60,13 +60,17 @@ export const getItemDetail = createAsyncThunk(
   }
 );
 
+<<<<<<< HEAD
 // const router = useRouter();
+=======
+>>>>>>> 252ea53a3b256009d0bb6bd715093e40c19ecbcb
 export const changeOwnerAfterBuy = createAsyncThunk(
   "PUT/CHANGEOWNER",
   async (
     { address, tokenId }: { address: string; tokenId: string },
     { rejectWithValue }
   ) => {
+    // const router = useRouter();
     return await axios
       .put(`${BACKEND_URL}/item/buy/`, { address, tokenId })
       .then((res) => {
