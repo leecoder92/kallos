@@ -40,7 +40,7 @@ export const KallosItemCard = ({ kallosData }) => {
               <Typography>{kallosData.title}</Typography>
             </a>
           </Link>
-          <Link href={`/items/${kallosData.authorAddress}`}>
+          <Link href={`/artist/${kallosData.authorAddress}`}>
             <a>
               <Typography>{kallosData.authorName}</Typography>
             </a>
