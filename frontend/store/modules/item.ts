@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BACKEND_URL } from "../../config/index";
+import { useRouter } from "next/router";
 
 export type ItemState = {
   allItems: Array<Object>;
@@ -65,9 +66,13 @@ export const changeOwnerAfterBuy = createAsyncThunk(
     { address, tokenId }: { address: string; tokenId: string },
     { rejectWithValue }
   ) => {
+    const router = useRouter();
     return await axios
       .put(`${BACKEND_URL}/item/buy/`, { address, tokenId })
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        router.push("/mypage");
+      })
       .catch((err) => rejectWithValue(err.response.data));
   }
 );
