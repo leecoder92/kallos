@@ -76,51 +76,8 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const router = useRouter();
   const [account, setAccount] = useState<string>("");
   const [isLogin, setIsLogin] = useState<boolean>(value);
-  const getIsLogin = async () => {
-    if (value) {
-      setIsLogin(true);
-    } else {
-      setIsLogin(false);
-    }
-  };
 
-  const getAccount = async () => {
-    try {
-      if (typeof window.ethereum !== "undefined") {
-        const myAccounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        if (myAccounts && myAccounts.length > 0) {
-          setLogin();
-          setIsLogin(true);
-          setAccount(myAccounts[0]);
-        }
-        window.ethereum.on("accountsChanged", () => {
-          alert("계좌가 바뀌었습니다. 새로 로그인해주세요.");
-          router.push("/");
-          setLogout();
-          setIsLogin(false);
-          setAccount("");
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    getAccount();
-  }, []);
-
-  useEffect(() => {
-    console.log(account);
-  }, [account]);
-
-  useEffect(() => {
-    getIsLogin();
-  }, [isLogin]);
   // 첫 방문시 정보입력 모달창
-  const [firstVisit, setFirstVisit] = useState<boolean>(false);
   const [artistName, setArtistName] = useState<string>("");
   const handleChangeArtistName = (event: any) => {
     event.preventDefault();
@@ -133,7 +90,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   };
   const metaLogin = async () => {
     try {
-      if (typeof window.ethereum !== "undefined" && !isLogin) {
+      if (typeof window.ethereum !== "undefined") {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
@@ -149,7 +106,9 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
               console.log(res.data);
               setLogin();
               setIsLogin(true);
-              alert(`반갑습니다. ${res.data.name}님!`);
+              if (router.pathname === "/") {
+                alert(`반갑습니다. ${res.data.name}님!`);
+              }
             }
           })
           .catch((err) => {
@@ -163,6 +122,10 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
       alert("로그인을 다시 시도해주세요.");
     }
   };
+
+  useEffect(() => {
+    metaLogin();
+  }, []);
 
   // 에러처리
   const [artistNameError, setArtistNameError] = useState(false);
@@ -181,6 +144,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
       })
         .then((res) => {
           console.log(res.data);
+          setArtistName("");
           handleClose();
           alert("등록되었습니다.");
         })
