@@ -34,7 +34,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Nanum Bold",
+    fontFamily: "Gowun Batang",
   },
 });
 
@@ -249,9 +249,9 @@ const Create = ({ account }) => {
           </Typography>
         </>
       ) : (
-        <Container sx={{ my: 18, mx: 25 }}>
+        <Box sx={{ my: 18, mx: 25 }}>
           <Typography variant="h3">작품 등록하기</Typography>
-          <Box>
+          <Container>
             <Stack direction="row" sx={{ mt: 10 }}>
               <Typography variant="h5" sx={{ mr: 14 }}>
                 작품 파일
@@ -289,7 +289,9 @@ const Create = ({ account }) => {
               <Typography variant="h5" sx={{ mr: 7.7 }}>
                 작가명
               </Typography>
-              <Typography sx={{ ml: 10, width: 700 }}>{artistName}</Typography>
+              <Typography variant="h5" sx={{ ml: 10, width: 700 }}>
+                {artistName}
+              </Typography>
             </Stack>
             <Stack direction="row">
               <Typography variant="h5">작품명</Typography>
@@ -309,7 +311,7 @@ const Create = ({ account }) => {
                 onChange={(e) => setDescription(e.target.value)}
               ></TextField>
             </Stack>
-          </Box>
+          </Container>
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <StyledButton
               onClick={createMint}
@@ -321,7 +323,7 @@ const Create = ({ account }) => {
               등록하기
             </StyledButton>
           </Box>
-        </Container>
+        </Box>
       )}
     </ThemeProvider>
   );

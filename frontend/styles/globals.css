@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Pen+Script&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Nanum+Pen+Script&display=swap");
 
 html,
 body,
@@ -27,6 +27,7 @@ a {
 }
 
 @font-face {
-  font-family: "Nanum Bold";
+  font-family: "Gowun Batang", serif;
+  font-weight: 700;
   src: url(../public/GowunBatang-Bold.ttf);
 }

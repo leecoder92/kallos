@@ -16,13 +16,13 @@ import { connect } from "react-redux";
 
 import Pagination from "../components/pagination";
 
-import axios from'axios';
+import axios from "axios";
 import { PROJECT_ID, PROJECT_SECRET, BACKEND_URL } from "../config/index";
-
 
 const mapStateToProps = (state: RootState) => {
   return {
     items: state.itemReducer.allItems,
+    pages: state.itemReducer.allItemTotalPage,
   };
 };
 
@@ -35,10 +35,16 @@ const mapDispatchToProps = (dispatch: any) => {
 interface SaleKallosProps {
   account: string;
   items: Array<Object>;
+  pages: number;
   setAllItems: any;
 }
 
-const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
+const Explore: FC<SaleKallosProps> = ({
+  account,
+  items,
+  pages,
+  setAllItems,
+}) => {
   const [onSaleItems, setOnSaleItems] = useState([]);
   const [showOnlySale, setShowOnlySale] = useState(false);
 
@@ -47,9 +53,8 @@ const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
 
   //pagination
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalItems, setTotalItems] = useState(0);
-  //   const paginate = (pageNumber) => setCurPage(pageNumber);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [totalPages, setTotalPages] = useState(0);
 
   //검색옵션 설정
   const handleOption = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,9 +87,12 @@ const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
 
   useEffect(() => {
     setOnSaleItems(items);
-    setTotalItems(items.length);
     console.log(items);
   }, [items]);
+
+  useEffect(() => {
+    setTotalPages(pages);
+  }, [pages]);
 
   useEffect(() => {
     console.log(showOnlySale);
@@ -167,8 +175,9 @@ const Explore: FC<SaleKallosProps> = ({ account, items, setAllItems }) => {
       <Pagination
         curPage={curPage}
         setCurPage={setCurPage}
-        totalItems={totalItems}
+        totalPages={totalPages}
         itemsPerPage={itemsPerPage}
+        totalItems={totalPages * itemsPerPage}
       />
       <style jsx>
         {`

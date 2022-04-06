@@ -35,8 +35,13 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+<<<<<<< HEAD
     // setArtistInfo: (account) => getArtistInfo(account),
     // setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
+=======
+    // setArtistInfo: (account) => dispatch(getArtistInfo(account)),
+    // setAllItemsOfArtist: (paramsObj) => dispatch(getAllItemsOfArtist(paramsObj)),
+>>>>>>> ed50970d1ee7f081759b5ea1e2fe1c7f70961666
     // setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
@@ -65,9 +70,8 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
 
   //pagination
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(8);
-  const [totalItems, setTotalItems] = useState(0);
-  // const paginate = (pageNumber) => setCurPage(pageNumber);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const params = {
     searchOption: "users",
@@ -75,8 +79,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     page: curPage,
     size: itemsPerPage,
   };
-  // console.log(items.length);
-  // console.log(curPage);
 
   // 작가 정보 불러오기
   const [artistDetail, setArtistDetail] = useState(null);
@@ -104,7 +106,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
       });
       console.log("작가 아이템 목록: ", res);
       setItemsOfArtist(res.data.items);
-      setTotalItems(res.data.items.length);
+      setTotalPages(res.data.totalPage);
     } catch (err) {
       console.log(err);
     }
@@ -114,10 +116,13 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     getArtistItems();
   }, [userAddress, curPage]);
 
+<<<<<<< HEAD
   // useEffect(() => {
   //   setAllItems(params);
   // }, []);
 
+=======
+>>>>>>> ed50970d1ee7f081759b5ea1e2fe1c7f70961666
   return (
     <div>
       <CssBaseline />
@@ -152,41 +157,51 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
                   {artistDetail &&
                     (artistDetail.description
                       ? artistDetail.description
-                      : "작가상세가 없습니다.")}
+                      : null)}
                 </Typography>
               </Box>
             </Stack>
             <Divider variant="middle" sx={{ my: 5 }} />
             <Typography variant="h4" align="center">
-              판매 작품
+              작품
             </Typography>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, 270px)",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 5,
-                rowGap: 5,
-                columnGap: 1,
-              }}
-            >
-              {itemsOfArtist &&
-                itemsOfArtist
-                  .slice(
-                    (curPage - 1) * itemsPerPage,
-                    (curPage - 1) * itemsPerPage + itemsPerPage
-                  )
-                  .map((item) => (
-                    <KallosItemCard key={item.id} kallosData={item} />
-                  ))}
-            </Box>
+            {itemsOfArtist && itemsOfArtist.length !== 0 ? (
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, 270px)",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 5,
+                  rowGap: 5,
+                  columnGap: 1,
+                }}
+              >
+                {itemsOfArtist.map((item) => (
+                  <KallosItemCard key={item.id} kallosData={item} />
+                ))}
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 10,
+                  rowGap: 5,
+                  columnGap: 1,
+                }}
+              >
+                <Typography>작품이 존재하지 않습니다</Typography>
+              </Box>
+            )}
           </Container>
           <Pagination
             curPage={curPage}
             setCurPage={setCurPage}
-            totalItems={totalItems}
+            totalPages={totalPages}
             itemsPerPage={itemsPerPage}
+            totalItems={totalPages * itemsPerPage}
           />
         </Box>
       </main>

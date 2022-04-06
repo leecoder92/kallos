@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
+// import MyKallosCard from "@/components/MyKallosCard";
 import MyKallosCard from "@/components/MyKallosCard";
 import {
   mintKallosTokenContract,
@@ -30,7 +31,6 @@ import maticImage from "../public/images/matic-token.png";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
-import { SaleKallosProps } from "../interfaces";
 import Pagination from "../components/pagination";
 import axios from "axios";
 // import { BACKEND_URL } from "../config/index";
@@ -51,24 +51,9 @@ const mapDispatchToProps = (dispatch: any) => {
   };
 };
 
-//paramObj
-interface ParamObj extends SaleKallosProps {
-  userAddress: string;
-  pageNumber: number;
-  itemsPerOnePage: number;
-  userInfo: any;
-  setUserInfo: any;
-}
-
-const MyPage: FC<ParamObj> = ({
-  account,
-  items,
-  setAllItems,
-  userInfo,
-  setUserInfo,
-}) => {
+const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
-  const [saleStatus, setSaleStatus] = useState<Boolean>(false);
+  const [saleStatus, setSaleStatus] = useState<boolean>(false);
   const [onSaleItems, setOnSaleItems] = useState([]);
 
   const cutAddress1 = account.substr(0, 5);
@@ -284,8 +269,19 @@ const MyPage: FC<ParamObj> = ({
                 columnGap: 1,
               }}
             >
-              {myItems?.map((item) => (
+              {/* {myItems?.map((item) => (
                 <KallosItemCard key={item.item_id} kallosData={item} />
+              ))} */}
+              {myItems?.map((item) => (
+                <MyKallosCard
+                  id={item.tokenId}
+                  key={item.item_id}
+                  kallosData={item}
+                  saleStatus={saleStatus}
+                  price={item.price}
+                  account={account}
+                  uri={item.item_id}
+                />
               ))}
             </Box>
             <Pagination

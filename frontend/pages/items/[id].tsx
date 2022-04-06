@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState, FC } from "react";
-import axios from "axios";
+import Link from "next/link";
 
 import {
   Button,
@@ -60,13 +60,6 @@ const ColorButton = styled(Button)({
   },
 });
 
-// interface SaleKallosCardProps extends IMyKallosData {
-//   account: string;
-//   getOnSaleTokens: () => Promise<void>;
-//   itemDetail: any;
-//   setItemDetail: any;
-// }
-
 const ItemDetail = ({
   account,
   itemDetail,
@@ -83,7 +76,8 @@ const ItemDetail = ({
     authorName: "",
     itemImg: "",
     description: "",
-    price: "prce",
+    price: "",
+    authorAddress: "",
   });
 
   const onShowModal = () => setShowModal(!showModal);
@@ -122,91 +116,6 @@ const ItemDetail = ({
       console.error(error);
     }
   };
-
-  //   const [image, setImage] = useState("");
-
-  //   const onSetImage = (event) => setImage(event.target.files[0]);
-
-  //   const onClickTest = async () => {
-  // //유저 정보 조회
-  // await axios
-  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/userInfo/${account}`)
-  //   .then((res) => console.log(res))
-  //   .catch((err) => console.log(err));
-  //작가 정보 조회
-  // await axios
-  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/artist/${account}`)
-  //   .then((res) => console.log(res))
-  //   .catch((err) => console.log(err));
-  //작품 판매 취소
-  // await axios
-  //   .put(`https://j6c107.p.ssafy.io:8443/api/item/cancel`, { tokenId: "43" })
-  //   .then((res) => console.log(res))
-  //   .catch((err) => console.log(err));
-  //유저 보유 작품 조회
-  // await axios
-  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/mypage/items`, {
-  //     params: {
-  //       address: account,
-  //       pageNo: 1,
-  //       itemPerPage: 1,
-  //     },
-  //   })
-  //   .then((res) => console.log(res))
-  //   .catch((err) => console.log(err));
-  //작가 작품 조회
-  // await axios
-  //   .get(`https://j6c107.p.ssafy.io:8443/api/user/artist/items`, {
-  //     params: {
-  //       address: account,
-  //       pageNo: 1,
-  //       itemPerPage: 1,
-  //     },
-  //   })
-  //   .then((res) => console.log(res))
-  //   .catch((err) => console.log(err));
-  //   };
-
-  //유저정보 수정
-  //   const updateUserData = async () => {
-  //     const formData = new FormData();
-  //     formData.append("address", account);
-  //     formData.append("name", "oooo");
-  //     formData.append("description", "바이?");
-  //     formData.append("profile_img", image);
-  //     await axios
-  //       .put(`https://j6c107.p.ssafy.io:8443/api/user/mypageupdate`, formData, {
-  //         headers: { "Content-Type": "multipart/form-data" },
-  //       })
-  //       .then((res) => console.log(res))
-  //       .catch((err) => console.log(err));
-  //   };
-
-  //   //등록
-  //   const registNft = async () => {
-  //     const formData = new FormData();
-  //     formData.append("address", account);
-  //     formData.append("title", "junho");
-  //     formData.append("name", "daye");
-  //     formData.append("description", "dd");
-  //     formData.append("tokenId", "90");
-  //     formData.append("file", image);
-  //     await axios
-  //       .post(`https://j6c107.p.ssafy.io:8443/api/item/create`, formData, {
-  //         headers: { "Content-Type": "multipart/form-data" },
-  //       })
-  //       .then((res) => console.log(res))
-  //       .catch((err) => console.log(err));
-  //   };
-
-  //   const onClickRegist = () => {
-  //     registNft();
-  //   };
-
-  //   useEffect(() => {
-  //     // updateUserData();
-  //     // registNft();
-  //   }, [image]);
 
   useEffect(() => {
     setItemDetail(router.query.id);
@@ -278,9 +187,13 @@ const ItemDetail = ({
                 {itemInfo ? itemInfo.title : null}
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>작가</Typography>
-              <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo ? itemInfo.authorName : null}
-              </Typography>
+              <Link href={`/artist/${itemInfo.authorAddress}`}>
+                <a>
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {itemInfo ? itemInfo.authorName : null}
+                  </Typography>
+                </a>
+              </Link>
               <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
               <Typography sx={{ fontSize: "20px" }}>
                 {itemInfo ? itemInfo.description : null}

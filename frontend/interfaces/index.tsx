@@ -1,7 +1,7 @@
 export interface IMyKallosData {
   id: number;
   uri: string;
-  price: string;
+  price: any;
 }
 
 export interface SaleKallosProps {
