@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { IMyKallosData } from "../interfaces";
+// import MyKallosCard from "@/components/MyKallosCard";
 import MyKallosCard from "@/components/MyKallosCard";
 import {
   mintKallosTokenContract,
@@ -68,7 +69,7 @@ const MyPage: FC<ParamObj> = ({
   setUserInfo,
 }) => {
   const [kallosTokens, setKallosTokens] = useState<IMyKallosData[]>();
-  const [saleStatus, setSaleStatus] = useState<Boolean>(false);
+  const [saleStatus, setSaleStatus] = useState<boolean>(false);
   const [onSaleItems, setOnSaleItems] = useState([]);
 
   const cutAddress1 = account.substr(0, 5);
@@ -284,8 +285,19 @@ const MyPage: FC<ParamObj> = ({
                 columnGap: 1,
               }}
             >
-              {myItems?.map((item) => (
+              {/* {myItems?.map((item) => (
                 <KallosItemCard key={item.item_id} kallosData={item} />
+              ))} */}
+              {myItems?.map((item) => (
+                <MyKallosCard
+                  id={item.tokenId}
+                  key={item.item_id}
+                  kallosData={item}
+                  saleStatus={saleStatus}
+                  price={item.price}
+                  account={account}
+                  uri={item.item_id}
+                />
               ))}
             </Box>
             <Pagination

@@ -25,7 +25,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   const theme = createTheme({
     typography: {
-      fontFamily: "Nanum Bold",
+      // fontFamily: "Nanum Bold",
+      fontFamily: "Gowun Batang",
       // fontFamily: ["Gowun Batang"].join(","),
       // button: {
       //   fontWeight: "bold",
