@@ -35,13 +35,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-<<<<<<< HEAD
-    // setArtistInfo: (account) => getArtistInfo(account),
-    // setAllItemsOfArtist: (paramsObj) => getAllItemsOfArtist(paramsObj),
-=======
     // setArtistInfo: (account) => dispatch(getArtistInfo(account)),
     // setAllItemsOfArtist: (paramsObj) => dispatch(getAllItemsOfArtist(paramsObj)),
->>>>>>> ed50970d1ee7f081759b5ea1e2fe1c7f70961666
     // setAllItems: (params) => dispatch(getAllItems(params)),
   };
 };
@@ -116,13 +111,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     getArtistItems();
   }, [userAddress, curPage]);
 
-<<<<<<< HEAD
-  // useEffect(() => {
-  //   setAllItems(params);
-  // }, []);
-
-=======
->>>>>>> ed50970d1ee7f081759b5ea1e2fe1c7f70961666
   return (
     <div>
       <CssBaseline />
