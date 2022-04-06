@@ -3,37 +3,30 @@ import { saleKallosTokenContract, web3 } from "../web3Config";
 import { IMyKallosData } from "../interfaces";
 import axios from "axios";
 import Image from "next/image";
-import { Co2Sharp } from "@mui/icons-material";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
+import Link from "next/link";
+import LoadingInterface from "@/components/LoadingInterface";
 
 interface MyKallosCardProps extends IMyKallosData {
   saleStatus: boolean;
   account: string;
+  kallosData: any;
 }
 
 const MyKallosCard: FC<MyKallosCardProps> = ({
   id,
-  uri,
   price,
   saleStatus,
   account,
+  kallosData,
 }) => {
-  const [metadata, setMetaData] = useState<any>();
-  const [sellPrice, setSellPrice] = useState<string>("");
-  const [myKallosPrice, setMyKallosPrice] = useState<string>(price);
+  const [sellPrice, setSellPrice] = useState<any>("");
+  const [myKallosPrice, setMyKallosPrice] = useState<any>(price);
+
+  const [sellLoad, setSellLoad] = useState(false);
 
   const onChangeSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
     setSellPrice(e.target.value);
-  };
-
-  const getMetadata = async () => {
-    try {
-      const response = await axios.get(uri);
-
-      setMetaData(response.data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const onClickSell = async () => {
@@ -41,39 +34,83 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
       if (!account || !saleStatus) return;
 
       const response = await saleKallosTokenContract.methods
-        .setForSaleKallosToken(id, web3.utils.toWei(sellPrice, "ether"))
-        .send({ from: account });
-
-      // console.dir(response);
+        .setForSaleKallosToken(id, web3.utils.toWei(String(sellPrice), "ether"))
+        .send({ from: account })
+        .on("transactionHash", () => {
+          setSellLoad(true);
+        });
 
       if (response.status) {
-        setMyKallosPrice(web3.utils.toWei(sellPrice, "ether"));
+        setMyKallosPrice(web3.utils.toWei(String(sellPrice), "ether"));
+        setSell();
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    getMetadata();
-  }, []);
+  const setSell = async () => {
+    const setSellParams = {
+      tokenId: id,
+      price: sellPrice,
+    };
+    await axios
+      .put("https://j6c107.p.ssafy.io:8443/api/item/sell", setSellParams)
+      .then((res) => {
+        console.log("put 보낸 결과는", res);
+      });
+  };
 
   return (
     <div>
-      {metadata && (
-        <>
-          <Image
-            width="300px"
-            height="300px"
-            src={metadata.image}
-            alt="Animal Card"
-          />
-          <Typography>제목: {metadata.name}</Typography>
-          <Typography>설명: {metadata.description}</Typography>
-        </>
-      )}
+      <Box
+        sx={{
+          borderRadius: "10px",
+          boxShadow: "0 0 5px #cfd4d1",
+          overflow: "hidden",
+        }}
+      >
+        <Link href={`/items/${kallosData.tokenId}`}>
+          <a>
+            <Box sx={{ borderRadius: "20px 20px 0 0" }}>
+              <Image
+                width="100%"
+                height="100%"
+                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${kallosData.itemImg}`}
+                alt="NFT Image"
+                layout="responsive"
+              />
+            </Box>
+          </a>
+        </Link>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "10px 15px",
+            borderTop: "1px solid #cfd4d1",
+          }}
+        >
+          <Box>
+            <Link href={`/items/${kallosData.tokenId}`}>
+              <a>
+                <Typography>{kallosData.title}</Typography>
+              </a>
+            </Link>
+            <Link href={`/items/${kallosData.authorAddress}`}>
+              <a>
+                <Typography>{kallosData.authorName}</Typography>
+              </a>
+            </Link>
+          </Box>
+          <Box sx={{ textAlign: "right" }}>
+            <Typography>{kallosData.price}</Typography>
+            <Typography>MATIC</Typography>
+          </Box>
+        </Box>
+      </Box>
       <div>
-        {myKallosPrice === "0" ? (
+        {myKallosPrice === 0 ? (
           <>
             <form>
               <input
@@ -88,7 +125,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
             </button>
           </>
         ) : (
-          <Typography>{web3.utils.fromWei(myKallosPrice)} MATIC</Typography>
+          <Typography>{String(myKallosPrice)} MATIC</Typography>
         )}
       </div>
     </div>
