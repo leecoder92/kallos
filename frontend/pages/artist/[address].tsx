@@ -101,7 +101,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
       });
       console.log("작가 아이템 목록: ", res);
       setItemsOfArtist(res.data.items);
-      setTotalPages(res.data.items.length);
+      setTotalPages(res.data.totalPage);
     } catch (err) {
       console.log(err);
     }
