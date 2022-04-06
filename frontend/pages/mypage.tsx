@@ -171,7 +171,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             }}
           >
             {userInfo.profile_img !== null ? (
-              <div style={{ borderRadius: "100px", overflow: "hidden" }}>
+              <div style={{ borderRadius: "100px", overflow: "hidden", height:"200px" }}>
                 <Image
                   src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
                   alt="user profile image"
