@@ -79,80 +79,93 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
   };
 
   return (
-    <div>
-      <Box
-        sx={{
-          borderRadius: "10px",
-          boxShadow: "0 0 5px #cfd4d1",
-          overflow: "hidden",
-        }}
-      >
-        <Link href={`/items/${kallosData.tokenId}`}>
-          <a>
-            <Box sx={{ borderRadius: "20px 20px 0 0" }}>
-              <Image
-                width="100%"
-                height="100%"
-                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${kallosData.itemImg}`}
-                alt="NFT Image"
-                layout="responsive"
-              />
-            </Box>
-          </a>
-        </Link>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "10px 15px",
-            borderTop: "1px solid #cfd4d1",
-          }}
-        >
-          <Box>
+    <>
+      {sellLoad ? (
+        <>
+          <LoadingInterface />
+          <Typography variant="h6" align="center">
+            작품 판매 중
+          </Typography>
+        </>
+      ) : (
+        <div>
+          <Box
+            sx={{
+              borderRadius: "10px",
+              boxShadow: "0 0 5px #cfd4d1",
+              overflow: "hidden",
+            }}
+          >
             <Link href={`/items/${kallosData.tokenId}`}>
               <a>
-                <Typography>{kallosData.title}</Typography>
+                <Box sx={{ borderRadius: "20px 20px 0 0" }}>
+                  <Image
+                    width="100%"
+                    height="100%"
+                    src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${kallosData.itemImg}`}
+                    alt="NFT Image"
+                    layout="responsive"
+                  />
+                </Box>
               </a>
             </Link>
-            <Link href={`/items/${kallosData.authorAddress}`}>
-              <a>
-                <Typography>{kallosData.authorName}</Typography>
-              </a>
-            </Link>
-          </Box>
-          <Box sx={{ textAlign: "right" }}>
-            <Typography>{kallosData.price}</Typography>
-            <Typography>MATIC</Typography>
-          </Box>
-        </Box>
-      </Box>
-      <div>
-        {myKallosPrice === 0 ? (
-          <div style={{ display: "flex", height: "24px", marginTop: "3px" }}>
-            <FormControl fullWidth>
-              <OutlinedInput
-                sx={{ height: "24px" }}
-                fullWidth
-                value={sellPrice}
-                onChange={onChangeSellPrice}
-                endAdornment={
-                  <InputAdornment position="end">Matic</InputAdornment>
-                }
-              />
-            </FormControl>
-            <ColorButton
-              style={{ width: "40%" }}
-              onClick={onClickSell}
-              disabled={!saleStatus}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 15px",
+                borderTop: "1px solid #cfd4d1",
+              }}
             >
-              판매
-            </ColorButton>
+              <Box>
+                <Link href={`/items/${kallosData.tokenId}`}>
+                  <a>
+                    <Typography>{kallosData.title}</Typography>
+                  </a>
+                </Link>
+                <Link href={`/items/${kallosData.authorAddress}`}>
+                  <a>
+                    <Typography>{kallosData.authorName}</Typography>
+                  </a>
+                </Link>
+              </Box>
+              <Box sx={{ textAlign: "right" }}>
+                <Typography>{kallosData.price}</Typography>
+                <Typography>MATIC</Typography>
+              </Box>
+            </Box>
+          </Box>
+          <div>
+            {myKallosPrice === 0 ? (
+              <div
+                style={{ display: "flex", height: "24px", marginTop: "3px" }}
+              >
+                <FormControl fullWidth>
+                  <OutlinedInput
+                    sx={{ height: "24px" }}
+                    fullWidth
+                    value={sellPrice}
+                    onChange={onChangeSellPrice}
+                    endAdornment={
+                      <InputAdornment position="end">Matic</InputAdornment>
+                    }
+                  />
+                </FormControl>
+                <ColorButton
+                  style={{ width: "40%" }}
+                  onClick={onClickSell}
+                  disabled={!saleStatus}
+                >
+                  판매
+                </ColorButton>
+              </div>
+            ) : (
+              <Typography>{String(myKallosPrice)} MATIC</Typography>
+            )}
           </div>
-        ) : (
-          <Typography>{String(myKallosPrice)} MATIC</Typography>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
