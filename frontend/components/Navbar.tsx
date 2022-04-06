@@ -279,14 +279,19 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
                   </MenuItem>
                 </div>
               ) : (
-                <MenuItem
-                  onClick={() => {
-                    metaLogin();
-                    handleCloseNavMenu();
-                  }}
-                >
-                  로그인
-                </MenuItem>
+                <div>
+                  <Link href="/guide" passHref>
+                    <MenuItem onClick={handleCloseNavMenu}>가이드</MenuItem>
+                  </Link>
+                  <MenuItem
+                    onClick={() => {
+                      metaLogin();
+                      handleCloseNavMenu();
+                    }}
+                  >
+                    로그인
+                  </MenuItem>
+                </div>
               )}
             </Menu>
             <Link href="/" passHref>
@@ -303,7 +308,11 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
           >
             <Link href="/explore" passHref>
               <Button
-                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
+                sx={{
+                  color: "white",
+                  fontSize: { lg: "20px", md: "17px" },
+                  fontWeight: "bold",
+                }}
               >
                 갤러리
               </Button>
@@ -315,7 +324,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
                   <Button
                     sx={{
                       color: "white",
-                      fontSize: "17px",
+                      fontSize: { lg: "20px", md: "17px" },
                       fontWeight: "bold",
                     }}
                   >
@@ -326,7 +335,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
                   <Button
                     sx={{
                       color: "white",
-                      fontSize: "17px",
+                      fontSize: { lg: "20px", md: "17px" },
                       fontWeight: "bold",
                     }}
                   >
@@ -334,19 +343,40 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
                   </Button>
                 </Link>
                 <Button
-                  sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
+                  sx={{
+                    color: "white",
+                    fontSize: { lg: "20px", md: "17px" },
+                    fontWeight: "bold",
+                  }}
                   onClick={metaLogout}
                 >
                   로그아웃
                 </Button>
               </div>
             ) : (
-              <Button
-                sx={{ color: "white", fontSize: "17px", fontWeight: "bold" }}
-                onClick={metaLogin}
-              >
-                로그인
-              </Button>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Link href="/guide" passHref>
+                  <Button
+                    sx={{
+                      color: "white",
+                      fontSize: { lg: "20px", md: "17px" },
+                      fontWeight: "bold",
+                    }}
+                  >
+                    가이드
+                  </Button>
+                </Link>
+                <Button
+                  sx={{
+                    color: "white",
+                    fontSize: { lg: "20px", md: "17px" },
+                    fontWeight: "bold",
+                  }}
+                  onClick={metaLogin}
+                >
+                  로그인
+                </Button>
+              </div>
             )}
           </Box>
         </Toolbar>

@@ -4,13 +4,16 @@ import React from "react";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
-import CaliImage from "../public/images/test_cali/cali.jpg";
-import CssImage from "../public/images/test_cali/css_is_awesome.png";
-import TestImage from "../public/images/5.png";
 import Carousel from "react-material-ui-carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
 import { useRouter } from "next/router";
+// 이미지
+import CaliImage1 from "../public/images/test_cali/cali1.jpg";
+import CaliImage2 from "../public/images/test_cali/cali2.png";
+import CaliImage3 from "../public/images/test_cali/cali3.jpg";
+import CaliImage4 from "../public/images/test_cali/cali4.jpg";
+import CaliImage5 from "../public/images/test_cali/cali5.jpg";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
@@ -24,9 +27,11 @@ const ColorButton = styled(Button)({
 
 const Home: NextPage = () => {
   const testImages = [
-    { image: CaliImage, name: "cali" },
-    { image: TestImage, name: "test image" },
-    { image: CssImage, name: "css image" },
+    { image: CaliImage1, name: "cali1" },
+    { image: CaliImage2, name: "cali2" },
+    { image: CaliImage3, name: "cali3" },
+    { image: CaliImage4, name: "cali4" },
+    { image: CaliImage5, name: "cali5" },
   ];
   const router = useRouter();
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
@@ -39,7 +44,11 @@ const Home: NextPage = () => {
   };
   return (
     <div>
-      <Stack direction="row" justifyContent="center" sx={{ mt: 10 }}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        sx={{ mt: { lg: 20, md: 15 } }}
+      >
         <Box
           width="40%"
           textAlign="center"
