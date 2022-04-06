@@ -76,7 +76,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
         .getKallosTokens(account)
         .call();
 
-      // console.log("토큰리스트", response);
+      console.log("토큰리스트", response);
       // setTotalItems(response.length);
 
       setKallosTokens(response);

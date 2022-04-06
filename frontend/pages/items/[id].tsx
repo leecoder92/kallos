@@ -14,9 +14,7 @@ import {
 } from "@mui/material";
 
 import {
-  mintKallosTokenContract,
   saleKallosTokenContract,
-  web3,
 } from "../../web3Config";
 import { IMyKallosData } from "../../interfaces";
 import { getItemDetail, changeOwnerAfterBuy } from "../../store/modules/item";
@@ -60,18 +58,27 @@ const ColorButton = styled(Button)({
   },
 });
 
-const ItemDetail = ({
+interface SaleKallosCardProps extends IMyKallosData {
+  account: string;
+  itemDetail: any;
+  setItemDetail: any;
+  setNewOwner: any;
+  getOnSaleTokens: () => Promise<void>;
+}
+
+const ItemDetail: FC<SaleKallosCardProps> = ({
   account,
   itemDetail,
   setItemDetail,
-  getOnSaleTokens,
   setNewOwner,
+  getOnSaleTokens,
 }) => {
   const router = useRouter();
 
   const [isNotBuyable, setIsNotBuyable] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [itemInfo, setItemInfo] = useState({
+    tokenId: "",
     title: "",
     authorName: "",
     itemImg: "",
@@ -83,34 +90,22 @@ const ItemDetail = ({
   const onShowModal = () => setShowModal(!showModal);
   const onShowAlert = () => alert("이미 구매하신 작품입니다");
 
-  //해당 토큰 아이디에 대한 소유자 주소 반환 후
-  //현 사용자와 일치하는 지 여부 확인(다른 사람이면 살 수 있도록)
-  const getKallosTokenOwner = async (tokenId) => {
-    try {
-      const response = await mintKallosTokenContract.methods
-        .ownerOf(tokenId)
-        .call();
-
-      setIsNotBuyable(
-        response.toLocaleLowerCase() === account.toLocaleLowerCase()
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   //구매 로직
-  const onClickBuy = async (tokenId) => {
-    setShowModal(!showModal);
+  const onClickBuy = async () => {
+    setShowModal(false);
     try {
       if (!account) return;
 
       const response = await saleKallosTokenContract.methods
-        .purchaseKallosToken(tokenId)
-        .send({ from: account, value: itemDetail.price });
+        .purchaseKallosToken(itemInfo.tokenId)
+        .send({
+          from: account,
+          value: (itemDetail.price * 1000000000000000000).toString(),
+        });
 
       if (response.status) {
-        getOnSaleTokens();
+        // getOnSaleTokens();
+        setNewOwner({ address: account, tokenId: itemInfo.tokenId });
       }
     } catch (error) {
       console.error(error);
@@ -187,13 +182,15 @@ const ItemDetail = ({
                 {itemInfo ? itemInfo.title : null}
               </Typography>
               <Typography sx={{ fontSize: "20px" }}>작가</Typography>
-              <Link href={`/artist/${itemInfo.authorAddress}`}>
-                <a>
-                  <Typography sx={{ fontSize: "20px" }}>
-                    {itemInfo ? itemInfo.authorName : null}
-                  </Typography>
-                </a>
-              </Link>
+              {itemInfo ? (
+                <Link href={`/artist/${itemInfo.authorAddress}`}>
+                  <a>
+                    <Typography sx={{ fontSize: "20px" }}>
+                      {itemInfo.authorName}
+                    </Typography>
+                  </a>
+                </Link>
+              ) : null}
               <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
               <Typography sx={{ fontSize: "20px" }}>
                 {itemInfo ? itemInfo.description : null}
@@ -201,6 +198,9 @@ const ItemDetail = ({
               <Typography sx={{ fontSize: "20px" }}>가격</Typography>
               <Typography sx={{ fontSize: "20px" }}>
                 {itemInfo ? itemInfo.price : null} MATIC
+              </Typography>
+              <Typography sx={{ fontSize: "20px" }}>
+                {itemInfo ? itemInfo.tokenId : null} MATIC
               </Typography>
             </Box>
             {isNotBuyable ? (
@@ -265,9 +265,6 @@ const ItemDetail = ({
           `}
         </style>
       </Box>
-      {/* <input type="file" onChange={onSetImage} />
-      <button onClick={onClickTest}>getUserInfo</button>
-      <button onClick={onClickRegist}>regist</button> */}
     </Box>
   );
 };
