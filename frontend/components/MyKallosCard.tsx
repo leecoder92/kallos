@@ -13,7 +13,7 @@ import {
   styled,
 } from "@mui/material";
 import Link from "next/link";
-import LoadingInterface from "@/components/LoadingInterface";
+import LoadingInterface from "@/components/MiniLoadingInterface";
 
 interface MyKallosCardProps extends IMyKallosData {
   saleStatus: boolean;
@@ -77,6 +77,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
       .put("https://j6c107.p.ssafy.io:8443/api/item/sell", setSellParams)
       .then((res) => {
         console.log("put 보낸 결과는", res);
+        setSellLoad(false);
       });
   };
 
@@ -85,9 +86,6 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
       {sellLoad ? (
         <>
           <LoadingInterface />
-          <Typography variant="h6" align="center">
-            작품 판매 중
-          </Typography>
         </>
       ) : (
         <div>
