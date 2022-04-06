@@ -74,8 +74,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     page: curPage,
     size: itemsPerPage,
   };
-  // console.log(items.length);
-  // console.log(curPage);
 
   // 작가 정보 불러오기
   const [artistDetail, setArtistDetail] = useState(null);
@@ -112,10 +110,6 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
     getArtistDetail();
     getArtistItems();
   }, [userAddress, curPage]);
-
-  useEffect(() => {
-    setAllItems(params);
-  }, []);
 
   return (
     <div>
@@ -157,7 +151,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
             </Stack>
             <Divider variant="middle" sx={{ my: 5 }} />
             <Typography variant="h4" align="center">
-              판매 작품
+              작품
             </Typography>
             <Box
               sx={{
