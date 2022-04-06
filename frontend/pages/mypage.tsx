@@ -33,7 +33,10 @@ import { KallosItemCard } from "../components/KallosItemCard";
 import { getAllItems } from "../store/modules/item";
 import Pagination from "../components/pagination";
 import axios from "axios";
+import styled from "styled-components";
 // import { BACKEND_URL } from "../config/index";
+
+// const ImageWrap = styled.
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -63,7 +66,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
   const [saleStatusLoading, setSaleStatusLoading] = useState<Boolean>(false);
 
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
   const [myItems, setMyItems] = useState([]);
@@ -148,23 +151,11 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
     getUserItems();
   }, [curPage]);
 
-  // console.log("userInfo:::", userInfo);
+  // useEffect(() => {
+  //   getUserItems();
+  // }, [myItems]);
+
   console.log("My Itmes:::", myItems);
-
-  // const params = {
-  //   searchOption: "users",
-  //   page: curPage,
-  //   size: itemsPerPage,
-  // };
-
-  // useEffect(() => {
-  //   setAllItems(params);
-  // }, []);
-
-  // useEffect(() => {
-  //   setOnSaleItems(items);
-  //   setTotalItems(items.length);
-  // }, [items]);
 
   return (
     <div className="viewContainer">
@@ -180,19 +171,25 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             }}
           >
             {userInfo.profile_img !== null ? (
-              <Image
-                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
-                alt="user profile image"
-                width="200px"
-                height="200px"
-              />
+              <div style={{ borderRadius: "100px", overflow: "hidden", height:"200px" }}>
+                <Image
+                  src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
+                  alt="user profile image"
+                  width="200px"
+                  height="200px"
+                />
+              </div>
             ) : (
-              // <Typography>이미지 불러와야함</Typography>
-              <Image src={defaultProfile} width="200px" height="200px" />
-              // <Image src={defaultProfile} width="200px" height="200px" />
+              <div style={{ borderRadius: "100px", overflow: "hidden" }}>
+                <Image
+                  className="makeImageCircular"
+                  src={defaultProfile}
+                  width="200px"
+                  height="200px"
+                />
+              </div>
             )}
-            {/* <Image src={defaultProfile} width="200px" height="200px" /> */}
-            <Typography variant="h5" sx={{ mt: 1, fontWeight: "bold" }}>
+            <Typography variant="h5" sx={{ mt: 3, fontWeight: "bold" }}>
               {userInfo.name}
             </Typography>
             <CopyToClipboard text={account}>
@@ -202,7 +199,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                     color: "black",
                   }}
                   variant="outlined"
-                  sx={{ mt: 1, borderRadius: 16, borderColor: "text.primary" }}
+                  sx={{ mt: 3, borderRadius: 16, borderColor: "text.primary" }}
                 >
                   <Stack direction="row" alignItems="center" spacing={0.7}>
                     <Image src={maticImage} width="25px" height="25px" />
@@ -214,7 +211,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
               </Tooltip>
             </CopyToClipboard>
             <Typography
-              sx={{ mt: 1 }}
+              sx={{ mt: 3 }}
               variant="h6"
               color={saleStatus ? "primary" : "error"}
             >
@@ -222,7 +219,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             </Typography>
             {saleStatusLoading ? <CircularProgress color="primary" /> : null}
             <Button
-              sx={{ mt: 1 }}
+              sx={{ mt: 3 }}
               onClick={onClickSaleStatus}
               variant="contained"
               color={saleStatus ? "error" : "primary"}
@@ -231,7 +228,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             </Button>
             <Box
               sx={{
-                mt: 1,
+                mt: 3,
                 py: 5,
                 px: 3,
                 bgcolor: "#F9E6E1",
@@ -256,7 +253,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
           </Grid>
           <Grid item direction="column" xs={9}>
             <Typography variant="h4" sx={{ my: 5 }}>
-              보유 중인 작품 100개
+              보유 중인 작품
             </Typography>
             <Box
               sx={{
@@ -269,9 +266,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 columnGap: 1,
               }}
             >
-              {/* {myItems?.map((item) => (
-                <KallosItemCard key={item.item_id} kallosData={item} />
-              ))} */}
               {myItems?.map((item) => (
                 <MyKallosCard
                   id={item.tokenId}
@@ -291,18 +285,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
               itemsPerPage={itemsPerPage}
               totalItems={totalPages * itemsPerPage}
             />
-            {/* {kallosTokens?.map((v, i) => {
-              return (
-                <MyKallosCard
-                  key={i}
-                  id={v.id}
-                  uri={v.uri}
-                  price={v.price}
-                  saleStatus={saleStatus}
-                  account={account}
-                />
-              );
-            })} */}
           </Grid>
         </Grid>
       </Container>

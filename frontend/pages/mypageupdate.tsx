@@ -1,6 +1,14 @@
 /* eslint-disable */
 import { FC, useEffect, useState } from "react";
-import { Typography, Grid, Box, TextField, Stack, Button } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Box,
+  TextField,
+  Stack,
+  Button,
+  styled,
+} from "@mui/material";
 import { updateUserInfo } from "@/store/modules/user";
 import { RootState } from "../store/modules";
 import { connect } from "react-redux";
@@ -9,6 +17,28 @@ import Image from "next/image";
 import Link from "next/link";
 import { getUserInfo } from "@/store/modules/user";
 import axios from "axios";
+
+const ColorButton = styled(Button)({
+  backgroundColor: "#F9E6E1",
+  color: "black",
+  width: "400px",
+  "&:hover": {
+    backgroundColor: "#F9E6E1",
+    color: "black",
+  },
+});
+
+const EmptyButton = styled(Button)({
+  //   backgroundColor: "none",
+  color: "#F9E6E1",
+  border: "2px solid #F9E6E1",
+  width: "400px",
+  "&:hover": {
+    border: "2px solid #f7b5a3",
+    backgroundColor: "#ffffff",
+    color: "#f7b5a3",
+  },
+});
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -147,25 +177,31 @@ const MyPageUpdate: FC<ParamObj> = ({
                 onChange={onChange}
                 style={{ display: "none" }}
               />
-              <div>
+              <div
+                style={{
+                  borderRadius: "100px",
+                  overflow: "hidden",
+                  height: "200px",
+                }}
+              >
                 {loaded === false || loaded === true ? (
                   <Image
                     src={image.preview_URL}
                     alt="preview-image"
-                    width="200"
-                    height="200"
+                    width="200px"
+                    height="200px"
                   />
                 ) : (
                   <span>이미지를 불러오는 중입니다.</span>
                 )}
               </div>
-              <Button
+              <ColorButton
                 variant="contained"
-                sx={{ mt: 5 }}
+                sx={{ mt: 5, width: 200 }}
                 onClick={() => inputRef.click()}
               >
                 프로필 이미지 변경
-              </Button>
+              </ColorButton>
               {/* <Image
               src={defaultProfile}
               alt="profile image"
@@ -224,17 +260,17 @@ const MyPageUpdate: FC<ParamObj> = ({
             justifyContent="center"
           >
             <Link href="/mypage">
-              <Button variant="contained" sx={{ width: 150 }} color="error">
+              <EmptyButton variant="text" sx={{ width: 150 }}>
                 취소
-              </Button>
+              </EmptyButton>
             </Link>
-            <Button
+            <ColorButton
               variant="contained"
               sx={{ width: 150 }}
               onClick={onChangeInfo}
             >
               수정 완료
-            </Button>
+            </ColorButton>
           </Stack>
         </Box>
       ) : null}

@@ -13,21 +13,20 @@ import {
   styled,
 } from "@mui/material";
 
-import {
-  saleKallosTokenContract,
-} from "../../web3Config";
+import { saleKallosTokenContract } from "../../web3Config";
 import { IMyKallosData } from "../../interfaces";
 import { getItemDetail, changeOwnerAfterBuy } from "../../store/modules/item";
 import { RootState } from "../../store/modules";
 import { connect } from "react-redux";
+import LoadingInterface from "@/components/LoadingInterface";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: RootState) => {
   return {
     itemDetail: state.itemReducer.itemDetail,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     setItemDetail: (obj) => dispatch(getItemDetail(obj)),
     setNewOwner: (obj) => dispatch(changeOwnerAfterBuy(obj)),
@@ -63,7 +62,6 @@ interface SaleKallosCardProps extends IMyKallosData {
   itemDetail: any;
   setItemDetail: any;
   setNewOwner: any;
-  getOnSaleTokens: () => Promise<void>;
 }
 
 const ItemDetail: FC<SaleKallosCardProps> = ({
@@ -71,9 +69,11 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
   itemDetail,
   setItemDetail,
   setNewOwner,
-  getOnSaleTokens,
 }) => {
   const router = useRouter();
+
+  // 구매 등록 중 상태 false: 등록 X, true: 등록 중
+  const [buyLoad, setBuyLoad] = useState<Boolean>(false);
 
   const [isNotBuyable, setIsNotBuyable] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -83,29 +83,34 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
     authorName: "",
     itemImg: "",
     description: "",
-    price: "",
+    price: 0,
     authorAddress: "",
+    ownerAddress: "",
+    onSaleYN: 0,
   });
 
   const onShowModal = () => setShowModal(!showModal);
-  const onShowAlert = () => alert("이미 구매하신 작품입니다");
 
   //구매 로직
   const onClickBuy = async () => {
     setShowModal(false);
     try {
       if (!account) return;
+      console.log("일단 들어옴");
 
       const response = await saleKallosTokenContract.methods
         .purchaseKallosToken(itemInfo.tokenId)
         .send({
           from: account,
-          value: (itemDetail.price * 1000000000000000000).toString(),
+          value: (itemInfo.price * 1000000000000000000).toString(),
+        })
+        .on("transactionHash", () => {
+          setBuyLoad(true);
         });
 
       if (response.status) {
-        // getOnSaleTokens();
         setNewOwner({ address: account, tokenId: itemInfo.tokenId });
+        router.push("/mypage");
       }
     } catch (error) {
       console.error(error);
@@ -121,151 +126,162 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
   }, [itemDetail]);
 
   return (
-    <Box sx={{ padding: "150px 200px", paddingTop: "0", height: "100%" }}>
-      <Typography sx={{ marginTop: "200px", fontSize: "45px" }}>
-        {itemInfo ? itemInfo.title : null}
-      </Typography>
-      <Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "1fr 3fr",
-            alignItems: "center",
-            height: "100%",
-            marginTop: "50px",
-          }}
-        >
-          <Box
-            sx={{
-              borderRadius: "10px",
-              overflow: "hidden",
-              width: "400px",
-              height: "400px",
-              boxShadow: "0 0 5px #cfd4d1",
-            }}
-          >
-            {itemInfo ? (
-              <Image
-                src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${itemInfo.itemImg}`}
-                width="100%"
-                height="100%"
-                alt="token image"
-                layout="responsive"
-              />
-            ) : null}
-          </Box>
-          <Box
-            sx={{
-              marginLeft: "30px",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              height: "400px",
-              padding: "30px",
-              boxShadow: "0 0 5px #cfd4d1",
-              borderRadius: "10px",
-              width: "inherit",
-            }}
-          >
+    <>
+      {buyLoad ? (
+        <>
+          <LoadingInterface />
+          <Typography variant="h6" align="center">
+            작품 구매을 성공하면 마이페이지로 이동합니다.
+          </Typography>
+        </>
+      ) : (
+        <Box sx={{ padding: "150px 200px", paddingTop: "0", height: "100%" }}>
+          <Typography sx={{ marginTop: "200px", fontSize: "45px" }}>
+            {itemInfo ? itemInfo.title : null}
+          </Typography>
+          <Box>
             <Box
               sx={{
+                width: "100%",
                 display: "grid",
                 gridTemplateColumns: "1fr 3fr",
-                gridTemplateRows: "repeat(4, 1fr)",
-                height: "inherit",
-                columnGap: 1,
+                alignItems: "center",
+                height: "100%",
+                marginTop: "50px",
               }}
             >
-              <Typography sx={{ fontSize: "20px" }}>제목</Typography>
-              <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo ? itemInfo.title : null}
-              </Typography>
-              <Typography sx={{ fontSize: "20px" }}>작가</Typography>
-              {itemInfo ? (
-                <Link href={`/artist/${itemInfo.authorAddress}`}>
-                  <a>
-                    <Typography sx={{ fontSize: "20px" }}>
-                      {itemInfo.authorName}
-                    </Typography>
-                  </a>
-                </Link>
-              ) : null}
-              <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
-              <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo ? itemInfo.description : null}
-              </Typography>
-              <Typography sx={{ fontSize: "20px" }}>가격</Typography>
-              <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo ? itemInfo.price : null} MATIC
-              </Typography>
-              <Typography sx={{ fontSize: "20px" }}>
-                {itemInfo ? itemInfo.tokenId : null} MATIC
-              </Typography>
-            </Box>
-            {isNotBuyable ? (
-              <ColorButton
-                variant="contained"
-                size="large"
-                onClick={onShowAlert}
+              <Box
+                sx={{
+                  borderRadius: "10px",
+                  overflow: "hidden",
+                  width: "400px",
+                  height: "400px",
+                  boxShadow: "0 0 5px #cfd4d1",
+                }}
               >
-                구매완료
-              </ColorButton>
-            ) : (
-              <ColorButton
-                variant="contained"
-                size="large"
-                onClick={onShowModal}
+                {itemInfo ? (
+                  <Image
+                    src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/calligraphyImages/${itemInfo.itemImg}`}
+                    width="100%"
+                    height="100%"
+                    alt="token image"
+                    layout="responsive"
+                  />
+                ) : null}
+              </Box>
+              <Box
+                sx={{
+                  marginLeft: "30px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  height: "400px",
+                  padding: "30px",
+                  boxShadow: "0 0 5px #cfd4d1",
+                  borderRadius: "10px",
+                  width: "inherit",
+                }}
               >
-                구매하기
-              </ColorButton>
-            )}
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              open={showModal}
-              onClose={onShowModal}
-              closeAfterTransition
-              BackdropComponent={Backdrop}
-              BackdropProps={{
-                timeout: 500,
-              }}
-            >
-              <Fade in={showModal}>
-                <Box sx={style}>
-                  <Typography
-                    id="transition-modal-title"
-                    variant="h6"
-                    component="h2"
-                  >
-                    정말 해당 작품을 구매하시겠습니까?
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 3fr",
+                    gridTemplateRows: "repeat(4, 1fr)",
+                    height: "inherit",
+                    columnGap: 1,
+                  }}
+                >
+                  <Typography sx={{ fontSize: "20px" }}>제목</Typography>
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {itemInfo ? itemInfo.title : null}
                   </Typography>
-                  <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                    해당 제품은 구매 취소 또는 환불이 불가합니다.
+                  <Typography sx={{ fontSize: "20px" }}>작가</Typography>
+                  {itemInfo ? (
+                    <Link href={`/artist/${itemInfo.authorAddress}`}>
+                      <a>
+                        <Typography sx={{ fontSize: "20px" }}>
+                          {itemInfo.authorName}
+                        </Typography>
+                      </a>
+                    </Link>
+                  ) : null}
+                  <Typography sx={{ fontSize: "20px" }}>작품 소개</Typography>
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {itemInfo ? itemInfo.description : null}
                   </Typography>
-                  <ColorButton
-                    variant="contained"
-                    sx={{ marginTop: "20px" }}
-                    onClick={onClickBuy}
-                  >
-                    구매하기
-                  </ColorButton>
+                  <Typography sx={{ fontSize: "20px" }}>가격</Typography>
+                  <Typography sx={{ fontSize: "20px" }}>
+                    {itemInfo && itemInfo.price !== 0
+                      ? `${itemInfo.price}MATIC`
+                      : "책정불가"}
+                  </Typography>
                 </Box>
-              </Fade>
-            </Modal>
+                {itemInfo && itemInfo.onSaleYN === 1 ? (
+                  itemInfo.ownerAddress !== account ? (
+                    <ColorButton
+                      variant="contained"
+                      size="large"
+                      onClick={onShowModal}
+                    >
+                      구매하기
+                    </ColorButton>
+                  ) : (
+                    <Typography>보유 중</Typography>
+                  )
+                ) : (
+                  <Typography>개인 소장 작품</Typography>
+                )}
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={showModal}
+                  onClose={onShowModal}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                    timeout: 500,
+                  }}
+                >
+                  <Fade in={showModal}>
+                    <Box sx={style}>
+                      <Typography
+                        id="transition-modal-title"
+                        variant="h6"
+                        component="h2"
+                      >
+                        정말 해당 작품을 구매하시겠습니까?
+                      </Typography>
+                      <Typography
+                        id="transition-modal-description"
+                        sx={{ mt: 2 }}
+                      >
+                        해당 제품은 구매 취소 또는 환불이 불가합니다.
+                      </Typography>
+                      <ColorButton
+                        variant="contained"
+                        sx={{ marginTop: "20px" }}
+                        onClick={onClickBuy}
+                      >
+                        구매하기
+                      </ColorButton>
+                    </Box>
+                  </Fade>
+                </Modal>
+              </Box>
+            </Box>
+            <style jsx>
+              {`
+                .detailContainer {
+                  padding: 150px 200px;
+                  padding-top: 0;
+                  height: 100%;
+                }
+              `}
+            </style>
           </Box>
         </Box>
-        <style jsx>
-          {`
-            .detailContainer {
-              padding: 150px 200px;
-              padding-top: 0;
-              height: 100%;
-            }
-          `}
-        </style>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 };
 
