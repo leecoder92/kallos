@@ -63,7 +63,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
   const [saleStatusLoading, setSaleStatusLoading] = useState<Boolean>(false);
 
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
   const [myItems, setMyItems] = useState([]);
