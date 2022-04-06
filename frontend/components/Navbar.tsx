@@ -168,8 +168,8 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
   const [artistNameError, setArtistNameError] = useState(false);
   // 등록하기
   const onRegister = () => {
-    if (artistName.length < 3) {
-      alert("작가명을 세 글자 이상 입력해주세요.");
+    if (artistName.length < 1) {
+      alert("작가명을 입력해주세요.");
     } else {
       axios({
         method: "post",
