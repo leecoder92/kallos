@@ -110,6 +110,7 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
 
       if (response.status) {
         setNewOwner({ address: account, tokenId: itemInfo.tokenId });
+        router.push("/mypage");
       }
     } catch (error) {
       console.error(error);

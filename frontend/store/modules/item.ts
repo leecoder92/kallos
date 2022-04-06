@@ -60,22 +60,22 @@ export const getItemDetail = createAsyncThunk(
   }
 );
 
-const router = useRouter();
 export const changeOwnerAfterBuy = createAsyncThunk(
   "PUT/CHANGEOWNER",
   async (
     { address, tokenId }: { address: string; tokenId: string },
     { rejectWithValue }
   ) => {
+    // const router = useRouter();
     return await axios
       .put(`${BACKEND_URL}/item/buy/`, { address, tokenId })
       .then((res) => {
         console.log(res);
-        router.push("/mypage");
+        // router.push("/mypage");
       })
       .catch((err) => {
         rejectWithValue(err.response.data);
-        router.push("/mypage");
+        // router.push("/mypage");
       });
   }
 );

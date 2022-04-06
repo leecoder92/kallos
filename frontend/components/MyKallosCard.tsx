@@ -58,7 +58,9 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
         });
 
       if (response.status) {
-        setMyKallosPrice(web3.utils.toWei(String(sellPrice), "ether"));
+        setMyKallosPrice(
+          parseInt(web3.utils.toWei(String(sellPrice), "ether"), 10) / 10 ** 18
+        );
         setSell();
       }
     } catch (error) {
@@ -120,16 +122,18 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
               </a>
             </Link>
           </Box>
-          <Box sx={{ textAlign: "right" }}>
-            <Typography>{kallosData.price}</Typography>
-            <Typography>MATIC</Typography>
-          </Box>
+          {myKallosPrice && myKallosPrice !== 0 ? (
+            <Box sx={{ textAlign: "right" }}>
+              <Typography>{myKallosPrice}</Typography>
+              <Typography>MATIC</Typography>
+            </Box>
+          ) : null}
         </Box>
       </Box>
       <div>
         {myKallosPrice === 0 ? (
-          <div style={{ display: "flex", height: "24px", marginTop: "3px" }}>
-            <FormControl fullWidth>
+          <div style={{ display: "flex", height: "24px", marginTop: "15px" }}>
+            <FormControl fullWidth sx={{ mr: 1 }}>
               <OutlinedInput
                 sx={{ height: "24px" }}
                 fullWidth
@@ -149,7 +153,16 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
             </ColorButton>
           </div>
         ) : (
-          <Typography>{String(myKallosPrice)} MATIC</Typography>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              height: "24px",
+              marginTop: "15px",
+            }}
+          >
+            <ColorButton fullWidth>판매 중</ColorButton>
+          </div>
         )}
       </div>
     </div>
