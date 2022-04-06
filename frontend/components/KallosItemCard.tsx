@@ -10,7 +10,7 @@ export const KallosItemCard = ({ kallosData }) => {
       sx={{
         borderRadius: "10px",
         boxShadow: "0 0 5px #cfd4d1",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <Link href={`/items/${kallosData.tokenId}`}>
@@ -40,16 +40,22 @@ export const KallosItemCard = ({ kallosData }) => {
               <Typography>{kallosData.title}</Typography>
             </a>
           </Link>
-          <Link href={`/items/${kallosData.authorAddress}`}>
+          <Link href={`/artist/${kallosData.authorAddress}`}>
             <a>
               <Typography>{kallosData.authorName}</Typography>
             </a>
           </Link>
         </Box>
-        <Box sx={{ textAlign: "right" }}>
-          <Typography>{kallosData.price}</Typography>
-          <Typography>MATIC</Typography>
-        </Box>
+        {kallosData.price === 0 ? (
+          <Box sx={{ textAlign: "right" }}>
+            <Typography>개인 보유</Typography>
+          </Box>
+        ) : (
+          <Box sx={{ textAlign: "right" }}>
+            <Typography>{kallosData.price}</Typography>
+            <Typography>MATIC</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
