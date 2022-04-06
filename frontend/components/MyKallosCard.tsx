@@ -23,6 +23,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
   const [sellPrice, setSellPrice] = useState<any>("");
   const [myKallosPrice, setMyKallosPrice] = useState<any>(price);
 
+  // 판매 등록 로딩 창
   const [sellLoad, setSellLoad] = useState(false);
 
   const onChangeSellPrice = (e: ChangeEvent<HTMLInputElement>) => {
