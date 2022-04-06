@@ -84,6 +84,24 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
     setArtistNameError(false);
     setArtistName(event.target.value);
   };
+
+  // 계정 바꿈 감지
+  const getChangeAccount = async () => {
+    try {
+      if (typeof window.ethereum !== "undefined") {
+        window.ethereum.on("accountsChanged", () => {
+          alert("계좌가 바뀌었습니다. 새로 로그인해주세요.");
+          router.push("/");
+          setLogout();
+          setIsLogin(false);
+          setAccount("");
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -125,6 +143,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
 
   useEffect(() => {
     metaLogin();
+    getChangeAccount();
   }, []);
 
   // 에러처리

@@ -3,7 +3,15 @@ import { saleKallosTokenContract, web3 } from "../web3Config";
 import { IMyKallosData } from "../interfaces";
 import axios from "axios";
 import Image from "next/image";
-import { Typography, Box } from "@mui/material";
+import {
+  Typography,
+  Box,
+  FormControl,
+  OutlinedInput,
+  InputAdornment,
+  Button,
+  styled,
+} from "@mui/material";
 import Link from "next/link";
 import LoadingInterface from "@/components/LoadingInterface";
 
@@ -12,6 +20,15 @@ interface MyKallosCardProps extends IMyKallosData {
   account: string;
   kallosData: any;
 }
+
+const ColorButton = styled(Button)({
+  backgroundColor: "#F9E6E1",
+  color: "black",
+  "&:hover": {
+    backgroundColor: "#F9E6E1",
+    color: "black",
+  },
+});
 
 const MyKallosCard: FC<MyKallosCardProps> = ({
   id,
@@ -111,19 +128,26 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
       </Box>
       <div>
         {myKallosPrice === 0 ? (
-          <>
-            <form>
-              <input
-                type="number"
+          <div style={{ display: "flex", height: "24px", marginTop: "3px" }}>
+            <FormControl fullWidth>
+              <OutlinedInput
+                sx={{ height: "24px" }}
+                fullWidth
                 value={sellPrice}
                 onChange={onChangeSellPrice}
+                endAdornment={
+                  <InputAdornment position="end">Matic</InputAdornment>
+                }
               />
-              MATIC
-            </form>
-            <button onClick={onClickSell} disabled={!saleStatus}>
-              Sell
-            </button>
-          </>
+            </FormControl>
+            <ColorButton
+              style={{ width: "40%" }}
+              onClick={onClickSell}
+              disabled={!saleStatus}
+            >
+              판매
+            </ColorButton>
+          </div>
         ) : (
           <Typography>{String(myKallosPrice)} MATIC</Typography>
         )}
