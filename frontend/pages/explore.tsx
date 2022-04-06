@@ -53,7 +53,7 @@ const Explore: FC<SaleKallosProps> = ({
 
   //pagination
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
 
   //검색옵션 설정

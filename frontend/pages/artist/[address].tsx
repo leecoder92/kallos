@@ -145,7 +145,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
                   {artistDetail &&
                     (artistDetail.description
                       ? artistDetail.description
-                      : "작가상세가 없습니다.")}
+                      : null)}
                 </Typography>
               </Box>
             </Stack>
@@ -153,27 +153,36 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
             <Typography variant="h4" align="center">
               작품
             </Typography>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, 270px)",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 5,
-                rowGap: 5,
-                columnGap: 1,
-              }}
-            >
-              {itemsOfArtist &&
-                itemsOfArtist
-                  .slice(
-                    (curPage - 1) * itemsPerPage,
-                    (curPage - 1) * itemsPerPage + itemsPerPage
-                  )
-                  .map((item) => (
-                    <KallosItemCard key={item.id} kallosData={item} />
-                  ))}
-            </Box>
+            {itemsOfArtist && itemsOfArtist.length !== 0 ? (
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, 270px)",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 5,
+                  rowGap: 5,
+                  columnGap: 1,
+                }}
+              >
+                {itemsOfArtist.map((item) => (
+                  <KallosItemCard key={item.id} kallosData={item} />
+                ))}
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: 10,
+                  rowGap: 5,
+                  columnGap: 1,
+                }}
+              >
+                <Typography>작품이 존재하지 않습니다</Typography>
+              </Box>
+            )}
           </Container>
           <Pagination
             curPage={curPage}
