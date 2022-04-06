@@ -145,7 +145,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
                   {artistDetail &&
                     (artistDetail.description
                       ? artistDetail.description
-                      : null)}
+                      : "소개글이 없습니다.")}
                 </Typography>
               </Box>
             </Stack>
@@ -165,8 +165,8 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
                   columnGap: 1,
                 }}
               >
-                {itemsOfArtist.map((item) => (
-                  <KallosItemCard key={item.id} kallosData={item} />
+                {itemsOfArtist.map((item, index) => (
+                  <KallosItemCard key={index} kallosData={item} />
                 ))}
               </Box>
             ) : (

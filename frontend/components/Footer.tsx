@@ -15,7 +15,7 @@ const Footer: NextPage = () => {
     >
       <Typography>Copyright ⓒ2022 Bbolrak. All rights reserved.</Typography>
 
-      <Typography>Contact: 010-2799-1939</Typography>
+      <Typography>Contact: bbolrak@ssafy.com</Typography>
     </footer>
   );
 };
