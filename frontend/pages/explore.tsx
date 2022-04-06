@@ -86,6 +86,10 @@ const Explore: FC<SaleKallosProps> = ({
   }, [option, keyword, curPage, showOnlySale]);
 
   useEffect(() => {
+    setCurPage(1);
+  }, [option, keyword, showOnlySale]);
+
+  useEffect(() => {
     setOnSaleItems(items);
     console.log(items);
   }, [items]);
