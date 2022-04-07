@@ -171,7 +171,13 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             }}
           >
             {userInfo.profile_img !== null ? (
-              <div style={{ borderRadius: "100px", overflow: "hidden", height:"200px" }}>
+              <div
+                style={{
+                  borderRadius: "100px",
+                  overflow: "hidden",
+                  height: "200px",
+                }}
+              >
                 <Image
                   src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
                   alt="user profile image"
@@ -233,6 +239,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 px: 3,
                 bgcolor: "#F9E6E1",
                 width: 200,
+                borderRadius: 1.25,
               }}
             >
               <Stack direction="column" spacing={2}>
@@ -266,17 +273,23 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 columnGap: 1,
               }}
             >
-              {myItems && myItems.length > 0 ? myItems.map((item) => (
-                <MyKallosCard
-                  id={item.tokenId}
-                  key={item.item_id}
-                  kallosData={item}
-                  saleStatus={saleStatus}
-                  price={item.price}
-                  account={account}
-                  uri={item.item_id}
-                />
-              )) : <Typography sx={{margin: "200px 0"}}>보유 중인 작품이 없습니다.</Typography>}
+              {myItems && myItems.length > 0 ? (
+                myItems.map((item) => (
+                  <MyKallosCard
+                    id={item.tokenId}
+                    key={item.item_id}
+                    kallosData={item}
+                    saleStatus={saleStatus}
+                    price={item.price}
+                    account={account}
+                    uri={item.item_id}
+                  />
+                ))
+              ) : (
+                <Typography sx={{ margin: "200px 0" }}>
+                  보유 중인 작품이 없습니다.
+                </Typography>
+              )}
             </Box>
             <Pagination
               curPage={curPage}
