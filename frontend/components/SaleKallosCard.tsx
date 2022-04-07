@@ -25,7 +25,7 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
 }) => {
   //살 수 있나 없나
   const [metadata, setMetaData] = useState<any>();
-//   const [isBuyable, setIsBuyable] = useState<boolean>(false);
+  //   const [isBuyable, setIsBuyable] = useState<boolean>(false);
 
   const getMetadata = async () => {
     try {
@@ -37,17 +37,17 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
     }
   };
 
-//   const getKallosTokenOwner = async () => {
-//     try {
-//       const response = await mintKallosTokenContract.methods.ownerOf(id).call();
+  //   const getKallosTokenOwner = async () => {
+  //     try {
+  //       const response = await mintKallosTokenContract.methods.ownerOf(id).call();
 
-//       setIsBuyable(
-//         response.toLocaleLowerCase() === account.toLocaleLowerCase()
-//       );
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
+  //       setIsBuyable(
+  //         response.toLocaleLowerCase() === account.toLocaleLowerCase()
+  //       );
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
   //구매 로직
   const onClickBuy = async () => {
@@ -72,8 +72,7 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
   }, []);
 
   useEffect(() => {
-    console.log(metadata);
-    
+    // console.log(metadata);
   }, [metadata]);
 
   return (
@@ -91,9 +90,9 @@ const SaleKallosCard: FC<SaleKallosCardProps> = ({
           {web3.utils.fromWei(price)} MATIC
         </Typography>
         {/* {isBuyable ? null : ( */}
-          <Button size="sm" colorScheme="green" m={2} onClick={onClickBuy}>
-            Buy
-          </Button>
+        <Button size="sm" colorScheme="green" m={2} onClick={onClickBuy}>
+          Buy
+        </Button>
         {/* )} */}
       </Box>
     </Box>

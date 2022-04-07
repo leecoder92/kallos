@@ -74,7 +74,7 @@ const client = ipfsClient.create({
 });
 
 client.pin.add("QmeGAVddnBSnKc1DLE7DLV9uuTqo5F7QbaveTjr45JUdQn").then((res) => {
-  console.log(res);
+  //   console.log(res);
 });
 
 // const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
@@ -120,7 +120,7 @@ const Create = ({ account }) => {
 
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
       setFileUrl(url);
-      console.log("file url:", fileUrl);
+      //   console.log("file url:", fileUrl);
     } catch (error) {
       console.log("Error uploading file: ", error);
     }
@@ -128,7 +128,7 @@ const Create = ({ account }) => {
 
   const createMint = async () => {
     // const { name, description } = formInput;
-    if (!title || !description || !fileUrl) return console.log("값이 비어있음");
+    if (!title || !description || !fileUrl) return; // console.log("값이 비어있음")
 
     const data = JSON.stringify({
       title,
@@ -139,7 +139,7 @@ const Create = ({ account }) => {
     try {
       const added = await client.add(data);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      console.log("url은", url);
+      //   console.log("url은", url);
       createSale(url);
     } catch (error) {
       console.log("Error uploading file: ", error);
@@ -171,7 +171,7 @@ const Create = ({ account }) => {
   const getArtistDetail = async (account) => {
     try {
       const res = await axios.get(`${BACKEND_URL}/user/artist/${account}`);
-      console.log("artist Detail: ", res);
+      //   console.log("artist Detail: ", res);
       setArtistName(res.data.name);
     } catch (err) {
       console.log(err);
@@ -187,7 +187,7 @@ const Create = ({ account }) => {
         .getKallosTokens(account)
         .call();
 
-      console.log("토큰리스트", response);
+      //   console.log("토큰리스트", response);
 
       setKallosTokens(response);
     } catch (error) {
@@ -224,7 +224,7 @@ const Create = ({ account }) => {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
-        console.log("성공!!", res);
+        // console.log("성공!!", res);
         Router.push("/mypage");
       })
       .catch((err) => console.log(err));

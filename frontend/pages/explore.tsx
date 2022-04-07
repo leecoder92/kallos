@@ -56,7 +56,7 @@ const Explore: FC<SaleKallosProps> = ({
 
   //pagination
   const [curPage, setCurPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
 
   //검색옵션 설정
@@ -93,17 +93,13 @@ const Explore: FC<SaleKallosProps> = ({
   }, [option, keyword, showOnlySale]);
 
   useEffect(() => {
+    // const reversedItems = [...items].reverse();
     setOnSaleItems(items);
-    console.log(items);
   }, [items]);
 
   useEffect(() => {
     setTotalPages(pages);
   }, [pages]);
-
-  useEffect(() => {
-    console.log(showOnlySale);
-  }, [showOnlySale]);
 
   useEffect(() => {
     if (router.query.keyword && router.query.keyword !== "")
@@ -184,9 +180,11 @@ const Explore: FC<SaleKallosProps> = ({
           columnGap: 1,
         }}
       >
-        {onSaleItems?.map((item) => (
-          <KallosItemCard key={item.item_id} kallosData={item} />
-        ))}
+        {onSaleItems && onSaleItems.length > 0
+          ? onSaleItems.map((item) => (
+              <KallosItemCard key={item.item_id} kallosData={item} />
+            ))
+          : null}
       </Box>
       <Pagination
         curPage={curPage}
