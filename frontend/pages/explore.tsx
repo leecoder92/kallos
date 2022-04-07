@@ -93,17 +93,13 @@ const Explore: FC<SaleKallosProps> = ({
   }, [option, keyword, showOnlySale]);
 
   useEffect(() => {
-    const reversedItems = [...items].reverse();
-    setOnSaleItems(reversedItems);
+    // const reversedItems = [...items].reverse();
+    setOnSaleItems(items);
   }, [items]);
 
   useEffect(() => {
     setTotalPages(pages);
   }, [pages]);
-
-  //   useEffect(() => {
-  //     console.log(showOnlySale);
-  //   }, [showOnlySale]);
 
   useEffect(() => {
     if (router.query.keyword && router.query.keyword !== "")

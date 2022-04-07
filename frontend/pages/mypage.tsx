@@ -71,8 +71,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
 
   const [myItems, setMyItems] = useState([]);
 
-  const paginate = (pageNumber) => setCurPage(pageNumber);
-
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
@@ -133,9 +131,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
       })
       .then((res) => {
         setTotalPages(res.data.totalPage);
-        const items = res.data.items;
-        const reversedItems = [...items].reverse();
-        setMyItems(reversedItems);
+        setMyItems(res.data.items);
       });
   };
 
@@ -151,8 +147,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
   useEffect(() => {
     getUserItems();
   }, [curPage]);
-
-  //   console.log("My Itmes:::", myItems);
 
   return (
     <div className="viewContainer">
