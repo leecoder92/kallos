@@ -60,7 +60,7 @@ const Home: NextPage = () => {
           }}
         >
           <Carousel
-            height="50vh"
+            height="60vh"
             animation="slide"
             duration={1000}
             indicators={false}
