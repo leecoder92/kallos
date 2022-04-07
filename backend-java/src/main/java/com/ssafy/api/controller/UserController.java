@@ -112,6 +112,8 @@ public class UserController {
 
 		List<Item> items = itemRepository.findByOwnerAddress(userAddress);
 
+		Collections.reverse(items);
+
 		List<Item> pageItems = new ArrayList<>();
 
 		int cntValue = 0;
@@ -207,6 +209,8 @@ public class UserController {
 		}
 
 		List<Item> items = itemRepository.findByAuthorAddress(userAddress);
+
+		Collections.reverse(items);
 
 		List<Item> pageItems = new ArrayList<>();
 

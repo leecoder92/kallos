@@ -124,6 +124,8 @@ public class ItemController {
 		List<Item> itemsByTitle = itemRepository.findByTitleContains(keywords);
 		List<User> usersByName = userRepository.findByNameContains(keywords);
 
+		Collections.reverse(itemsByTitle);
+
 		Map resMap = new HashMap()
 		{
 			{
@@ -150,6 +152,9 @@ public class ItemController {
 		if (option.equals("all")) {
 			List<Item> itemsByTitle = itemRepository.findByTitleContains(keyword);
 			List<Item> itemsByName = itemRepository.findByAuthorNameContains(keyword);
+
+			Collections.reverse(itemsByTitle);
+			Collections.reverse(itemsByName);
 
 			List<Item> allItems = new ArrayList<>();
 			for (int i=0; i<itemsByTitle.size(); i++){
@@ -213,6 +218,8 @@ public class ItemController {
 		} else if (option.equals("title")) {
 			List<Item> itemsByTitle = itemRepository.findByTitleContains(keyword);
 
+			Collections.reverse(itemsByTitle);
+
 			List<Item> onSaleItems = new ArrayList<Item>();
 			if (onSaleYN == 0) {
 				onSaleItems = onSaleYN(itemsByTitle, 0);
@@ -255,6 +262,8 @@ public class ItemController {
 			return new ResponseEntity(resMap,HttpStatus.OK);
 		} else if (option.equals("name")) {
 			List<Item> itemsByName = itemRepository.findByAuthorNameContains(keyword);
+
+			Collections.reverse(itemsByName);
 
 			List<Item> onSaleItems = new ArrayList<Item>();
 			if (onSaleYN == 0) {
