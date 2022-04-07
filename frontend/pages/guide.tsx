@@ -15,37 +15,41 @@ import guide8 from "../public/images/guide/guide8.png";
 import guide9 from "../public/images/guide/guide9.png";
 import guide10 from "../public/images/guide/guide10.png";
 import guide11 from "../public/images/guide/guide11.png";
+import { Toys } from '@mui/icons-material';
 
 
 const guide = () => {
   return (
-    <Container sx={{ mt: 10, textAlign: "center" }}>
-      <Typography variant="h3">Metamask 사용방법(10 STEPS)</Typography>
-      <Typography>
+    <Container sx={{ mt: 18 }}>
+      <Typography variant="h3" sx={{textAlign:"center", mb : 13}}>Metamask 사용방법(10 STEPS)</Typography>
+      <Typography variant="h5" sx={{mb : 1}}>
         1. Chrome에서 메타마스크를 검색해 확장 프로그램(link)을 먼저 깔아줍니다.
       </Typography>
-      <Typography>
-        (단, chrome에 싸피 관련 홈페이지(에듀싸피, 깃랩, 프로젝트 싸피 등)를
+      <Typography variant="h6" sx={{color:"#5A7484"}}>
+        (단, chrome에 싸피 관련 홈페이지(에듀싸피, 깃랩, 프로젝트 싸피 등)를 
         먼저 들어가게 되면 메타마스크 확장프로그램이 실행되지 않으니
         유의바랍니다!)
       </Typography>
-      <Link href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" underline='none'>
-        확장 프로그램 링크
-      </Link>
+      <Stack direction="row" sx={{ mt : 1, }}>
+        <Typography variant="h6">확장 프로그램 링크 :</Typography>
+        <Link href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" underline='none' style={{color:'#E2C7C0'}} variant="h6">
+         &nbsp;https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn
+        </Link>
+      </Stack>
       <Image 
         src={guide1} alt="guide1"
       />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 1}}>
         2. 확장 프로그램 설치 후, 확장 프로그램을 눌러줍니다. 아래의 화면이 뜨면 시작하기 버튼을 눌러줍니다! 
       </Typography>
-      <Image 
+      <Image
         src={guide2} alt="guide2"
       />
-      <Typography>
-        3.우리는 메타 마스크가 처음이기 때문에 오른쪽의 지갑 생성 버튼을 누르고 메타마스크 개선에 참여 동의까지 눌러줍니다. 그리고 메타마스크에 쓰일 비밀번호까지 만들어줍니다.
+      <Typography variant="h5" sx={{mb : 1}}>
+        3. 우리는 메타 마스크가 처음이기 때문에 오른쪽의 지갑 생성 버튼을 누르고 메타마스크 개선에 참여 동의까지 눌러줍니다. 그리고 메타마스크에 쓰일 비밀번호까지 만들어줍니다.
       </Typography>
-      <Stack>
-        <Image 
+      <Stack sx={{ width: 700, alignItems: "center"}}>
+        <Image
           src={guide301} alt="guide3-1"
         />
         <Image 
@@ -55,23 +59,14 @@ const guide = () => {
           src={guide303} alt="guide3-3"
         />
       </Stack>
-      <Typography>
+      <Typography variant="h5" sx={{mb : 1, mt : 5}}>
         4. 다음은 비밀 복구 구문인데 이 구문이 있어야지 어디서든 계정을 백업하거나 복구할 수 있습니다.
       </Typography>
-      <Typography>
-        비밀 복구 구문은 반드시 따로 그대로 적어서 보관을 해주세요(단어 순서도 중요)!!!!아주 중요!!!! 누군가가 당신의 비밀 복구 구문을 알게되면 당신의 계정은 뺏긴 것입니다.  
+      <Typography variant="h5" sx={{mb : 1, color:"#DC143C"}}>
+      &nbsp;비밀 복구 구문은 반드시 따로 그대로 적어서 보관을 해주세요. 단어 순서도 중요!!!!아주 중요!!!! 누군가가 당신의 비밀 복구 구문을 알게되면 당신의 계정은 뺏긴 것입니다.  
       </Typography>
-      <Typography>
-        비밀 복구 구문은 중요하기 때문에 아래 페이지의 동영상을 보는 것을 추천드립니다!! 비밀 백업 구문 확인까지 완료해주시면 됩니다. 
-        2. Chrome에서 메타마스크를 검색해 확장 프로그램(link)을 먼저 깔아줍니다.
-      </Typography>
-      <Typography>
-        (단, chrome에 싸피 관련 홈페이지(에듀싸피, 깃랩, 프로젝트 싸피 등)를
-        먼저 들어가게 되면 메타마스크 확장프로그램이 실행되지 않으니
-        유의바랍니다!)
-      </Typography>
-      <Typography>
-        3. Chrome에서 메타마스크를 검색해 확장 프로그램(link)을 먼저 깔아줍니다.
+      <Typography variant="h5" sx={{mb : 2}}>
+      &nbsp;비밀 복구 구문은 중요하기 때문에 아래 페이지의 동영상을 보는 것을 추천드립니다!! 비밀 백업 구문 확인까지 완료해주시면 됩니다. 
       </Typography>
       <Stack>
         <Image 
@@ -81,27 +76,33 @@ const guide = () => {
           src={guide402} alt="guide4-2"
         />
       </Stack>
-      <Typography>
+      <Typography variant="h5" sx={{mb : 1, mt: 5}}>
         5. 아래 화면이 나오면 회원가입 성공!!! 
       </Typography>
       <Image 
         src={guide5} alt="guide5"
       />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 2, mt: 3}}>
         6. 완료 버튼을 누르면 아래 사진으로 이동하게 되는데요. Metamask상의
-        본인의 지갑이라고 생각하시면 됩니다. 사진 상단 Account1 밑의 숫자와
+        본인의 지갑이라고 생각하시면 됩니다. 
+        <br />
+        &nbsp;사진 상단 Account1 밑의 숫자와
         영문자가 섞여 보이는 것이 본인의 지갑 주소이고 현재 잔액은 0ETH 라고
         표시됩니다.
       </Typography>
       <Image src={guide6} alt="guide6" />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 3, mt : 7}}>
         7. 오른쪽 상단을 보면 이더리움 메인넷이라고 현재 연결되어있는 네트워크가
-        표시되어있습니다. 하지만 우리는 폴리곤 네트워크의 뭄바이 테스트넷을
-        사용할것이기 때문에 따로 추가해주겠습니다. 오른쪽 상단의 이더리움 메인넷
+        표시되어있습니다. 
+        <br />
+        &nbsp;하지만 우리는 폴리곤 네트워크의 뭄바이 테스트넷을
+        사용할것이기 때문에 따로 추가해주겠습니다. 
+        <br />
+        &nbsp;오른쪽 상단의 이더리움 메인넷
         옆의 화살표를 누르고 하단에 네트워크 추가를 눌러주세요.
       </Typography>
       <Image src={guide7} alt="guide7" />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 3, mt : 7}}>
         8. 아래와 같은 화면이 뜨면 네트워크 이름은 임의로 작성해 주시고, 아래
         정보를 그대로 복붙해 넣어주시면 됩니다.
       </Typography>
@@ -117,9 +118,9 @@ const guide = () => {
         </Typography>
       </Box>
       <Image src={guide8} alt="guide8" />
-      <Typography>9. 아래의 화면이 보이면 네트워크 추가도 성공!!</Typography>
+      <Typography variant="h5" sx={{mb : 3, mt : 7}}>9. 아래의 화면이 보이면 네트워크 추가도 성공!!</Typography>
       <Image src={guide9} alt="guide9" />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 3, mt : 7}}>
         10. 거래를 하려면 MATIC이 필요한데, 현재 0MATIC입니다. 하지만
         문제없어요!테스트용이기때문에 MATIC 토큰을 무료로 나눠주는 사이트가
         있는데요. 구글에 polygon faucet을 검색하면 나오는 사이트를 클릭해주세요.{" "}
@@ -128,9 +129,9 @@ const guide = () => {
         <a
           href="https://faucet.polygon.technology/"
           style={{
-            textDecoration: "underline",
-            textDecorationColor: "blue",
-            color: "blue",
+            textDecoration: "none",
+            textDecorationColor: "#E2C7C0",
+            color: "#E2C7C0",
           }}
         >
           {" "}
@@ -142,7 +143,7 @@ const guide = () => {
         지갑주소 눌러 복사해 붙여줍니다.
       </Typography>
       <Image src={guide10} alt="guide10" />
-      <Typography>
+      <Typography variant="h5" sx={{mb : 3, mt : 3}}>
         submit까지 누르고 조금 기다리면 0.5MATIC이 지갑에 들어와있는 것을 확인할
         수 있습니다.
         <br />
@@ -150,7 +151,7 @@ const guide = () => {
         유의하시길 바랍니다.)
       </Typography>
       <Image src={guide11} alt="guide11" />
-      <Typography>이제 준비 끝!! 저희 사이트에 들어가시면 됩니다!!</Typography>
+      <Typography variant="h3" sx={{mb : 7, mt : 7, textAlign:"center"}}>이제 준비 끝!! 로그인 버튼을 눌러주세요!!</Typography>
     </Container>
   )
 }

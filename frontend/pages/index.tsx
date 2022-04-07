@@ -8,12 +8,6 @@ import Carousel from "react-material-ui-carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/modules";
 import { useRouter } from "next/router";
-// 이미지
-import CaliImage1 from "../public/images/test_cali/cali1.jpg";
-import CaliImage2 from "../public/images/test_cali/cali2.png";
-import CaliImage3 from "../public/images/test_cali/cali3.jpg";
-import CaliImage4 from "../public/images/test_cali/cali4.jpg";
-import CaliImage5 from "../public/images/test_cali/cali5.jpg";
 
 const ColorButton = styled(Button)({
   backgroundColor: "#F9E6E1",
@@ -25,14 +19,22 @@ const ColorButton = styled(Button)({
   },
 });
 
+const IndexImages = [
+  require("../public/images/test_cali/cali1.jpg"),
+  require("../public/images/test_cali/cali2.png"),
+  require("../public/images/test_cali/cali3.jpg"),
+  require("../public/images/test_cali/cali4.jpg"),
+  require("../public/images/test_cali/cali5.jpg"),
+];
+
 const Home: NextPage = () => {
-  const testImages = [
-    { image: CaliImage1, name: "cali1" },
-    { image: CaliImage2, name: "cali2" },
-    { image: CaliImage3, name: "cali3" },
-    { image: CaliImage4, name: "cali4" },
-    { image: CaliImage5, name: "cali5" },
-  ];
+  // const testImages = [
+  //   { image: CaliImage1, name: "cali1" },
+  //   { image: CaliImage2, name: "cali2" },
+  //   { image: CaliImage3, name: "cali3" },
+  //   { image: CaliImage4, name: "cali4" },
+  //   { image: CaliImage5, name: "cali5" },
+  // ];
   const router = useRouter();
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
   const handleForceLogin = () => {
@@ -58,15 +60,15 @@ const Home: NextPage = () => {
           }}
         >
           <Carousel
-            height="50vh"
+            height="60vh"
             animation="slide"
             duration={1000}
             indicators={false}
             navButtonsAlwaysInvisible={true}
             stopAutoPlayOnHover={false}
           >
-            {testImages.map((item, i) => (
-              <Image key={i} src={item.image} alt={item.name} />
+            {IndexImages.map((item, i) => (
+              <Image key={i} src={item} alt="#" />
             ))}
           </Carousel>
         </Box>

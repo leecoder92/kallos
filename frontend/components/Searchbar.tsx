@@ -82,8 +82,8 @@ function Searchbar() {
     setIsLoading(true);
   };
 
-  // 엔터 눌렀을 때 explore로 푸쉬()
-  const handleEnterAndEsc = (event: any) => {
+  // 엔터 눌렀을 때 explore로 푸쉬하고 입력창 초기화
+  const handleEnterAndEsc = async (event: any) => {
     if (event.key === "Enter" && searchValue) {
       setSearchValue("");
       router.push(
