@@ -133,7 +133,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             // console.log(err);
           });
       } else {
-        alert("Metamask를 설치하세요~");
+        alert("Metamask를 설치해 주세요. 우측 상단 가이드를 확인해주세요.");
       }
     } catch (error) {
       console.error(error);
