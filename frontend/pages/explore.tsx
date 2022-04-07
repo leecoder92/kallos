@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useEffect, useState, FC } from "react";
+import { useRouter } from "next/router";
 import styles from "../styles/form.module.scss";
 
 import Box from "@mui/material/Box";
@@ -45,6 +46,8 @@ const Explore: FC<SaleKallosProps> = ({
   pages,
   setAllItems,
 }) => {
+  const router = useRouter();
+
   const [onSaleItems, setOnSaleItems] = useState([]);
   const [showOnlySale, setShowOnlySale] = useState(false);
 
@@ -102,6 +105,11 @@ const Explore: FC<SaleKallosProps> = ({
     console.log(showOnlySale);
   }, [showOnlySale]);
 
+  useEffect(() => {
+    if (router.query.keyword && router.query.keyword !== "")
+      setKeyword(router.query.keyword as string);
+  }, [router.isReady]);
+
   return (
     <div className="viewContainer">
       <h1>Explore Calligraphy</h1>
@@ -130,7 +138,11 @@ const Explore: FC<SaleKallosProps> = ({
               </Select>
             </FormControl>
           </Box>
-          <input placeholder="검색어.." onChange={handleKeyword} />
+          <input
+            placeholder="검색어.."
+            onChange={handleKeyword}
+            value={keyword}
+          />
         </Box>
 
         <Box>

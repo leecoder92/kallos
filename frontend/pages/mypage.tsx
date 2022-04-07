@@ -266,7 +266,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 columnGap: 1,
               }}
             >
-              {myItems?.map((item) => (
+              {myItems && myItems.length > 0 ? myItems.map((item) => (
                 <MyKallosCard
                   id={item.tokenId}
                   key={item.item_id}
@@ -276,7 +276,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                   account={account}
                   uri={item.item_id}
                 />
-              ))}
+              )) : <Typography>보유 중인 작품이 없습니다.</Typography>}
             </Box>
             <Pagination
               curPage={curPage}

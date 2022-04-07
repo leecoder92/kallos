@@ -85,7 +85,11 @@ function Searchbar() {
   // 엔터 눌렀을 때 explore로 푸쉬()
   const handleEnterAndEsc = (event: any) => {
     if (event.key === "Enter" && searchValue) {
-      router.push({ pathname: `/explore`, query: { keyword: searchValue } });
+      setSearchValue("");
+      router.push(
+        { pathname: `/explore`, query: { keyword: searchValue } },
+        "/explore"
+      );
     } else if (event.key === "Enter" && !searchValue) {
       alert("검색어를 입력하세요.");
     }
