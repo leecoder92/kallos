@@ -236,6 +236,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 px: 3,
                 bgcolor: "#F9E6E1",
                 width: 200,
+                borderRadius: 1.25,
               }}
             >
               <Stack direction="column" spacing={2}>

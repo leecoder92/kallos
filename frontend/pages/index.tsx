@@ -20,21 +20,14 @@ const ColorButton = styled(Button)({
 });
 
 const IndexImages = [
-  require("../public/images/test_cali/cali1.jpg"),
-  require("../public/images/test_cali/cali2.png"),
-  require("../public/images/test_cali/cali3.jpg"),
-  require("../public/images/test_cali/cali4.jpg"),
-  require("../public/images/test_cali/cali5.jpg"),
+  require("../public/images/test_cali/daye.jpg"),
+  require("../public/images/test_cali/jisu1.jpg"),
+  require("../public/images/test_cali/jisu2.jpg"),
+  require("../public/images/test_cali/jongjun.png"),
+  require("../public/images/test_cali/nayeong.png"),
 ];
 
 const Home: NextPage = () => {
-  // const testImages = [
-  //   { image: CaliImage1, name: "cali1" },
-  //   { image: CaliImage2, name: "cali2" },
-  //   { image: CaliImage3, name: "cali3" },
-  //   { image: CaliImage4, name: "cali4" },
-  //   { image: CaliImage5, name: "cali5" },
-  // ];
   const router = useRouter();
   const isLogin = useSelector((state: RootState) => state.loginReducer.value);
   const handleForceLogin = () => {
@@ -55,7 +48,7 @@ const Home: NextPage = () => {
           width="40%"
           textAlign="center"
           sx={{
-            mt: 10,
+            mt: 2,
             mx: { lg: 20, md: 10, xs: 5 },
           }}
         >
@@ -68,7 +61,7 @@ const Home: NextPage = () => {
             stopAutoPlayOnHover={false}
           >
             {IndexImages.map((item, i) => (
-              <Image key={i} src={item} alt="#" />
+              <Image width="550px" height="550px" key={i} src={item} alt="#" />
             ))}
           </Carousel>
         </Box>
