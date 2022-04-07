@@ -115,7 +115,7 @@ function Searchbar() {
           url: `${BEUrl}/item/search/${searchValue}`,
         })
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             setFilteredArtistData(res.data.usersByName);
             setFilteredTitleData(res.data.itemsByTitle);
             setIsSearchResult(true);

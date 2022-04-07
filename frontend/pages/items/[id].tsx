@@ -96,7 +96,6 @@ const ItemDetail: FC<SaleKallosCardProps> = ({
     setShowModal(false);
     try {
       if (!account) return;
-      console.log("일단 들어옴");
 
       const response = await saleKallosTokenContract.methods
         .purchaseKallosToken(itemInfo.tokenId)

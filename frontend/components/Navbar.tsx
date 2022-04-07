@@ -121,7 +121,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             if (res.data.message === "FirstVisit") {
               setOpen(true);
             } else {
-              console.log(res.data);
+              //   console.log(res.data);
               setLogin();
               setIsLogin(true);
               if (router.pathname === "/") {
@@ -130,7 +130,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
             }
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
           });
       } else {
         alert("Metamask를 설치하세요~");
@@ -162,7 +162,7 @@ const SearchAppBar: FC<LoginProps> = ({ value, setLogin, setLogout }) => {
         },
       })
         .then((res) => {
-          console.log(res.data);
+          //   console.log(res.data);
           setArtistName("");
           handleClose();
           alert("등록되었습니다.");

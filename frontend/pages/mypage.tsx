@@ -79,7 +79,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
         .getKallosTokens(account)
         .call();
 
-      console.log("토큰리스트", response);
+      //   console.log("토큰리스트", response);
       // setTotalItems(response.length);
 
       setKallosTokens(response);
@@ -132,9 +132,10 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
         params: getItemParams,
       })
       .then((res) => {
-        console.log(res.data);
         setTotalPages(res.data.totalPage);
-        setMyItems(res.data.items);
+        const items = res.data.items;
+        const reversedItems = [...items].reverse();
+        setMyItems(reversedItems);
       });
   };
 
@@ -151,11 +152,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
     getUserItems();
   }, [curPage]);
 
-  // useEffect(() => {
-  //   getUserItems();
-  // }, [myItems]);
-
-  console.log("My Itmes:::", myItems);
+  //   console.log("My Itmes:::", myItems);
 
   return (
     <div className="viewContainer">
@@ -171,7 +168,13 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
             }}
           >
             {userInfo.profile_img !== null ? (
-              <div style={{ borderRadius: "100px", overflow: "hidden", height:"200px" }}>
+              <div
+                style={{
+                  borderRadius: "100px",
+                  overflow: "hidden",
+                  height: "200px",
+                }}
+              >
                 <Image
                   src={`https://kallosimages.s3.ap-northeast-2.amazonaws.com/profileImages/${userInfo.profile_img}`}
                   alt="user profile image"
@@ -266,17 +269,23 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                 columnGap: 1,
               }}
             >
-              {myItems && myItems.length > 0 ? myItems.map((item) => (
-                <MyKallosCard
-                  id={item.tokenId}
-                  key={item.item_id}
-                  kallosData={item}
-                  saleStatus={saleStatus}
-                  price={item.price}
-                  account={account}
-                  uri={item.item_id}
-                />
-              )) : <Typography sx={{margin: "200px 0"}}>보유 중인 작품이 없습니다.</Typography>}
+              {myItems && myItems.length > 0 ? (
+                myItems.map((item) => (
+                  <MyKallosCard
+                    id={item.tokenId}
+                    key={item.item_id}
+                    kallosData={item}
+                    saleStatus={saleStatus}
+                    price={item.price}
+                    account={account}
+                    uri={item.item_id}
+                  />
+                ))
+              ) : (
+                <Typography sx={{ margin: "200px 0" }}>
+                  보유 중인 작품이 없습니다.
+                </Typography>
+              )}
             </Box>
             <Pagination
               curPage={curPage}
