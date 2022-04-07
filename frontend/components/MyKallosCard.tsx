@@ -77,7 +77,7 @@ const MyKallosCard: FC<MyKallosCardProps> = ({
     await axios
       .put("https://j6c107.p.ssafy.io:8443/api/item/sell", setSellParams)
       .then((res) => {
-        console.log("put 보낸 결과는", res);
+        // console.log("put 보낸 결과는", res);
         setSellLoad(false);
       });
   };

@@ -81,7 +81,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
   const getArtistDetail = async () => {
     try {
       const res = await axios.get(`${BACKEND_URL}/user/artist/${userAddress}`);
-      console.log("작가 정보: ", res);
+      //   console.log("작가 정보: ", res);
       setArtistDetail(res.data);
     } catch (err) {
       console.log(err);
@@ -99,7 +99,7 @@ const artistDetail: FC<SaleKallosProps> = ({ items, setAllItems, account }) => {
           itemPerPage: 8,
         },
       });
-      console.log("작가 아이템 목록: ", res);
+      //   console.log("작가 아이템 목록: ", res);
       setItemsOfArtist(res.data.items);
       setTotalPages(res.data.totalPage);
     } catch (err) {

@@ -71,15 +71,13 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
 
   const [myItems, setMyItems] = useState([]);
 
-  const paginate = (pageNumber) => setCurPage(pageNumber);
-
   const getKallosTokens = async () => {
     try {
       const response = await getKallosTokenContract.methods
         .getKallosTokens(account)
         .call();
 
-      console.log("토큰리스트", response);
+      //   console.log("토큰리스트", response);
       // setTotalItems(response.length);
 
       setKallosTokens(response);
@@ -132,7 +130,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
         params: getItemParams,
       })
       .then((res) => {
-        console.log(res.data);
         setTotalPages(res.data.totalPage);
         setMyItems(res.data.items);
       });
@@ -150,12 +147,6 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
   useEffect(() => {
     getUserItems();
   }, [curPage]);
-
-  // useEffect(() => {
-  //   getUserItems();
-  // }, [myItems]);
-
-  console.log("My Itmes:::", myItems);
 
   return (
     <div className="viewContainer">
