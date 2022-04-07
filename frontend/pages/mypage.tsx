@@ -276,7 +276,7 @@ const MyPage = ({ account, items, setAllItems, userInfo, setUserInfo }) => {
                   account={account}
                   uri={item.item_id}
                 />
-              )) : <Typography>보유 중인 작품이 없습니다.</Typography>}
+              )) : <Typography sx={{margin: "200px 0"}}>보유 중인 작품이 없습니다.</Typography>}
             </Box>
             <Pagination
               curPage={curPage}
