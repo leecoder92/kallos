@@ -109,4 +109,3 @@ $ git flow feature pull origin <feature-name>
 - [[협업] 협업을 위한 Git Flow 설정하기](https://overcome-the-limits.tistory.com/entry/%ED%98%91%EC%97%85-%ED%98%91%EC%97%85%EC%9D%84-%EC%9C%84%ED%95%9C-Git-Flow-%EC%84%A4%EC%A0%95%ED%95%98%EA%B8%B0)
 - [git 브랜치 전략에 대해서](https://tecoble.techcourse.co.kr/post/2021-07-15-git-branch/)
 - [[Git] git-flow 소개, 설치 및 사용법](https://hbase.tistory.com/60)
-- [Git flow 이해하기](https://lab.ssafy.com/s06-webmobile1-sub2/S06P12C203/-/edit/frontend/TIL/hyein/Git/git-flow-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0.md)
